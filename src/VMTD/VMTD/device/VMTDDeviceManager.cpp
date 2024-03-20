@@ -262,6 +262,62 @@ namespace VMTDLib
         }
     }
 
+    const QList<VMTDParticipant *> &VMTDDeviceManager::participants() const
+    {
+        return m_participants;
+    }
+    void VMTDDeviceManager::buildParticipants()
+    {
+        qDeleteAll(m_participants);
+        m_participants.clear();
+
+        const auto queryStr =
+            QString("SELECT Hosts.id, Hosts.name, Hosts.ip, Hosts.interface, Hosts.switch_port, Switches.name, Switches.url "
+                    "FROM Hosts INNER JOIN Switches ON Switches.id = Hosts.switch_id WHERE Hosts.id > '0';");
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Hosts\" selecting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+
+        while (query.next())
+        {
+            const auto hostIp = query.value("Hosts.ip").toString();
+            const auto switchUrl = query.value("Switches.url").toString();
+
+            if (m_settings->shouldCheckOnline() &&
+                (!m_urlOnline.contains(switchUrl) || !m_ipOnline.contains(hostIp)))
+                continue;
+
+            const auto hostName = query.value("Hosts.name").toString();
+            const auto hostInterface = query.value("Hosts.interface").toString();
+            const auto switchPort = query.value("Hosts.switch_port").toString();
+            const auto switchName = query.value("Switches.name").toString();
+
+            auto participant = new VMTDParticipant(this);
+            participant->setHostName(hostName);
+            participant->setHostIp(hostIp);
+            participant->setHostInterface(hostInterface);
+            participant->setSwitchName(switchName);
+            participant->setSwitchUrl(switchUrl);
+            participant->setSwitchPort(switchPort);
+            m_participants.append(participant);
+        }
+    }
+
+    void VMTDDeviceManager::updateUrlOnlineSlot(const QString &url, bool isOnline)
+    {
+        m_urlOnline[url] = isOnline;
+    }
+    void VMTDDeviceManager::updateIpOnlineSlot(const QString &ip, bool isOnline)
+    {
+        m_ipOnline[ip] = isOnline;
+    }
+
     void VMTDDeviceManager::printDbConnections()
     {
         QString dbConnections = VN_S(VMTDDeviceManager) + " | All DB connections: ";

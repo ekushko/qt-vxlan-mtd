@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../VMTDSettings.h"
+#include "../engine/VMTDParticipant.h"
 
 #include <QtSql>
 
@@ -32,7 +33,6 @@ namespace VMTDLib
                           const QString &password);
         void removeSwitch(int id);
 
-
         void selectHosts();
         void createHost(int id, const QString &name,
                         const QString &ip,
@@ -41,11 +41,20 @@ namespace VMTDLib
                         int switchId);
         void removeHost(int id);
 
+        const QList<VMTDParticipant *> &participants() const;
+        void                       buildParticipants();
+
     signals:
 
         void switchesUpdatedSignal(const QSqlQuery &query);
 
         void hostsUpdatedSignal(const QSqlQuery &query);
+
+    public slots:
+
+        void updateUrlOnlineSlot(const QString &url, bool isOnline);
+
+        void updateIpOnlineSlot(const QString &ip, bool isOnline);
 
     private:
 
@@ -65,5 +74,10 @@ namespace VMTDLib
         QSqlDatabase m_db;
         QString      m_dbName;
         QString      m_dbConnectionName;
+
+        QMap<QString, bool> m_urlOnline;
+        QMap<QString, bool>  m_ipOnline;
+
+        QList<VMTDParticipant *> m_participants;
     };
 }

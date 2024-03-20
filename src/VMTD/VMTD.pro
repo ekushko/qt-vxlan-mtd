@@ -7,7 +7,7 @@
 NAME = VMTD
 
 TEMPLATE  = app
-#TEMPLATE  = lib
+TEMPLATE  = lib
 
 CONFIG += debug_and_release
 CONFIG += build_all
@@ -146,19 +146,27 @@ SOURCES += \
     main.cpp \
     MainWindow.cpp \
     VMTD/VMTDBuildInfo.cpp \
+    VMTD/VMTDMethod.cpp \
     VMTD/VMTDSettings.cpp \
     VMTD/VMTDSettingsForm.cpp \
     VMTD/device/VMTDDeviceHostDialog.cpp \
     VMTD/device/VMTDDeviceManager.cpp \
     VMTD/device/VMTDDeviceManagerForm.cpp \
     VMTD/device/VMTDDeviceSwitchDialog.cpp \
-    VMTD/device/VMTDDeviceTableForm.cpp
+    VMTD/device/VMTDDeviceTableForm.cpp \
+    VMTD/engine/VMTDEngine.cpp \
+    VMTD/engine/VMTDEngineForm.cpp \
+    VMTD/engine/VMTDGroup.cpp \
+    VMTD/engine/VMTDInterface.cpp \
+    VMTD/engine/VMTDParticipant.cpp \
+    VMTD/engine/VMTDRoute.cpp
 
 HEADERS += \
     MainWindow.h \
     VMTD/VMTDBuildInfo.h \
     VMTD/VMTDComboMap.h \
     VMTD/VMTDDeclareShared.h \
+    VMTD/VMTDMethod.h \
     VMTD/VMTDSettings.h \
     VMTD/VMTDSettingsForm.h \
     VMTD/VMTDTemplate.h \
@@ -167,7 +175,13 @@ HEADERS += \
     VMTD/device/VMTDDeviceManager.h \
     VMTD/device/VMTDDeviceManagerForm.h \
     VMTD/device/VMTDDeviceSwitchDialog.h \
-    VMTD/device/VMTDDeviceTableForm.h
+    VMTD/device/VMTDDeviceTableForm.h \
+    VMTD/engine/VMTDEngine.h \
+    VMTD/engine/VMTDEngineForm.h \
+    VMTD/engine/VMTDGroup.h \
+    VMTD/engine/VMTDInterface.h \
+    VMTD/engine/VMTDParticipant.h \
+    VMTD/engine/VMTDRoute.h
 
 FORMS += \
     MainWindow.ui \
@@ -175,7 +189,8 @@ FORMS += \
     VMTD/device/VMTDDeviceHostDialog.ui \
     VMTD/device/VMTDDeviceManagerForm.ui \
     VMTD/device/VMTDDeviceSwitchDialog.ui \
-    VMTD/device/VMTDDeviceTableForm.ui
+    VMTD/device/VMTDDeviceTableForm.ui \
+    VMTD/engine/VMTDEngineForm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

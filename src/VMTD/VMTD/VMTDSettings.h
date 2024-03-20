@@ -60,8 +60,22 @@ namespace VMTDLib
         bool    shouldShowDebug() const;
         void setShouldShowDebug(bool shouldShowDebug);
 
+        //
+
         QString dbName() const;
         void setDbName(const QString &dbName);
+
+        bool    shouldCheckOnline() const;
+        void setShouldCheckOnline(bool shouldCheckOnline);
+
+        int     defaultVlanId() const;
+        void setDefaultVlanId(int defaultVlanId);
+
+        int     minVlanId() const;
+        void setMinVlanId(int minVlanId);
+
+        int     maxVlanId() const;
+        void setMaxVlanId(int maxVlanId);
 
     signals:
 
@@ -81,7 +95,12 @@ namespace VMTDLib
         const QString m_systemName;
         QString m_debugName;
         bool m_shouldShowDebug;
+
         QString m_dbName;
+        bool m_shouldCheckOnline;
+        int m_defaultVlanId;
+        int m_minVlanId;
+        int m_maxVlanId;
 
         bool m_shouldBeRestarted;
 

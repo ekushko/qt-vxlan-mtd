@@ -19,6 +19,10 @@ namespace VMTDLib
         m_debugName = "VMTD";
         m_shouldShowDebug = true;
         m_dbName = "physical_description";
+        m_shouldCheckOnline = false;
+        m_defaultVlanId = 19;
+        m_minVlanId = 20;
+        m_maxVlanId = 50;
 
         m_shouldBeRestarted = false;
 
@@ -87,6 +91,10 @@ namespace VMTDLib
         jsonObj[VN_ME(m_debugName)] = m_debugName;
         jsonObj[VN_ME(m_shouldShowDebug)] = m_shouldShowDebug;
         jsonObj[VN_ME(m_dbName)] = m_dbName;
+        jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
+        jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
+        jsonObj[VN_ME(m_minVlanId)] = m_minVlanId;
+        jsonObj[VN_ME(m_maxVlanId)] = m_maxVlanId;
 
         return jsonObj;
     }
@@ -99,6 +107,10 @@ namespace VMTDLib
         m_debugName = jsonObj[VN_ME(m_debugName)].toString(m_debugName);
         m_shouldShowDebug = jsonObj[VN_ME(m_shouldShowDebug)].toBool(m_shouldShowDebug);
         m_dbName = jsonObj[VN_ME(m_dbName)].toString(m_dbName);
+        m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
+        m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
+        m_minVlanId = jsonObj[VN_ME(m_minVlanId)].toInt(m_minVlanId);
+        m_maxVlanId = jsonObj[VN_ME(m_maxVlanId)].toInt(m_maxVlanId);
     }
 
     QString VMTDSettings::filePath() const
@@ -175,6 +187,48 @@ namespace VMTDLib
     void VMTDSettings::setDbName(const QString &dbName)
     {
         m_dbName = dbName;
+    }
+
+    bool VMTDSettings::shouldCheckOnline() const
+    {
+        return m_shouldCheckOnline;
+    }
+    void VMTDSettings::setShouldCheckOnline(bool shouldCheckOnline)
+    {
+        m_shouldCheckOnline = shouldCheckOnline;
+    }
+
+    int VMTDSettings::defaultVlanId() const
+    {
+        return m_defaultVlanId;
+    }
+    void VMTDSettings::setDefaultVlanId(int defaultVlanId)
+    {
+        m_defaultVlanId = defaultVlanId;
+    }
+
+    int VMTDSettings::minVlanId() const
+    {
+        return m_minVlanId;
+    }
+    void VMTDSettings::setMinVlanId(int minVlanId)
+    {
+        if (minVlanId > maxVlanId())
+            return;
+
+        m_minVlanId = minVlanId;
+    }
+
+    int VMTDSettings::maxVlanId() const
+    {
+        return m_maxVlanId;
+    }
+    void VMTDSettings::setMaxVlanId(int maxVlanId)
+    {
+        if (maxVlanId < minVlanId())
+            return;
+
+        m_maxVlanId = maxVlanId;
     }
 
     void VMTDSettings::saveSlot()
