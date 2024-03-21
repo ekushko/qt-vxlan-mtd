@@ -29,9 +29,6 @@ namespace VMTDLib
         connect(ui->pbStop, &QPushButton::clicked,
                 m_server, &VMTDNxApiServer::stopListenSlot);
 
-        connect(ui->pbHideRight, &QPushButton::clicked,
-                this, &VMTDNxApiServerForm::pbHideRightClicked);
-
         m_uiTimer.setParent(this);
         connect(&m_uiTimer, &QTimer::timeout,
                 this, &VMTDNxApiServerForm::uiTimerTickSlot);
@@ -77,9 +74,9 @@ namespace VMTDLib
         }
     }
 
-    void VMTDNxApiServerForm::pbHideRightClicked()
+    void VMTDNxApiServerForm::on_pbShowDetailedState_clicked()
     {
         ui->wRight->setVisible(!ui->wRight->isVisible());
-        ui->pbHideRight->setText(ui->wRight->isVisible() ? ">" : "<");
+        ui->pbShowDetailedState->setText(ui->wRight->isVisible() ? ">" : "<");
     }
 }

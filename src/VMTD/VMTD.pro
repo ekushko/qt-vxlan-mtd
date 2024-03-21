@@ -150,6 +150,11 @@ SOURCES += \
     VMTD/VMTDSettings.cpp \
     VMTD/VMTDSettingsForm.cpp \
     VMTD/adapter/VMTDAdapterForm.cpp \
+    VMTD/adapter/host/VMTDHostAdapterForm.cpp \
+    VMTD/adapter/host/VMTDHostClient.cpp \
+    VMTD/adapter/host/VMTDHostClientForm.cpp \
+    VMTD/adapter/host/VMTDHostServer.cpp \
+    VMTD/adapter/host/VMTDHostServerForm.cpp \
     VMTD/adapter/nxapi/VMTDNxApiAdapter.cpp \
     VMTD/adapter/nxapi/VMTDNxApiAdapterForm.cpp \
     VMTD/adapter/nxapi/VMTDNxApiServer.cpp \
@@ -178,6 +183,11 @@ HEADERS += \
     VMTD/VMTDTemplate.h \
     VMTD/VMTDVarname.h \
     VMTD/adapter/VMTDAdapterForm.h \
+    VMTD/adapter/host/VMTDHostAdapterForm.h \
+    VMTD/adapter/host/VMTDHostClient.h \
+    VMTD/adapter/host/VMTDHostClientForm.h \
+    VMTD/adapter/host/VMTDHostServer.h \
+    VMTD/adapter/host/VMTDHostServerForm.h \
     VMTD/adapter/nxapi/VMTDNxApiAdapter.h \
     VMTD/adapter/nxapi/VMTDNxApiAdapterForm.h \
     VMTD/adapter/nxapi/VMTDNxApiServer.h \
@@ -198,6 +208,9 @@ FORMS += \
     MainWindow.ui \
     VMTD/VMTDSettingsForm.ui \
     VMTD/adapter/VMTDAdapterForm.ui \
+    VMTD/adapter/host/VMTDHostAdapterForm.ui \
+    VMTD/adapter/host/VMTDHostClientForm.ui \
+    VMTD/adapter/host/VMTDHostServerForm.ui \
     VMTD/adapter/nxapi/VMTDNxApiAdapterForm.ui \
     VMTD/adapter/nxapi/VMTDNxApiServerForm.ui \
     VMTD/device/VMTDDeviceHostDialog.ui \

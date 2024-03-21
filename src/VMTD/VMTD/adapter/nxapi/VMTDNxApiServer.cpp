@@ -53,7 +53,7 @@ namespace VMTDLib
             return;
         }
 
-        for (const auto url : m_manager->switchUrls())
+        for (const auto &url : m_manager->switchUrls())
         {
             auto adapter = new VMTDNxApiAdapter(this, m_settings, m_netManager, url);
             m_adapters.append(adapter);

@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pbHideRight">
+    <widget class="QPushButton" name="pbShowDetailedState">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>

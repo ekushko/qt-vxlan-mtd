@@ -18,11 +18,18 @@ namespace VMTDLib
         m_nodeType = EnNodeType::CLIENT;
         m_debugName = "VMTD";
         m_shouldShowDebug = true;
+
         m_dbName = "physical_description";
         m_shouldCheckOnline = false;
         m_defaultVlanId = 19;
         m_minVlanId = 20;
         m_maxVlanId = 50;
+
+        m_localPort = 30001;
+        m_serverIp = "127.0.0.1";
+        m_serverPort = 30000;
+        m_shouldReconnect = false;
+        m_reconnectInterval = 1000;
 
         m_shouldBeRestarted = false;
 
@@ -90,11 +97,18 @@ namespace VMTDLib
         jsonObj[VN_ME(m_systemName)] = m_systemName;
         jsonObj[VN_ME(m_debugName)] = m_debugName;
         jsonObj[VN_ME(m_shouldShowDebug)] = m_shouldShowDebug;
+
         jsonObj[VN_ME(m_dbName)] = m_dbName;
         jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
         jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
         jsonObj[VN_ME(m_minVlanId)] = m_minVlanId;
         jsonObj[VN_ME(m_maxVlanId)] = m_maxVlanId;
+
+        jsonObj[VN_ME(m_localPort)] = m_localPort;
+        jsonObj[VN_ME(m_serverIp)] = m_serverIp;
+        jsonObj[VN_ME(m_serverPort)] = m_serverPort;
+        jsonObj[VN_ME(m_shouldReconnect)] = m_shouldReconnect;
+        jsonObj[VN_ME(m_reconnectInterval)] = m_reconnectInterval;
 
         return jsonObj;
     }
@@ -106,11 +120,18 @@ namespace VMTDLib
         m_nodeType = (EnNodeType)jsonObj[VN_ME(m_nodeType)].toInt((int)m_nodeType);
         m_debugName = jsonObj[VN_ME(m_debugName)].toString(m_debugName);
         m_shouldShowDebug = jsonObj[VN_ME(m_shouldShowDebug)].toBool(m_shouldShowDebug);
+
         m_dbName = jsonObj[VN_ME(m_dbName)].toString(m_dbName);
         m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
         m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
         m_minVlanId = jsonObj[VN_ME(m_minVlanId)].toInt(m_minVlanId);
         m_maxVlanId = jsonObj[VN_ME(m_maxVlanId)].toInt(m_maxVlanId);
+
+        m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
+        m_serverIp = jsonObj[VN_ME(m_serverIp)].toString(m_serverIp);
+        m_serverPort = jsonObj[VN_ME(m_serverPort)].toInt(m_serverPort);
+        m_shouldReconnect = jsonObj[VN_ME(m_shouldReconnect)].toBool(m_shouldReconnect);
+        m_reconnectInterval = jsonObj[VN_ME(m_reconnectInterval)].toInt(m_reconnectInterval);
     }
 
     QString VMTDSettings::filePath() const
@@ -230,6 +251,79 @@ namespace VMTDLib
 
         m_maxVlanId = maxVlanId;
     }
+
+
+    int VMTDSettings::localPort() const
+    {
+        return m_localPort;
+    }
+    void VMTDSettings::setLocalPort(int localPort)
+    {
+        if (m_localPort != localPort)
+        {
+            m_localPort = localPort;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+
+    QString VMTDSettings::serverIp() const
+    {
+        return m_serverIp;
+    }
+    void VMTDSettings::setServerIp(const QString &serverIp)
+    {
+        if (m_serverIp != serverIp)
+        {
+            m_serverIp = serverIp;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+    int VMTDSettings::serverPort() const
+    {
+        return m_serverPort;
+    }
+    void VMTDSettings::setServerPort(int serverPort)
+    {
+        if (m_serverPort != serverPort)
+        {
+            m_serverPort = serverPort;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+    bool VMTDSettings::shouldReconnect() const
+    {
+        return m_shouldReconnect;
+    }
+    void VMTDSettings::setShouldReconnect(bool shouldReconnect)
+    {
+        if (m_shouldReconnect != shouldReconnect)
+        {
+            m_shouldReconnect = shouldReconnect;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+    int VMTDSettings::reconnectInterval() const
+    {
+        return m_reconnectInterval;
+    }
+    void VMTDSettings::setReconnectInterval(int reconnectInterval)
+    {
+        if (m_reconnectInterval != reconnectInterval)
+        {
+            m_reconnectInterval = reconnectInterval;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
 
     void VMTDSettings::saveSlot()
     {

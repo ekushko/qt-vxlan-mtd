@@ -77,6 +77,23 @@ namespace VMTDLib
         int     maxVlanId() const;
         void setMaxVlanId(int maxVlanId);
 
+        //
+
+        int     localPort() const;
+        void setLocalPort(int localPort);
+
+        QString serverIp() const;
+        void setServerIp(const QString &serverIp);
+
+        int     serverPort() const;
+        void setServerPort(int serverPort);
+
+        bool    shouldReconnect() const;
+        void setShouldReconnect(bool shouldReconnect);
+
+        int     reconnectInterval() const;
+        void setReconnectInterval(int reconnectInterval);
+
     signals:
 
         void restartSignal();
@@ -101,6 +118,12 @@ namespace VMTDLib
         int m_defaultVlanId;
         int m_minVlanId;
         int m_maxVlanId;
+
+        int m_localPort;
+        QString m_serverIp;
+        int     m_serverPort;
+        bool m_shouldReconnect;
+        int m_reconnectInterval;
 
         bool m_shouldBeRestarted;
 

@@ -40,6 +40,6 @@ namespace VMTDLib
         void adapterCreatedSlot(VMTDNxApiAdapter *adapter);
         void adapterRemovedSlot(VMTDNxApiAdapter *adapter);
 
-        void pbHideRightClicked();
+        void on_pbShowDetailedState_clicked();
     };
 }
