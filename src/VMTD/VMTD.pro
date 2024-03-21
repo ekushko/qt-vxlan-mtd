@@ -36,8 +36,8 @@ DEFINES += TARGET=\\\"$$TARGET\\\"
 QT += core gui
 QT += widgets
 QT += sql
-#QT += network
-#QT += websockets
+QT += network
+QT += websockets
 
 #
 ###-----common.pri--------------------------------------------------------------------------
@@ -149,6 +149,11 @@ SOURCES += \
     VMTD/VMTDMethod.cpp \
     VMTD/VMTDSettings.cpp \
     VMTD/VMTDSettingsForm.cpp \
+    VMTD/adapter/VMTDAdapterForm.cpp \
+    VMTD/adapter/nxapi/VMTDNxApiAdapter.cpp \
+    VMTD/adapter/nxapi/VMTDNxApiAdapterForm.cpp \
+    VMTD/adapter/nxapi/VMTDNxApiServer.cpp \
+    VMTD/adapter/nxapi/VMTDNxApiServerForm.cpp \
     VMTD/device/VMTDDeviceHostDialog.cpp \
     VMTD/device/VMTDDeviceManager.cpp \
     VMTD/device/VMTDDeviceManagerForm.cpp \
@@ -163,6 +168,7 @@ SOURCES += \
 
 HEADERS += \
     MainWindow.h \
+    VMTD/VMTDAlias.h \
     VMTD/VMTDBuildInfo.h \
     VMTD/VMTDComboMap.h \
     VMTD/VMTDDeclareShared.h \
@@ -171,6 +177,11 @@ HEADERS += \
     VMTD/VMTDSettingsForm.h \
     VMTD/VMTDTemplate.h \
     VMTD/VMTDVarname.h \
+    VMTD/adapter/VMTDAdapterForm.h \
+    VMTD/adapter/nxapi/VMTDNxApiAdapter.h \
+    VMTD/adapter/nxapi/VMTDNxApiAdapterForm.h \
+    VMTD/adapter/nxapi/VMTDNxApiServer.h \
+    VMTD/adapter/nxapi/VMTDNxApiServerForm.h \
     VMTD/device/VMTDDeviceHostDialog.h \
     VMTD/device/VMTDDeviceManager.h \
     VMTD/device/VMTDDeviceManagerForm.h \
@@ -186,6 +197,9 @@ HEADERS += \
 FORMS += \
     MainWindow.ui \
     VMTD/VMTDSettingsForm.ui \
+    VMTD/adapter/VMTDAdapterForm.ui \
+    VMTD/adapter/nxapi/VMTDNxApiAdapterForm.ui \
+    VMTD/adapter/nxapi/VMTDNxApiServerForm.ui \
     VMTD/device/VMTDDeviceHostDialog.ui \
     VMTD/device/VMTDDeviceManagerForm.ui \
     VMTD/device/VMTDDeviceSwitchDialog.ui \

@@ -1,15 +1,13 @@
 #pragma once
 
 #include "VMTDInterface.h"
+#include "../VMTDAlias.h"
 
 #include <QObject>
 #include <QJsonObject>
 
 namespace VMTDLib
 {
-#define RequestList QList<QPair<QString, QJsonObject>>
-#define CommandList QStringList
-
     class VMTDParticipant : public QObject
     {
         Q_OBJECT
