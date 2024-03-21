@@ -299,6 +299,7 @@ namespace VMTDLib
             const auto switchName = query.value("Switches.name").toString();
 
             auto participant = new VMTDParticipant(this);
+            participant->setDefaultVlanId(m_settings->defaultVlanId());
             participant->setHostName(hostName);
             participant->setHostIp(hostIp);
             participant->setHostInterface(hostInterface);
@@ -306,6 +307,68 @@ namespace VMTDLib
             participant->setSwitchUrl(switchUrl);
             participant->setSwitchPort(switchPort);
             m_participants.append(participant);
+        }
+    }
+
+    const QList<QString> &VMTDDeviceManager::hostIps() const
+    {
+        return m_hostIps;
+    }
+    void VMTDDeviceManager::buildHostIps()
+    {
+        m_hostIps.clear();
+
+        const auto queryStr =
+            QString("SELECT ip FROM Hosts WHERE id > '0';");
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Hosts\" selecting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+
+        while (query.next())
+        {
+            const auto hostIp = query.value("ip").toString();
+            m_hostIps.append(hostIp);
+        }
+    }
+
+    const QList<QUrl> &VMTDDeviceManager::switchUrls() const
+    {
+        return m_switchUrls;
+    }
+    void VMTDDeviceManager::buildSwitchUrls()
+    {
+        m_switchUrls.clear();
+
+        const auto queryStr =
+            QString("SELECT url, username, password FROM Switches WHERE id > '0';");
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Switches\" selecting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+
+        while (query.next())
+        {
+            const auto switchUrl = query.value("url").toString();
+            const auto switchUsername = query.value("username").toString();
+            const auto switchPassword = query.value("password").toString();
+
+            QUrl url;
+            url.setUrl(switchUrl);
+            url.setUserName(switchUsername);
+            url.setPassword(switchPassword);
+
+            m_switchUrls.append(url);
         }
     }
 

@@ -44,6 +44,12 @@ namespace VMTDLib
         const QList<VMTDParticipant *> &participants() const;
         void                       buildParticipants();
 
+        const QList<QString> &hostIps() const;
+        void             buildHostIps();
+
+        const QList<QUrl> &switchUrls() const;
+        void          buildSwitchUrls();
+
     signals:
 
         void switchesUpdatedSignal(const QSqlQuery &query);
@@ -79,5 +85,8 @@ namespace VMTDLib
         QMap<QString, bool>  m_ipOnline;
 
         QList<VMTDParticipant *> m_participants;
+
+        QList<QString> m_hostIps;
+        QList<QUrl> m_switchUrls;
     };
 }
