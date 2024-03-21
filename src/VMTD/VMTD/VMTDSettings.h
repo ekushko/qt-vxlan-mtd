@@ -94,6 +94,20 @@ namespace VMTDLib
         int     reconnectInterval() const;
         void setReconnectInterval(int reconnectInterval);
 
+        //
+
+        bool    shouldCheckConnection() const;
+        void setShouldCheckConnection(bool shouldCheckConnection);
+
+        int     checkConnectionInterval() const;
+        void setCheckConnectionInterval(int checkConnectionInterval);
+
+        int     ticketTimeoutInterval() const;
+        void setTicketTimeoutInterval(int ticketTimeoutInterval);
+
+        int     checkQueueInterval() const;
+        void setCheckQueueInterval(int checkQueueInterval);
+
     signals:
 
         void restartSignal();
@@ -124,6 +138,11 @@ namespace VMTDLib
         int     m_serverPort;
         bool m_shouldReconnect;
         int m_reconnectInterval;
+
+        bool m_shouldCheckConnection;
+        int m_checkConnectionInterval;
+        int m_ticketTimeoutInterval;
+        int m_checkQueueInterval;
 
         bool m_shouldBeRestarted;
 

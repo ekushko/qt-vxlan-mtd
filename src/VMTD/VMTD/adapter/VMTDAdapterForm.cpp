@@ -11,8 +11,6 @@ namespace VMTDLib
 
         if (parent != nullptr && parent->layout() != nullptr)
             parent->layout()->addWidget(this);
-
-        connect(ui->pbClear, &QPushButton::clicked, this, &VMTDAdapterForm::pbClearClicked);
     }
 
     VMTDAdapterForm::~VMTDAdapterForm()
@@ -26,7 +24,7 @@ namespace VMTDLib
             ui->pteFlow->appendPlainText(text);
     }
 
-    void VMTDAdapterForm::pbClearClicked()
+    void VMTDAdapterForm::on_pbClear_clicked()
     {
         ui->pteFlow->clear();
     }

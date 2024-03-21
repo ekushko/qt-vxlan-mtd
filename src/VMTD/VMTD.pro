@@ -169,7 +169,15 @@ SOURCES += \
     VMTD/engine/VMTDGroup.cpp \
     VMTD/engine/VMTDInterface.cpp \
     VMTD/engine/VMTDParticipant.cpp \
-    VMTD/engine/VMTDRoute.cpp
+    VMTD/engine/VMTDRoute.cpp \
+    VMTD/protocol/VMTDClient.cpp \
+    VMTD/protocol/VMTDProtocolHandler.cpp \
+    VMTD/protocol/VMTDProtocolHandlerForm.cpp \
+    VMTD/protocol/VMTDServer.cpp \
+    VMTD/protocol/host/VMTDHostProtocolHandler.cpp \
+    VMTD/protocol/host/VMTDHostProtocolHandlerForm.cpp \
+    VMTD/protocol/nxapi/VMTDNxApiProtocolHandler.cpp \
+    VMTD/protocol/nxapi/VMTDNxApiProtocolHandlerForm.cpp
 
 HEADERS += \
     MainWindow.h \
@@ -202,7 +210,15 @@ HEADERS += \
     VMTD/engine/VMTDGroup.h \
     VMTD/engine/VMTDInterface.h \
     VMTD/engine/VMTDParticipant.h \
-    VMTD/engine/VMTDRoute.h
+    VMTD/engine/VMTDRoute.h \
+    VMTD/protocol/VMTDClient.h \
+    VMTD/protocol/VMTDProtocolHandler.h \
+    VMTD/protocol/VMTDProtocolHandlerForm.h \
+    VMTD/protocol/VMTDServer.h \
+    VMTD/protocol/host/VMTDHostProtocolHandler.h \
+    VMTD/protocol/host/VMTDHostProtocolHandlerForm.h \
+    VMTD/protocol/nxapi/VMTDNxApiProtocolHandler.h \
+    VMTD/protocol/nxapi/VMTDNxApiProtocolHandlerForm.h
 
 FORMS += \
     MainWindow.ui \
@@ -217,7 +233,10 @@ FORMS += \
     VMTD/device/VMTDDeviceManagerForm.ui \
     VMTD/device/VMTDDeviceSwitchDialog.ui \
     VMTD/device/VMTDDeviceTableForm.ui \
-    VMTD/engine/VMTDEngineForm.ui
+    VMTD/engine/VMTDEngineForm.ui \
+    VMTD/protocol/VMTDProtocolHandlerForm.ui \
+    VMTD/protocol/host/VMTDHostProtocolHandlerForm.ui \
+    VMTD/protocol/nxapi/VMTDNxApiProtocolHandlerForm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

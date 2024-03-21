@@ -31,6 +31,11 @@ namespace VMTDLib
         m_shouldReconnect = false;
         m_reconnectInterval = 1000;
 
+        m_shouldCheckConnection = false;
+        m_checkConnectionInterval = 100;
+        m_checkQueueInterval = 100;
+        m_ticketTimeoutInterval = 3000;
+
         m_shouldBeRestarted = false;
 
         connect(this, &VMTDSettings::saveSignal, this, &VMTDSettings::saveSlot);
@@ -110,6 +115,11 @@ namespace VMTDLib
         jsonObj[VN_ME(m_shouldReconnect)] = m_shouldReconnect;
         jsonObj[VN_ME(m_reconnectInterval)] = m_reconnectInterval;
 
+        jsonObj[VN_ME(m_shouldCheckConnection)] = m_shouldCheckConnection;
+        jsonObj[VN_ME(m_checkConnectionInterval)] = m_checkConnectionInterval;
+        jsonObj[VN_ME(m_checkQueueInterval)] = m_checkQueueInterval;
+        jsonObj[VN_ME(m_ticketTimeoutInterval)] = m_ticketTimeoutInterval;
+
         return jsonObj;
     }
     void VMTDSettings::fromJson(const QJsonObject &jsonObj)
@@ -132,6 +142,15 @@ namespace VMTDLib
         m_serverPort = jsonObj[VN_ME(m_serverPort)].toInt(m_serverPort);
         m_shouldReconnect = jsonObj[VN_ME(m_shouldReconnect)].toBool(m_shouldReconnect);
         m_reconnectInterval = jsonObj[VN_ME(m_reconnectInterval)].toInt(m_reconnectInterval);
+
+        m_shouldCheckConnection = jsonObj[VN_ME(m_shouldCheckConnection)]
+                                  .toBool(m_shouldCheckConnection);
+        m_checkConnectionInterval = jsonObj[VN_ME(m_checkConnectionInterval)]
+                                    .toInt(m_checkConnectionInterval);
+        m_checkQueueInterval = jsonObj[VN_ME(m_checkQueueInterval)]
+                               .toInt(m_checkQueueInterval);
+        m_ticketTimeoutInterval = jsonObj[VN_ME(m_ticketTimeoutInterval)]
+                                  .toInt(m_ticketTimeoutInterval);
     }
 
     QString VMTDSettings::filePath() const
@@ -319,6 +338,53 @@ namespace VMTDLib
         if (m_reconnectInterval != reconnectInterval)
         {
             m_reconnectInterval = reconnectInterval;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+
+    bool VMTDSettings::shouldCheckConnection() const
+    {
+        return m_shouldCheckConnection;
+    }
+    void VMTDSettings::setShouldCheckConnection(bool shouldCheckConnection)
+    {
+        m_shouldCheckConnection = shouldCheckConnection;
+    }
+
+    int VMTDSettings::checkConnectionInterval() const
+    {
+        return m_checkConnectionInterval;
+    }
+    void VMTDSettings::setCheckConnectionInterval(int checkConnectionInterval)
+    {
+        if (m_checkConnectionInterval != checkConnectionInterval)
+        {
+            m_checkConnectionInterval = checkConnectionInterval;
+
+            m_shouldBeRestarted = true;
+        }
+    }
+
+    int VMTDSettings::ticketTimeoutInterval() const
+    {
+        return m_ticketTimeoutInterval;
+    }
+    void VMTDSettings::setTicketTimeoutInterval(int ticketTimeoutInterval)
+    {
+        m_ticketTimeoutInterval = ticketTimeoutInterval;
+    }
+
+    int VMTDSettings::checkQueueInterval() const
+    {
+        return m_checkQueueInterval;
+    }
+    void VMTDSettings::setCheckQueueInterval(int checkQueueInterval)
+    {
+        if (m_checkQueueInterval != checkQueueInterval)
+        {
+            m_checkQueueInterval = checkQueueInterval;
 
             m_shouldBeRestarted = true;
         }
