@@ -66,8 +66,6 @@ namespace VMTDLib
 
     public slots:
 
-        virtual void showFormSlot() = 0;
-
         virtual void checkConnectionSlot();
 
         virtual void clearQueueSlot() = 0;

@@ -3,9 +3,6 @@
 
 #include "../../VMTDVarname.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
-
 namespace VMTDLib
 {
     VMTDHostClient::VMTDHostClient(QObject *parent, VMTDSettings *settings)

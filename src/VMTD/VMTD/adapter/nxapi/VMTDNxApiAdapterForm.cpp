@@ -1,10 +1,6 @@
 #include    "VMTDNxApiAdapterForm.h"
 #include "ui_VMTDNxApiAdapterForm.h"
 
-#include <QJsonValue>
-#include <QJsonObject>
-#include <QJsonDocument>
-
 namespace VMTDLib
 {
     VMTDNxApiAdapterForm::VMTDNxApiAdapterForm(QWidget *parent, VMTDNxApiAdapter *adapter) :

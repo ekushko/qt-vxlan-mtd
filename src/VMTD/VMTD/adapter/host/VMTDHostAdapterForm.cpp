@@ -1,9 +1,6 @@
 #include    "VMTDHostAdapterForm.h"
 #include "ui_VMTDHostAdapterForm.h"
 
-#include <QJsonObject>
-#include <QJsonDocument>
-
 namespace VMTDLib
 {
     VMTDHostAdapterForm::VMTDHostAdapterForm(QWidget *parent, QWebSocket *socket) :

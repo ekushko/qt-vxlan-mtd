@@ -52,7 +52,7 @@ namespace VMTDLib
 
         VMTDNxApiAdapter *m_adapter;
 
-        QQueue<CommandList> m_queue;
+        QQueue<QStringList> m_queue;
 
     private slots:
 

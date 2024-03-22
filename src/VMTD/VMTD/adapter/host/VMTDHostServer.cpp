@@ -3,8 +3,6 @@
 
 #include "../../VMTDVarname.h"
 
-#include <QJsonDocument>
-
 namespace VMTDLib
 {
     VMTDHostServer::VMTDHostServer(QObject *parent, VMTDSettings *settings)
@@ -207,7 +205,7 @@ namespace VMTDLib
     {
         QString debugString;
 
-        QWebSocket *socket = dynamic_cast<QWebSocket *>(sender());
+        auto socket = dynamic_cast<QWebSocket *>(sender());
 
         if (socket == nullptr)
         {

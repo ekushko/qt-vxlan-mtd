@@ -4,6 +4,7 @@
 #include "../../VMTDAlias.h"
 
 #include <QWebSocket>
+#include <QJsonDocument>
 
 namespace VMTDLib
 {

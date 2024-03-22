@@ -171,9 +171,11 @@ SOURCES += \
     VMTD/engine/VMTDParticipant.cpp \
     VMTD/engine/VMTDRoute.cpp \
     VMTD/protocol/VMTDClient.cpp \
+    VMTD/protocol/VMTDClientForm.cpp \
     VMTD/protocol/VMTDProtocolHandler.cpp \
     VMTD/protocol/VMTDProtocolHandlerForm.cpp \
     VMTD/protocol/VMTDServer.cpp \
+    VMTD/protocol/VMTDServerForm.cpp \
     VMTD/protocol/host/VMTDHostProtocolHandler.cpp \
     VMTD/protocol/host/VMTDHostProtocolHandlerForm.cpp \
     VMTD/protocol/nxapi/VMTDNxApiProtocolHandler.cpp \
@@ -212,9 +214,11 @@ HEADERS += \
     VMTD/engine/VMTDParticipant.h \
     VMTD/engine/VMTDRoute.h \
     VMTD/protocol/VMTDClient.h \
+    VMTD/protocol/VMTDClientForm.h \
     VMTD/protocol/VMTDProtocolHandler.h \
     VMTD/protocol/VMTDProtocolHandlerForm.h \
     VMTD/protocol/VMTDServer.h \
+    VMTD/protocol/VMTDServerForm.h \
     VMTD/protocol/host/VMTDHostProtocolHandler.h \
     VMTD/protocol/host/VMTDHostProtocolHandlerForm.h \
     VMTD/protocol/nxapi/VMTDNxApiProtocolHandler.h \
@@ -234,7 +238,9 @@ FORMS += \
     VMTD/device/VMTDDeviceSwitchDialog.ui \
     VMTD/device/VMTDDeviceTableForm.ui \
     VMTD/engine/VMTDEngineForm.ui \
+    VMTD/protocol/VMTDClientForm.ui \
     VMTD/protocol/VMTDProtocolHandlerForm.ui \
+    VMTD/protocol/VMTDServerForm.ui \
     VMTD/protocol/host/VMTDHostProtocolHandlerForm.ui \
     VMTD/protocol/nxapi/VMTDNxApiProtocolHandlerForm.ui
 
