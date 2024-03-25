@@ -164,6 +164,8 @@ SOURCES += \
     VMTD/device/VMTDDeviceManagerForm.cpp \
     VMTD/device/VMTDDeviceSwitchDialog.cpp \
     VMTD/device/VMTDDeviceTableForm.cpp \
+    VMTD/engine/VMTDConfigurator.cpp \
+    VMTD/engine/VMTDConfiguratorForm.cpp \
     VMTD/engine/VMTDEngine.cpp \
     VMTD/engine/VMTDEngineForm.cpp \
     VMTD/engine/VMTDGroup.cpp \
@@ -207,6 +209,8 @@ HEADERS += \
     VMTD/device/VMTDDeviceManagerForm.h \
     VMTD/device/VMTDDeviceSwitchDialog.h \
     VMTD/device/VMTDDeviceTableForm.h \
+    VMTD/engine/VMTDConfigurator.h \
+    VMTD/engine/VMTDConfiguratorForm.h \
     VMTD/engine/VMTDEngine.h \
     VMTD/engine/VMTDEngineForm.h \
     VMTD/engine/VMTDGroup.h \
@@ -237,6 +241,7 @@ FORMS += \
     VMTD/device/VMTDDeviceManagerForm.ui \
     VMTD/device/VMTDDeviceSwitchDialog.ui \
     VMTD/device/VMTDDeviceTableForm.ui \
+    VMTD/engine/VMTDConfiguratorForm.ui \
     VMTD/engine/VMTDEngineForm.ui \
     VMTD/protocol/VMTDClientForm.ui \
     VMTD/protocol/VMTDProtocolHandlerForm.ui \
