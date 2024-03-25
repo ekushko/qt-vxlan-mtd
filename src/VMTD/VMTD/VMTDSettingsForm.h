@@ -21,6 +21,23 @@ namespace VMTDLib
         ~VMTDSettingsForm();
 
     private:
+
+        void setEditMode(bool isEditMode);
+        void updateView();
+
+        void updateData();
+
         Ui::VMTDSettingsForm *ui;
+
+        VMTDSettings *m_settings;
+
+    private slots:
+
+
+        void on_pbSave_clicked();
+        void on_pbLoad_clicked();
+        void on_pbChange_clicked();
+        void on_pbAccept_clicked();
+        void on_pbCancel_clicked();
     };
 }

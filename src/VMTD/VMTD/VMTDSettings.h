@@ -60,7 +60,7 @@ namespace VMTDLib
         bool    shouldShowDebug() const;
         void setShouldShowDebug(bool shouldShowDebug);
 
-        //
+        // ПАРАМЕТРЫ КОНФИГУРИРОВАНИЯ
 
         QString dbName() const;
         void setDbName(const QString &dbName);
@@ -77,7 +77,13 @@ namespace VMTDLib
         int     maxVlanId() const;
         void setMaxVlanId(int maxVlanId);
 
-        //
+        QString netplan1FileName() const;
+        void setNetplan1FileName(const QString &netplan1FileName);
+
+        QString netplan2FileName() const;
+        void setNetplan2FileName(const QString &netplan2FileName);
+
+        // СЕТЕВЫЕ ПАРАМЕТРЫ
 
         int     localPort() const;
         void setLocalPort(int localPort);
@@ -94,7 +100,7 @@ namespace VMTDLib
         int     reconnectInterval() const;
         void setReconnectInterval(int reconnectInterval);
 
-        //
+        // ПАРАМЕТРЫ ПРОТОКОЛА
 
         bool    shouldCheckConnection() const;
         void setShouldCheckConnection(bool shouldCheckConnection);
@@ -132,6 +138,8 @@ namespace VMTDLib
         int m_defaultVlanId;
         int m_minVlanId;
         int m_maxVlanId;
+        QString m_netplan1FileName;
+        QString m_netplan2FileName;
 
         int m_localPort;
         QString m_serverIp;

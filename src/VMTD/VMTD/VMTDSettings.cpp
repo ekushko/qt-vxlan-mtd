@@ -24,6 +24,8 @@ namespace VMTDLib
         m_defaultVlanId = 19;
         m_minVlanId = 20;
         m_maxVlanId = 50;
+        m_netplan1FileName = "02-vmtd-1";
+        m_netplan2FileName = "03-vmtd-2";
 
         m_localPort = 30001;
         m_serverIp = "127.0.0.1";
@@ -108,6 +110,8 @@ namespace VMTDLib
         jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
         jsonObj[VN_ME(m_minVlanId)] = m_minVlanId;
         jsonObj[VN_ME(m_maxVlanId)] = m_maxVlanId;
+        jsonObj[VN_ME(m_netplan1FileName)] = m_netplan1FileName;
+        jsonObj[VN_ME(m_netplan2FileName)] = m_netplan2FileName;
 
         jsonObj[VN_ME(m_localPort)] = m_localPort;
         jsonObj[VN_ME(m_serverIp)] = m_serverIp;
@@ -136,6 +140,8 @@ namespace VMTDLib
         m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
         m_minVlanId = jsonObj[VN_ME(m_minVlanId)].toInt(m_minVlanId);
         m_maxVlanId = jsonObj[VN_ME(m_maxVlanId)].toInt(m_maxVlanId);
+        m_netplan1FileName = jsonObj[VN_ME(m_netplan1FileName)].toString(m_netplan1FileName);
+        m_netplan2FileName = jsonObj[VN_ME(m_netplan2FileName)].toString(m_netplan2FileName);
 
         m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
         m_serverIp = jsonObj[VN_ME(m_serverIp)].toString(m_serverIp);
@@ -271,6 +277,23 @@ namespace VMTDLib
         m_maxVlanId = maxVlanId;
     }
 
+    QString VMTDSettings::netplan1FileName() const
+    {
+        return m_netplan1FileName;
+    }
+    void VMTDSettings::setNetplan1FileName(const QString &netplan1FileName)
+    {
+        m_netplan1FileName = netplan1FileName;
+    }
+
+    QString VMTDSettings::netplan2FileName() const
+    {
+        return m_netplan2FileName;
+    }
+    void VMTDSettings::setNetplan2FileName(const QString &netplan2FileName)
+    {
+        m_netplan2FileName = netplan2FileName;
+    }
 
     int VMTDSettings::localPort() const
     {
