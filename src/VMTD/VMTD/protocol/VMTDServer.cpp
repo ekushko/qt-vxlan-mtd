@@ -39,10 +39,14 @@ namespace VMTDLib
             m_form->deleteLater();
     }
 
-    void VMTDServer::showForm()
+    QWidget *VMTDServer::form() const
+    {
+        return m_form;
+    }
+    void VMTDServer::showForm(QWidget *parent)
     {
         if (m_form == nullptr)
-            m_form = new VMTDServerForm(nullptr, this);
+            m_form = new VMTDServerForm(parent, this);
 
         m_form->show();
         m_form->raise();

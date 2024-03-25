@@ -7,7 +7,7 @@
 NAME = VMTD
 
 TEMPLATE  = app
-TEMPLATE  = lib
+#TEMPLATE  = lib
 
 CONFIG += debug_and_release
 CONFIG += build_all
@@ -146,6 +146,7 @@ SOURCES += \
     main.cpp \
     MainWindow.cpp \
     VMTD/VMTDBuildInfo.cpp \
+    VMTD/VMTDController.cpp \
     VMTD/VMTDMethod.cpp \
     VMTD/VMTDSettings.cpp \
     VMTD/VMTDSettingsForm.cpp \
@@ -188,6 +189,7 @@ HEADERS += \
     VMTD/VMTDAlias.h \
     VMTD/VMTDBuildInfo.h \
     VMTD/VMTDComboMap.h \
+    VMTD/VMTDController.h \
     VMTD/VMTDDeclareShared.h \
     VMTD/VMTDMethod.h \
     VMTD/VMTDSettings.h \

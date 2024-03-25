@@ -44,7 +44,6 @@ namespace VMTDLib
         void appendClientSocketSlot(QWebSocket *socket);
         void removeClientSocketSlot(QWebSocket *socket);
 
-        void pbShowDetailedStateClicked();
         void on_pbShowDetailedState_clicked();
     };
 }

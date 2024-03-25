@@ -20,7 +20,8 @@ namespace VMTDLib
                         VMTDDeviceManager *manager);
         ~VMTDNxApiServer();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
         bool isListening() const;
 
@@ -32,8 +33,6 @@ namespace VMTDLib
         void adapterRemovedSignal(VMTDNxApiAdapter *adapter);
 
     public slots:
-
-        void showFormSlot();
 
         void   startListenSlot();
         void    stopListenSlot();

@@ -30,10 +30,16 @@ namespace VMTDLib
             || handler->type() != VMTDProtocolHandler::EnType::HOST)
             return;
 
-        if (m_hostForm != nullptr)
-            delete m_hostForm;
-
         auto hostHandler = dynamic_cast<VMTDHostProtocolHandler *>(handler);
         m_hostForm = new VMTDHostProtocolHandlerForm(ui->wHandler, hostHandler);
+    }
+    void VMTDClientForm::handlerRemovedSlot(VMTDProtocolHandler *handler)
+    {
+        if (handler == nullptr
+            || handler->type() != VMTDProtocolHandler::EnType::HOST)
+            return;
+
+        if (m_hostForm != nullptr)
+            delete m_hostForm;
     }
 }

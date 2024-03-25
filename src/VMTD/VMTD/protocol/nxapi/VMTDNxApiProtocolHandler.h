@@ -18,7 +18,6 @@ namespace VMTDLib
         VMTDNxApiProtocolHandler(QObject *parent,
                                  VMTDSettings *settings,
                                  VMTDNxApiAdapter *adapter);
-        ~VMTDNxApiProtocolHandler();
 
         // ЛОГИКА
 

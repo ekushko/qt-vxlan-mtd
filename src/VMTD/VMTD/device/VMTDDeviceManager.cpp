@@ -42,10 +42,14 @@ namespace VMTDLib
         printDbConnections();
     }
 
-    void VMTDDeviceManager::showForm()
+    QWidget *VMTDDeviceManager::form() const
+    {
+        return m_form;
+    }
+    void VMTDDeviceManager::showForm(QWidget *parent)
     {
         if (m_form == nullptr)
-            m_form = new VMTDDeviceManagerForm(nullptr, this);
+            m_form = new VMTDDeviceManagerForm(parent, this);
 
         m_form->show();
         m_form->raise();

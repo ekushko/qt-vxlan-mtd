@@ -24,6 +24,20 @@ namespace VMTDLib
         delete m_wsServer;
     }
 
+    QWidget *VMTDHostServer::form() const
+    {
+        return m_form;
+    }
+    void VMTDHostServer::showForm(QWidget *parent)
+    {
+        if (m_form == nullptr)
+            m_form = new VMTDHostServerForm(parent, this);
+
+        m_form->show();
+        m_form->raise();
+        m_form->activateWindow();
+    }
+
     VMTDSettings *VMTDHostServer::settings() const
     {
         return m_settings;
@@ -44,16 +58,6 @@ namespace VMTDLib
             state = "Closed";
 
         return state;
-    }
-
-    void VMTDHostServer::showFormSlot()
-    {
-        if (m_form == nullptr)
-            m_form = new VMTDHostServerForm(nullptr, this);
-
-        m_form->show();
-        m_form->raise();
-        m_form->activateWindow();
     }
 
     void VMTDHostServer::startListenSlot()

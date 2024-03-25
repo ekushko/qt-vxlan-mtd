@@ -1,4 +1,5 @@
 #include "VMTDClient.h"
+#include "VMTDClientForm.h"
 
 #include "../VMTDVarname.h"
 
@@ -12,6 +13,26 @@ namespace VMTDLib
         , m_hostClient(hostClient)
     {
 
+    }
+
+    VMTDClient::~VMTDClient()
+    {
+        if (m_form != nullptr)
+            m_form->deleteLater();
+    }
+
+    QWidget *VMTDClient::form() const
+    {
+        return m_form;
+    }
+    void VMTDClient::showForm(QWidget *parent)
+    {
+        if (m_form == nullptr)
+            m_form = new VMTDClientForm(parent, this);
+
+        m_form->show();
+        m_form->raise();
+        m_form->activateWindow();
     }
 
     void VMTDClient::socketConnectedSlot(QWebSocket *socket)

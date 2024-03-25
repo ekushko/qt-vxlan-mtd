@@ -19,7 +19,8 @@ namespace VMTDLib
                    VMTDDeviceManager *manager);
         ~VMTDEngine();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
         // ЛОГИКА
 

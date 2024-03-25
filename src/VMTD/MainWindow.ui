@@ -13,9 +13,113 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
+  <widget class="QWidget" name="wMain">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMain">
+    <property name="title">
+     <string>Main</string>
+    </property>
+    <addaction name="actionDevice"/>
+    <addaction name="actionSettings"/>
+    <addaction name="actionStart"/>
+    <addaction name="actionStop"/>
+   </widget>
+   <widget class="QMenu" name="menuServer">
+    <property name="title">
+     <string>Server</string>
+    </property>
+    <addaction name="actionNxApiServer"/>
+    <addaction name="actionHostServer"/>
+    <addaction name="actionServer"/>
+    <addaction name="actionEngine"/>
+   </widget>
+   <widget class="QMenu" name="menuClient">
+    <property name="title">
+     <string>Client</string>
+    </property>
+    <addaction name="actionHostClient"/>
+    <addaction name="actionClient"/>
+    <addaction name="actionConfigurator"/>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuServer"/>
+   <addaction name="menuClient"/>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionNxApiServer">
+   <property name="text">
+    <string>NX-API Server</string>
+   </property>
+  </action>
+  <action name="actionHostServer">
+   <property name="text">
+    <string>Host Server</string>
+   </property>
+  </action>
+  <action name="actionServer">
+   <property name="text">
+    <string>VMTD Server</string>
+   </property>
+  </action>
+  <action name="actionHostClient">
+   <property name="text">
+    <string>Host Client</string>
+   </property>
+  </action>
+  <action name="actionClient">
+   <property name="text">
+    <string>VMTD Client</string>
+   </property>
+  </action>
+  <action name="actionEngine">
+   <property name="text">
+    <string>Engine</string>
+   </property>
+  </action>
+  <action name="actionConfigurator">
+   <property name="text">
+    <string>Configurator</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionDevice">
+   <property name="text">
+    <string>Device Manager</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

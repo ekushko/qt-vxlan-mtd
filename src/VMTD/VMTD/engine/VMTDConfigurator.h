@@ -17,7 +17,8 @@ namespace VMTDLib
         VMTDConfigurator(QObject *parent, VMTDSettings *settings);
         ~VMTDConfigurator();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
         VMTDSettings *settings() const;
 
@@ -28,8 +29,6 @@ namespace VMTDLib
     public slots:
 
         void handleMethodSlot(const QString &method, const QJsonObject &params, bool &result);
-
-        void showFormSlot();
 
     private:
 

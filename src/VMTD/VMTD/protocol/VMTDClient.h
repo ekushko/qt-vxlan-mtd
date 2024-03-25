@@ -19,7 +19,8 @@ namespace VMTDLib
                    VMTDHostClient *hostClient);
         ~VMTDClient();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
     signals:
 
@@ -29,6 +30,8 @@ namespace VMTDLib
         void handlerRemovedSignal(VMTDProtocolHandler *handler);
 
     private:
+
+        QPointer<VMTDClientForm> m_form;
 
         VMTDSettings *m_settings;
 

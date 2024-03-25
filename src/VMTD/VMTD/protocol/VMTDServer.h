@@ -22,7 +22,8 @@ namespace VMTDLib
                    VMTDHostServer *hostServer);
         ~VMTDServer();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
         // ДАННЫЕ
 

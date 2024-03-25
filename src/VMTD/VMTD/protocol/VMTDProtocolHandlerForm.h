@@ -37,7 +37,6 @@ namespace VMTDLib
 
     private slots:
 
-        void pbClearFlowClicked();
         void on_pbClearFlow_clicked();
     };
 }

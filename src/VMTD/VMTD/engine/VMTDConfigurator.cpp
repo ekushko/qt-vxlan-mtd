@@ -23,10 +23,14 @@ namespace VMTDLib
             m_form->deleteLater();
     }
 
-    void VMTDConfigurator::showForm()
+    QWidget *VMTDConfigurator::form() const
+    {
+        return m_form;
+    }
+    void VMTDConfigurator::showForm(QWidget *parent)
     {
         if (m_form == nullptr)
-            m_form = new VMTDConfiguratorForm(nullptr, this);
+            m_form = new VMTDConfiguratorForm(parent, this);
 
         m_form->show();
         m_form->raise();

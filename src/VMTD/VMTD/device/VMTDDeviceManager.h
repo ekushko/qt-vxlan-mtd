@@ -18,7 +18,8 @@ namespace VMTDLib
         VMTDDeviceManager(QObject *parent, VMTDSettings *settings);
         ~VMTDDeviceManager();
 
-        void showForm();
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
 
         bool              isDbOpened() const;
         const QSqlDatabase &db() const;

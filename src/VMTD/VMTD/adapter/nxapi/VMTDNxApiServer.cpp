@@ -25,10 +25,14 @@ namespace VMTDLib
             m_form->deleteLater();
     }
 
-    void VMTDNxApiServer::showForm()
+    QWidget *VMTDNxApiServer::form() const
+    {
+        return m_form;
+    }
+    void VMTDNxApiServer::showForm(QWidget *parent)
     {
         if (m_form == nullptr)
-            m_form = new VMTDNxApiServerForm(nullptr, this);
+            m_form = new VMTDNxApiServerForm(parent, this);
 
         m_form->show();
         m_form->raise();

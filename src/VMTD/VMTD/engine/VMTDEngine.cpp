@@ -24,10 +24,14 @@ namespace VMTDLib
             delete m_form;
     }
 
-    void VMTDEngine::showForm()
+    QWidget *VMTDEngine::form() const
+    {
+        return m_form;
+    }
+    void VMTDEngine::showForm(QWidget *parent)
     {
         if (m_form == nullptr)
-            m_form = new VMTDEngineForm(nullptr, this);
+            m_form = new VMTDEngineForm(parent, this);
 
         m_form->show();
         m_form->raise();

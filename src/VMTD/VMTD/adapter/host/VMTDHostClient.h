@@ -19,6 +19,9 @@ namespace VMTDLib
         VMTDHostClient(QObject *parent, VMTDSettings *settings);
         ~VMTDHostClient();
 
+        QWidget *form() const;
+        void showForm(QWidget *parent = nullptr);
+
         VMTDSettings *settings() const;
 
         QWebSocket *socket() const;
@@ -35,8 +38,6 @@ namespace VMTDLib
         void socketDisconnectedSignal(QWebSocket *socket);
 
     public slots:
-
-        void showFormSlot();
 
         void    connectSocketSlot();
         void disconnectSocketSlot();

@@ -35,6 +35,20 @@ namespace VMTDLib
         m_socket->deleteLater();
     }
 
+    QWidget *VMTDHostClient::form() const
+    {
+        return m_form;
+    }
+    void VMTDHostClient::showForm(QWidget *parent)
+    {
+        if (m_form == nullptr)
+            m_form = new VMTDHostClientForm(parent, this);
+
+        m_form->show();
+        m_form->raise();
+        m_form->activateWindow();
+    }
+
     VMTDSettings *VMTDHostClient::settings() const
     {
         return m_settings;
@@ -55,16 +69,6 @@ namespace VMTDLib
             state = "Disconnected";
 
         return state;
-    }
-
-    void VMTDHostClient::showFormSlot()
-    {
-        if (m_form == nullptr)
-            m_form = new VMTDHostClientForm(nullptr, this);
-
-        m_form->show();
-        m_form->raise();
-        m_form->activateWindow();
     }
 
     void VMTDHostClient::connectSocketSlot()
