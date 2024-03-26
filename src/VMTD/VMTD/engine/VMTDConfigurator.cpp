@@ -8,10 +8,19 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QDir>
+#include <QFile>
 #include <QProcess>
 
 namespace VMTDLib
 {
+    static const QString NETPLAN_PATH_TEMPLATE = QString("%1%2%3%4%5")
+                                                 .arg(QDir::separator())
+                                                 .arg("etc")
+                                                 .arg(QDir::separator())
+                                                 .arg("netplan")
+                                                 .arg(QDir::separator());
+
     VMTDConfigurator::VMTDConfigurator(QObject *parent, VMTDSettings *settings)
         : QObject(parent)
         , m_settings(settings)
@@ -48,13 +57,82 @@ namespace VMTDLib
     {
         return m_netplan1;
     }
+    void VMTDConfigurator::setNetplan1(const QString &netplan1)
+    {
+        m_netplan1 = netplan1;
+    }
+    QString VMTDConfigurator::netplan1FilePath() const
+    {
+        return NETPLAN_PATH_TEMPLATE
+               + QString("%1.%2")
+               .arg(m_settings->netplan1FileName())
+               .arg("yaml");
+    }
+
     const QString &VMTDConfigurator::netplan2() const
     {
         return m_netplan2;
     }
+    void VMTDConfigurator::setNetplan2(const QString &netplan2)
+    {
+        m_netplan2 = netplan2;
+    }
+    QString VMTDConfigurator::netplan2FilePath() const
+    {
+        return NETPLAN_PATH_TEMPLATE
+               + QString("%1.%2")
+               .arg(m_settings->netplan2FileName())
+               .arg("yaml");
+    }
+
     const QString &VMTDConfigurator::hosts() const
     {
         return m_hosts;
+    }
+    void VMTDConfigurator::setHosts(const QString &hosts)
+    {
+        m_hosts = hosts;
+    }
+    QString VMTDConfigurator::hostsFilePath() const
+    {
+        return QString();
+    }
+
+    bool VMTDConfigurator::applyNetplan()
+    {
+        QFile netplan1File(netplan1FilePath());
+
+        if (!netplan1File.open(QIODevice::WriteOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(netplan1FilePath()));
+            return false;
+        }
+
+        netplan1File.write(m_netplan1.toUtf8());
+        netplan1File.close();
+
+        QFile netplan2File(netplan1FilePath());
+
+        if (!netplan2File.open(QIODevice::WriteOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(netplan2FilePath()));
+            return false;
+        }
+
+        netplan2File.write(m_netplan2.toUtf8());
+        netplan2File.close();
+
+        const auto result =
+            QProcess::startDetached("/bin/bash",
+                                    QStringList()
+                                    << "-c"
+                                    << (QString("netplan apply")));
+
+        return result;
     }
 
     void VMTDConfigurator::handleMethodSlot(const QString &method,
@@ -212,13 +290,7 @@ namespace VMTDLib
     {
         Q_UNUSED(params)
 
-        const auto result =
-            QProcess::startDetached("/bin/bash",
-                                    QStringList()
-                                    << "-c"
-                                    << (QString("netplan apply")));
-
-        return result;
+        return applyNetplan();
     }
 
     bool VMTDConfigurator::handleCheckConnection(const QJsonObject &params)

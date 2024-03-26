@@ -23,6 +23,7 @@ namespace VMTDLib
 
     private:
 
+        void setEditMode(bool isEditMode);
         void updateView();
 
         Ui::VMTDConfiguratorForm *ui;
@@ -34,5 +35,9 @@ namespace VMTDLib
     private slots:
 
         void uiTimerTickSlot();
+
+        void on_pbChange_clicked();
+        void on_pbAccept_clicked();
+        void on_pbCancel_clicked();
     };
 }

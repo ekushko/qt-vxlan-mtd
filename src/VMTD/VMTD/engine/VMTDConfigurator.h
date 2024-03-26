@@ -23,8 +23,18 @@ namespace VMTDLib
         VMTDSettings *settings() const;
 
         const QString &netplan1() const;
+        void        setNetplan1(const QString &netplan1);
+        QString        netplan1FilePath() const;
+
         const QString &netplan2() const;
+        void        setNetplan2(const QString &netplan2);
+        QString        netplan2FilePath() const;
+
         const QString &hosts() const;
+        void        setHosts(const QString &hosts);
+        QString        hostsFilePath() const;
+
+        bool applyNetplan();
 
     public slots:
 
