@@ -41,6 +41,8 @@ namespace VMTDLib
         bool handleClearRoutes(const QJsonObject &params);
         bool handleClearHosts(const QJsonObject &params);
 
+        bool handleApplyNetplan(const QJsonObject &params);
+
         bool handleCheckConnection(const QJsonObject &params);
 
         QPointer<VMTDConfiguratorForm> m_form;

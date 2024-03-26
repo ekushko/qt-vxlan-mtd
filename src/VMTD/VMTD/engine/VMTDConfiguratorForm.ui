@@ -15,58 +15,106 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="tbwMain">
-     <property name="currentIndex">
-      <number>0</number>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
      </property>
-     <widget class="QWidget" name="tabNetplan1">
-      <attribute name="title">
-       <string>Netplan-1</string>
-      </attribute>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>694</width>
+        <height>572</height>
+       </rect>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="_1">
+         <property name="text">
+          <string>Netplan-1:</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="lbNetplan1">
          <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <string>TextLabel</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabNetplan2">
-      <attribute name="title">
-       <string>Netplan-2</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <spacer name="_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="_2">
+         <property name="text">
+          <string>Netplan-2:</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="lbNetplan2">
          <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <string>TextLabel</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabHosts">
-      <attribute name="title">
-       <string>Hosts</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <spacer name="_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="_3">
+         <property name="text">
+          <string>Hosts:</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="lbHosts">
          <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <string>TextLabel</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

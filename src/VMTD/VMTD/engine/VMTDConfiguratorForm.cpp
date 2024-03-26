@@ -16,6 +16,8 @@ namespace VMTDLib
         m_uiTimer.setParent(this);
         connect(&m_uiTimer, &QTimer::timeout, this, &VMTDConfiguratorForm::uiTimerTickSlot);
         m_uiTimer.start(1000);
+
+        updateView();
     }
 
     VMTDConfiguratorForm::~VMTDConfiguratorForm()
@@ -25,9 +27,15 @@ namespace VMTDLib
 
     void VMTDConfiguratorForm::updateView()
     {
-        ui->lbNetplan1->setText(m_configurator->netplan1());
-        ui->lbNetplan2->setText(m_configurator->netplan2());
-        ui->lbHosts->setText(m_configurator->hosts());
+        ui->lbNetplan1->setText(m_configurator->netplan1().isEmpty()
+                                ? "Empty"
+                                : m_configurator->netplan1());
+        ui->lbNetplan2->setText(m_configurator->netplan2().isEmpty()
+                                ? "Empty"
+                                : m_configurator->netplan2());
+        ui->lbHosts->setText(m_configurator->hosts().isEmpty()
+                             ? "Empty"
+                             : m_configurator->hosts());
     }
 
     void VMTDConfiguratorForm::uiTimerTickSlot()

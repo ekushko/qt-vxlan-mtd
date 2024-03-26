@@ -206,6 +206,15 @@ namespace VMTDLib
         return true;
     }
 
+    bool VMTDConfigurator::handleApplyNetplan(const QJsonObject &params)
+    {
+        Q_UNUSED(params)
+
+        // в разработке
+
+        return true;
+    }
+
     bool VMTDConfigurator::handleCheckConnection(const QJsonObject &params)
     {
         Q_UNUSED(params)

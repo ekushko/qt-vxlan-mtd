@@ -28,6 +28,8 @@ private:
 
 private slots:
 
+    void restartSlot();
+
     void on_actionDevice_triggered();
     void on_actionSettings_triggered();
     void on_actionStart_triggered();

@@ -22,11 +22,36 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_controller = new VMTDController(this, "_vmtd");
     m_controller->startController();
+
+    connect(m_controller->settings(), &VMTDSettings::restartSignal,
+            this, &MainWindow::restartSlot);
+
+    restartSlot();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::restartSlot()
+{
+    const auto isServer = (m_controller->settings()->nodeType() == VMTDNodeType::SERVER);
+    const auto isRunning = m_controller->isRunning();
+
+    ui->actionDevice->setEnabled(isServer);
+    ui->actionStart->setEnabled(!isRunning);
+    ui->actionStop->setEnabled(isRunning);
+
+    ui->menuServer->setEnabled(isServer);
+    ui->actionNxApiServer->setEnabled(isRunning);
+    ui->actionHostServer->setEnabled(isRunning);
+    ui->actionServer->setEnabled(isRunning);
+    ui->actionEngine->setEnabled(isServer);
+
+    ui->actionHostClient->setEnabled(isRunning);
+    ui->actionClient->setEnabled(isRunning);
+    ui->actionConfigurator->setEnabled(isRunning);
 }
 
 void MainWindow::on_actionDevice_triggered()
@@ -43,10 +68,14 @@ void MainWindow::on_actionSettings_triggered()
 void MainWindow::on_actionStart_triggered()
 {
     m_controller->startController();
+
+    restartSlot();
 }
 void MainWindow::on_actionStop_triggered()
 {
     m_controller->stopController();
+
+    restartSlot();
 }
 
 

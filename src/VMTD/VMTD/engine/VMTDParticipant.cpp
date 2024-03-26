@@ -120,6 +120,9 @@ namespace VMTDLib
                 m_requestList.append(qMakePair(MTH_CLEAR_INTERFACE_2, jsonObj));
             }
         }
+
+
+        m_requestList.append(qMakePair(MTH_APPLY_NETPLAN, QJsonObject()));
     }
 
     void VMTDParticipant::buildCommands()

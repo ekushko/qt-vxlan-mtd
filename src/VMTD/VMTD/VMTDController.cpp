@@ -18,12 +18,16 @@ namespace VMTDLib
         connect(this, &VMTDController::finished, this, &VMTDController::finishedSlot);
 
         m_manager = new VMTDDeviceManager(this, m_settings);
+
+        m_engine = new VMTDEngine(this, m_settings, m_manager);
     }
 
     VMTDController::~VMTDController()
     {
         if (isRunning())
             stopController();
+
+        delete m_engine;
 
         delete m_manager;
 
@@ -122,9 +126,10 @@ namespace VMTDLib
                     m_manager, &VMTDDeviceManager::updateUrlOnlineSlot);
             connect(m_server, &VMTDServer::updateIpOnlineSignal,
                     m_manager, &VMTDDeviceManager::updateIpOnlineSlot);
-
-            m_engine = new VMTDEngine(nullptr, m_settings, m_manager);
-            connect(this, &VMTDController::finished, m_engine, &VMTDEngine::deleteLater);
+            connect(m_engine, &VMTDEngine::appendCommandListSignal,
+                    m_server, &VMTDServer::appendCommandListSlot);
+            connect(m_engine, &VMTDEngine::appendRequestListSignal,
+                    m_server, &VMTDServer::appendRequestListSlot);
         }
 
         exec();

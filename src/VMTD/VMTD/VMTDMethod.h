@@ -51,6 +51,7 @@ namespace VMTDLib
 #define MTH_CLEAR_INTERFACE_1 VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_INTERFACE_1)
 #define MTH_CLEAR_INTERFACE_2 VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_INTERFACE_2)
 #define MTH_CLEAR_HOSTS VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_HOSTS)
+#define MTH_APPLY_NETPLAN VMTDMethod::methods().value(VMTDMethod::EnName::APPLY_NETPLAN)
 #define MTH_CHECK_CONNECTION VMTDMethod::methods().value(VMTDMethod::EnName::CHECK_CONNECTION)
 
 #define PRM_INTERFACE VMTDMethod::params().value(VMTDMethod::EnParamName::INTERFACE)
@@ -80,6 +81,8 @@ namespace VMTDLib
             CLEAR_INTERFACE_1,
             CLEAR_INTERFACE_2,
             CLEAR_HOSTS,
+
+            APPLY_NETPLAN,
 
             CHECK_CONNECTION
         };
