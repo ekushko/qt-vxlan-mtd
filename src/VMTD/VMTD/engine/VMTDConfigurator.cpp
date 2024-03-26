@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <QProcess>
+
 namespace VMTDLib
 {
     VMTDConfigurator::VMTDConfigurator(QObject *parent, VMTDSettings *settings)
@@ -210,9 +212,13 @@ namespace VMTDLib
     {
         Q_UNUSED(params)
 
-        // в разработке
+        const auto result =
+            QProcess::startDetached("/bin/bash",
+                                    QStringList()
+                                    << "-c"
+                                    << (QString("netplan apply")));
 
-        return true;
+        return result;
     }
 
     bool VMTDConfigurator::handleCheckConnection(const QJsonObject &params)

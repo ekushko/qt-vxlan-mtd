@@ -117,7 +117,14 @@ equals( TEMPLATE, "lib" ) {
     INSTALLS   += incl
 
     FOLDERSLIST  = \
-        device
+        adapter \
+        adapter/host \
+        adapter/nxapi \
+        device \
+        engine \
+        protocol \
+        protocol/host \
+        protocol/nxapi
 
     for( FOLDER, FOLDERSLIST ) {
         $${FOLDER}.path   = $${IMPORT_PATH}/$${NAME}/$${FOLDER}
