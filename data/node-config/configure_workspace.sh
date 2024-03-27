@@ -13,7 +13,7 @@ echo "Root rights found!"
 
 # Настройка прав для netplan
 
-utils="GROUP_EVE ALL=(ALL) NOPASSWD: /home/eve/VMTD/VMTD"
+utils="GROUP_EVE ALL=(ALL) NOPASSWD: /home/eve/VMTD/VMTD, /bin/nohup"
 utils_users="User_Alias GROUP_EVE = eve"
 utils_file="/etc/sudoers"
 echo $utils_users >> $utils_file
