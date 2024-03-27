@@ -44,6 +44,6 @@ for item in "${ips[@]}"; do
         send_to_host $ip $user $password ./VMTD
     fi
     if [[ $should_run == "run" ]]; then
-        command_to_host $ip $user $password "cd VMTD; export DISPLAY=:0; nohup ./VMTD -tray </dev/null &>/dev/null &"
+        command_to_host $ip $user $password "cd VMTD; export DISPLAY=:0; sudo nohup ./VMTD -tray </dev/null &>/dev/null &"
     fi
 done
