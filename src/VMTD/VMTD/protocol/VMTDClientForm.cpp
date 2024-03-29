@@ -17,6 +17,8 @@ namespace VMTDLib
                 this, &VMTDClientForm::handlerCreatedSlot);
         connect(m_client, &VMTDClient::handlerRemovedSignal,
                 this, &VMTDClientForm::handlerRemovedSlot);
+
+        handlerCreatedSlot(m_client->handler());
     }
 
     VMTDClientForm::~VMTDClientForm()

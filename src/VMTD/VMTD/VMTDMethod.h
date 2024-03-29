@@ -11,28 +11,29 @@ namespace VMTDLib
 {
     static const QString VLAN_HEADER_TEMPLATE =
     {
-        "vlans:\n"
+        "network:\n"
+        "  vlans:\n"
     };
 
     static const QString VLAN_TEMPLATE =
     {
-        "  vlan.%1:\n"
-        "    id: %1\n"
-        "    link: %2\n"
-        "    addresses: [%3/%4]\n"
-        "    macaddress: %5\n"
+        "    vlan.%1:\n"
+        "      id: %1\n"
+        "      link: %2\n"
+        "      addresses: [ \"%3/%4\" ]\n"
+        "      macaddress: %5\n"
     };
 
     static const QString ROUTE_HEADER_TEMPLATE =
     {
-        "    routes:\n"
+        "      routes:\n"
     };
 
     static const QString ROUTE_TEMPLATE =
     {
-        "      - to: %1/%2\n"
-        "        via: %3\n"
-        "        metric: %4\n"
+        "        - to: %1/%2\n"
+        "          via: %3\n"
+        "          metric: %4\n"
     };
 
     static const QString NETWORK_TEMPLATE =

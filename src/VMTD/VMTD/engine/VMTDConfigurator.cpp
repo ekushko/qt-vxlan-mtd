@@ -12,6 +12,8 @@
 #include <QFile>
 #include <QProcess>
 
+#include <QRegularExpression>
+
 namespace VMTDLib
 {
     static const QString NETPLAN_PATH_TEMPLATE = QString("%1%2%3%4%5")
@@ -25,7 +27,12 @@ namespace VMTDLib
         : QObject(parent)
         , m_settings(settings)
     {
+        connect(this, &VMTDConfigurator::applyNetplanSignal,
+                this, &VMTDConfigurator::applyNetplanSlot);
 
+        m_netplan1 = load(netplan1FilePath());
+        m_netplan2 = load(netplan2FilePath());
+        //m_hosts = load(hostsFilePath());
     }
 
     VMTDConfigurator::~VMTDConfigurator()
@@ -59,6 +66,10 @@ namespace VMTDLib
     }
     void VMTDConfigurator::setNetplan1(const QString &netplan1)
     {
+        QRegularExpression re("vlan.[0-9]+");
+        const auto rm = re.match(m_netplan1);
+        m_vlanInterface1 = rm.captured(0);
+
         m_netplan1 = netplan1;
     }
     QString VMTDConfigurator::netplan1FilePath() const
@@ -75,6 +86,10 @@ namespace VMTDLib
     }
     void VMTDConfigurator::setNetplan2(const QString &netplan2)
     {
+        QRegularExpression re("vlan.[0-9]+");
+        const auto rm = re.match(m_netplan2);
+        m_vlanInterface2 = rm.captured(0);
+
         m_netplan2 = netplan2;
     }
     QString VMTDConfigurator::netplan2FilePath() const
@@ -98,42 +113,6 @@ namespace VMTDLib
         return QString();
     }
 
-    bool VMTDConfigurator::applyNetplan()
-    {
-        QFile netplan1File(netplan1FilePath());
-
-        if (!netplan1File.open(QIODevice::WriteOnly))
-        {
-            m_settings->debugOut(QString("%1 | File %2 not opened!")
-                                 .arg(VN_S(VMTDConfigurator))
-                                 .arg(netplan1FilePath()));
-            return false;
-        }
-
-        netplan1File.write(m_netplan1.toUtf8());
-        netplan1File.close();
-
-        QFile netplan2File(netplan1FilePath());
-
-        if (!netplan2File.open(QIODevice::WriteOnly))
-        {
-            m_settings->debugOut(QString("%1 | File %2 not opened!")
-                                 .arg(VN_S(VMTDConfigurator))
-                                 .arg(netplan2FilePath()));
-            return false;
-        }
-
-        netplan2File.write(m_netplan2.toUtf8());
-        netplan2File.close();
-
-        const auto result =
-            QProcess::startDetached("/bin/bash",
-                                    QStringList()
-                                    << "-c"
-                                    << (QString("netplan apply")));
-
-        return result;
-    }
 
     void VMTDConfigurator::handleMethodSlot(const QString &method,
                                             const QJsonObject &params,
@@ -167,6 +146,10 @@ namespace VMTDLib
         {
             result = handleClearHosts(params);
         }
+        else if (method == MTH_APPLY_NETPLAN)
+        {
+            result = handleApplyNetplan(params);
+        }
         else if (method == MTH_CHECK_CONNECTION)
         {
             result = handleCheckConnection(params);
@@ -184,59 +167,73 @@ namespace VMTDLib
 
     bool VMTDConfigurator::handleSetupInterface1(const QJsonObject &params)
     {
-        m_netplan1 = VLAN_HEADER_TEMPLATE +
-                     QString(VLAN_TEMPLATE)
-                     .arg(params[PRM_VLAN_ID].toString())
-                     .arg(params[PRM_INTERFACE].toString())
-                     .arg(params[PRM_IP].toString())
-                     .arg(params[PRM_MASK].toInt())
-                     .arg(params[PRM_MAC].toString());
+        auto netplan = VLAN_HEADER_TEMPLATE +
+                       QString(VLAN_TEMPLATE)
+                       .arg(params[PRM_VLAN_ID].toInt())
+                       .arg(params[PRM_INTERFACE].toString())
+                       .arg(params[PRM_IP].toString())
+                       .arg(params[PRM_MASK].toInt())
+                       .arg(params[PRM_MAC].toString());
 
         if (params.contains(PRM_ROUTES)
             && params[PRM_ROUTES].isArray())
         {
-            m_netplan1 += ROUTE_HEADER_TEMPLATE;
+            const auto routesArr = params[PRM_ROUTES].toArray();
 
-            for (const auto routeVal : params[PRM_ROUTES].toArray())
+            if (!routesArr.isEmpty())
             {
-                const auto &routeObj = routeVal.toObject();
+                netplan += ROUTE_HEADER_TEMPLATE;
 
-                m_netplan1 += QString(ROUTE_TEMPLATE)
-                              .arg(routeObj[PRM_NETWORK].toString())
-                              .arg(routeObj[PRM_MASK].toInt())
-                              .arg(routeObj[PRM_GATEWAY].toString())
-                              .arg(routeObj[PRM_METRIC].toInt());
+                for (const auto routeVal : routesArr)
+                {
+                    const auto &routeObj = routeVal.toObject();
+
+                    netplan += QString(ROUTE_TEMPLATE)
+                               .arg(routeObj[PRM_NETWORK].toString())
+                               .arg(routeObj[PRM_MASK].toInt())
+                               .arg(routeObj[PRM_GATEWAY].toString())
+                               .arg(routeObj[PRM_METRIC].toInt());
+                }
             }
         }
+
+        setNetplan1(netplan);
 
         return true;
     }
     bool VMTDConfigurator::handleSetupInterface2(const QJsonObject &params)
     {
-        m_netplan2 = VLAN_HEADER_TEMPLATE +
-                     QString(VLAN_TEMPLATE)
-                     .arg(params[PRM_VLAN_ID].toString())
-                     .arg(params[PRM_INTERFACE].toString())
-                     .arg(params[PRM_IP].toString())
-                     .arg(params[PRM_MASK].toInt())
-                     .arg(params[PRM_MAC].toString());
+        auto netplan = VLAN_HEADER_TEMPLATE +
+                       QString(VLAN_TEMPLATE)
+                       .arg(params[PRM_VLAN_ID].toInt())
+                       .arg(params[PRM_INTERFACE].toString())
+                       .arg(params[PRM_IP].toString())
+                       .arg(params[PRM_MASK].toInt())
+                       .arg(params[PRM_MAC].toString());
 
         if (params.contains(PRM_ROUTES)
             && params[PRM_ROUTES].isArray())
         {
-            m_netplan2 += ROUTE_HEADER_TEMPLATE;
+            const auto routesArr = params[PRM_ROUTES].toArray();
 
-            for (const auto routeVal : params[PRM_ROUTES].toArray())
+            if (!routesArr.isEmpty())
             {
-                const auto &routeObj = routeVal.toObject();
+                netplan += ROUTE_HEADER_TEMPLATE;
 
-                m_netplan2 += QString(ROUTE_TEMPLATE)
-                              .arg(routeObj[PRM_NETWORK].toString())
-                              .arg(routeObj[PRM_MASK].toInt())
-                              .arg(routeObj[PRM_GATEWAY].toString())
-                              .arg(routeObj[PRM_METRIC].toInt());
+                for (const auto routeVal : routesArr)
+                {
+                    const auto &routeObj = routeVal.toObject();
+
+                    netplan += QString(ROUTE_TEMPLATE)
+                               .arg(routeObj[PRM_NETWORK].toString())
+                               .arg(routeObj[PRM_MASK].toInt())
+                               .arg(routeObj[PRM_GATEWAY].toString())
+                               .arg(routeObj[PRM_METRIC].toInt());
+                }
             }
         }
+
+        setNetplan2(netplan);
 
         return true;
     }
@@ -290,7 +287,9 @@ namespace VMTDLib
     {
         Q_UNUSED(params)
 
-        return applyNetplan();
+        emit applyNetplanSignal();
+
+        return true;
     }
 
     bool VMTDConfigurator::handleCheckConnection(const QJsonObject &params)
@@ -298,5 +297,92 @@ namespace VMTDLib
         Q_UNUSED(params)
 
         return true;
+    }
+
+    void VMTDConfigurator::save(const QString &filePath, const QString &data)
+    {
+        QFile f(filePath);
+
+        if (!f.open(QIODevice::WriteOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(filePath));
+            return;
+        }
+
+        f.write(data.toUtf8());
+        f.close();
+    }
+    QString VMTDConfigurator::load(const QString &filePath)
+    {
+        QFile f(filePath);
+
+        if (!f.open(QIODevice::ReadOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(filePath));
+            return QString();
+        }
+
+        return QString::fromUtf8(f.readAll());
+    }
+
+
+    void VMTDConfigurator::applyNetplanSlot()
+    {
+        save(netplan1FilePath(), m_netplan1);
+        save(netplan2FilePath(), m_netplan2);
+        //save(hostsFilePath(), m_hosts);
+
+        QString commands;
+
+        if (!m_vlanInterface1.isEmpty())
+        {
+            commands += QString("ip link delete %1")
+                        .arg(m_vlanInterface1);
+
+            m_settings->debugOut(QString("%1 | Interface %2 is down!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(m_vlanInterface1));
+        }
+
+        if (!m_vlanInterface2.isEmpty())
+        {
+            if (!commands.isEmpty())
+                commands += "; ";
+
+            commands += QString("ip link delete %1")
+                        .arg(m_vlanInterface2);
+
+            m_settings->debugOut(QString("%1 | Interface %2 is down!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(m_vlanInterface2));
+        }
+
+        {
+            if (!commands.isEmpty())
+                commands += "; ";
+
+            commands += "netplan apply";
+        }
+
+        const auto result =
+            QProcess::execute("/bin/bash",
+                              QStringList()
+                              << "-c"
+                              << commands);
+
+        if (!result)
+        {
+            m_settings->debugOut(QString("%1 | Netplan not applied!")
+                                 .arg(VN_S(VMTDConfigurator)));
+        }
+        else
+        {
+            m_settings->debugOut(QString("%1 | Netplan applied!")
+                                 .arg(VN_S(VMTDConfigurator)));
+        }
     }
 }

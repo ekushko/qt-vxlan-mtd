@@ -12,7 +12,7 @@ namespace VMTDLib
         , m_settings(settings)
         , m_hostClient(hostClient)
     {
-
+        socketConnectedSlot(m_hostClient->socket());
     }
 
     VMTDClient::~VMTDClient()
@@ -33,6 +33,16 @@ namespace VMTDLib
         m_form->show();
         m_form->raise();
         m_form->activateWindow();
+    }
+
+    QWebSocket *VMTDClient::socket() const
+    {
+        return m_socket;
+    }
+
+    VMTDHostProtocolHandler *VMTDClient::handler() const
+    {
+        return m_hostHandler;
     }
 
     void VMTDClient::socketConnectedSlot(QWebSocket *socket)

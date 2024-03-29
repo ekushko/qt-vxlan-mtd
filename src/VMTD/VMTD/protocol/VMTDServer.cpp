@@ -19,10 +19,16 @@ namespace VMTDLib
         connect(m_nxApiServer, &VMTDNxApiServer::adapterRemovedSignal,
                 this, &VMTDServer::adapterRemovedSlot);
 
+        for (auto nxApiAdapter : m_nxApiServer->adapters())
+            adapterCreatedSlot(nxApiAdapter);
+
         connect(m_hostServer, &VMTDHostServer::clientConnectedSignal,
                 this, &VMTDServer::clientConnectedSlot);
         connect(m_hostServer, &VMTDHostServer::clientDisconnectedSignal,
                 this, &VMTDServer::clientDisconnectedSlot);
+
+        for (auto socket : m_hostServer->WsClientSockets)
+            clientConnectedSlot(socket);
 
         m_checkConnectionTimer.setParent(this);
         m_checkConnectionTimer.setInterval(m_settings->checkConnectionInterval());

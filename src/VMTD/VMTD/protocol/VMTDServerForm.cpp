@@ -17,6 +17,12 @@ namespace VMTDLib
                 this, &VMTDServerForm::handlerCreatedSlot);
         connect(m_server, &VMTDServer::handlerRemovedSignal,
                 this, &VMTDServerForm::handlerRemovedSlot);
+
+        for (auto handler : m_server->hostHandlers())
+            handlerCreatedSlot(handler);
+
+        for (auto handler : m_server->nxApiHandlers())
+            handlerCreatedSlot(handler);
     }
 
     VMTDServerForm::~VMTDServerForm()
@@ -40,7 +46,7 @@ namespace VMTDLib
         {
             auto hostHandler = dynamic_cast<VMTDHostProtocolHandler *>(handler);
             auto form = new VMTDHostProtocolHandlerForm(ui->tbwHost, hostHandler);
-            ui->tbwNxApi->addTab(form, hostHandler->ip());
+            ui->tbwHost->addTab(form, hostHandler->ip());
             m_hostForms[handler] = form;
         }
     }

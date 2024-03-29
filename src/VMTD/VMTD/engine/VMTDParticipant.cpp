@@ -62,6 +62,7 @@ namespace VMTDLib
                 jsonObj[PRM_MAC] = m_interface1->mac();
                 jsonObj[PRM_IP] = m_interface1->ip();
                 jsonObj[PRM_MASK] = m_interface1->mask();
+                jsonObj[PRM_VLAN_ID] = m_interface1->vlanId();
 
                 QJsonArray jsonArr;
 
@@ -94,8 +95,10 @@ namespace VMTDLib
             if (m_role == EnRole::GATEWAY)
             {
                 jsonObj[PRM_INTERFACE] = hostInterface();
+                jsonObj[PRM_MAC] = m_interface2->mac();
                 jsonObj[PRM_IP] = m_interface2->ip();
                 jsonObj[PRM_MASK] = m_interface2->mask();
+                jsonObj[PRM_VLAN_ID] = m_interface2->vlanId();
 
                 QJsonArray jsonArr;
 

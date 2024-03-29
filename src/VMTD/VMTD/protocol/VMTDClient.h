@@ -22,6 +22,10 @@ namespace VMTDLib
         QWidget *form() const;
         void showForm(QWidget *parent = nullptr);
 
+        QWebSocket *socket() const;
+
+        VMTDHostProtocolHandler *handler() const;
+
     signals:
 
         void handleMethodSignal(const QString &method, const QJsonObject &params, bool &result);
@@ -36,8 +40,8 @@ namespace VMTDLib
         VMTDSettings *m_settings;
 
         VMTDHostClient *m_hostClient;
-        QWebSocket *m_socket;
-        VMTDHostProtocolHandler *m_hostHandler;
+        QWebSocket *m_socket = nullptr;
+        VMTDHostProtocolHandler *m_hostHandler = nullptr;
 
     private slots:
 

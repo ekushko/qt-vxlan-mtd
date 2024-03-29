@@ -59,7 +59,8 @@ namespace VMTDLib
         m_configurator->setNetplan1(ui->pteNetplan1->toPlainText());
         m_configurator->setNetplan2(ui->pteNetplan2->toPlainText());
         m_configurator->setHosts(ui->pteHosts->toPlainText());
-        m_configurator->applyNetplan();
+
+        emit m_configurator->applyNetplanSignal();
 
         setEditMode(false);
         updateView();

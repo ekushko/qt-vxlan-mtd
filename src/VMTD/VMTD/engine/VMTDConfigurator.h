@@ -34,7 +34,9 @@ namespace VMTDLib
         void        setHosts(const QString &hosts);
         QString        hostsFilePath() const;
 
-        bool applyNetplan();
+    signals:
+
+        void applyNetplanSignal();
 
     public slots:
 
@@ -55,12 +57,22 @@ namespace VMTDLib
 
         bool handleCheckConnection(const QJsonObject &params);
 
+        void    save(const QString &filePath, const QString &data);
+        QString load(const QString &filePath);
+
         QPointer<VMTDConfiguratorForm> m_form;
 
         VMTDSettings *m_settings;
 
+        QString m_vlanInterface1;
+        QString m_vlanInterface2;
+
         QString m_netplan1;
         QString m_netplan2;
         QString m_hosts;
+
+    private slots:
+
+        void applyNetplanSlot();
     };
 }

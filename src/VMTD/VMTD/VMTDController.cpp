@@ -9,13 +9,14 @@ namespace VMTDLib
     VMTDController::VMTDController(QObject *parent, const QString &systemName)
         : QThread(parent)
     {
-        m_settings = new VMTDSettings(this, systemName);
-        connect(m_settings, &VMTDSettings::restartSignal, this, &VMTDController::restartSlot);
-
-        qRegisterMetaType<QList<QPair<QString, QJsonObject>>>("QList<QPair<QString, QJsonObject>>");
+        qRegisterMetaType<RequestList>(VN(RequestList));
+        qRegisterMetaType<CommandList>(VN(CommandList));
 
         connect(this, &VMTDController::started, this, &VMTDController::startedSlot);
         connect(this, &VMTDController::finished, this, &VMTDController::finishedSlot);
+
+        m_settings = new VMTDSettings(this, systemName);
+        connect(m_settings, &VMTDSettings::restartSignal, this, &VMTDController::restartSlot);
 
         m_manager = new VMTDDeviceManager(this, m_settings);
 
