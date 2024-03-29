@@ -18,8 +18,8 @@ namespace VMTDLib
 
         setAttribute(Qt::WA_DeleteOnClose, true);
         setWindowTitle(QString("Protocol %1:%2").
-                       arg(m_handler->ip())
-                       .arg(m_handler->port()));
+                       arg(m_handler->hostIp())
+                       .arg(m_handler->hostPort()));
 
         m_handlerForm = new VMTDProtocolHandlerForm(ui->gbProtocolHandler, m_handler);
 

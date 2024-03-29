@@ -19,7 +19,7 @@ namespace VMTDLib
         VMTDHostProtocolHandler(QObject *parent,
                                 VMTDSettings *settings,
                                 EnSide side,
-                                QWebSocket *socket);
+                                const QString &hostIp, int hostPort);
 
         // КОНСТАНТЫ
 
@@ -42,15 +42,15 @@ namespace VMTDLib
 
         // ДАННЫЕ
 
-        QString ip() const;
+        QString hostIp() const;
 
-        int port() const;
+        int hostPort() const;
 
         int queueLength() const override;
 
     signals:
 
-        void sendMessageSignal(QWebSocket *socket, const QString &data);
+        void sendMessageSignal(const QString &ip, int port, const QString &data);
 
         void handleMethodSignal(const QString &method, const QJsonObject &params, bool &result);
 
@@ -60,7 +60,7 @@ namespace VMTDLib
 
         void appendRequestListSlot(const RequestList &requests);
 
-        void receiveMessageSlot(QWebSocket *socket, const QString &data);
+        void receiveMessageSlot(const QString &ip, int port, const QString &data);
 
         void clearQueueSlot() override;
 
@@ -78,7 +78,8 @@ namespace VMTDLib
 
         QPointer<VMTDHostProtocolHandlerForm> m_form;
 
-        QWebSocket *m_socket;
+        QString m_ip;
+        int m_port;
 
         int m_commandCounter = 0;
 

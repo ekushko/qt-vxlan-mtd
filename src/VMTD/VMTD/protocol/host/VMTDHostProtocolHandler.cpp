@@ -12,9 +12,10 @@ namespace VMTDLib
     VMTDHostProtocolHandler::VMTDHostProtocolHandler(QObject *parent,
                                                      VMTDSettings *settings,
                                                      EnSide side,
-                                                     QWebSocket *socket)
+                                                     const QString &ip, int port)
         : VMTDProtocolHandler(parent, settings, EnType::HOST, side)
-        , m_socket(socket)
+        , m_ip(ip)
+        , m_port(port)
     {
 
     }
@@ -48,14 +49,14 @@ namespace VMTDLib
         appendRequestListSlot(requests);
     }
 
-    QString VMTDHostProtocolHandler::ip() const
+    QString VMTDHostProtocolHandler::hostIp() const
     {
-        return QHostAddress(m_socket->peerAddress().toIPv4Address()).toString();
+        return m_ip;
     }
 
-    int VMTDHostProtocolHandler::port() const
+    int VMTDHostProtocolHandler::hostPort() const
     {
-        return m_socket->peerPort();
+        return m_port;
     }
 
     int VMTDHostProtocolHandler::queueLength() const
@@ -89,10 +90,30 @@ namespace VMTDLib
         }
     }
 
-    void VMTDHostProtocolHandler::receiveMessageSlot(QWebSocket *socket, const QString &data)
+    void VMTDHostProtocolHandler::receiveMessageSlot(const QString &ip, int port, const QString &data)
     {
+        if (ip != hostIp() && port != hostPort())
+        {
+            const auto debugText = QString("Received from %1:%2 but expected %3:%4")
+                                   .arg(ip).arg(port)
+                                   .arg(hostIp()).arg(hostPort());
+            emit showDebugSignal(QTime::currentTime(), debugText);
+            m_settings->debugOut(QString("%1 | %2:%3 | %4")
+                                 .arg(VN_S(VMTDHostProtocolHandler))
+                                 .arg(hostIp()).arg(hostPort())
+                                 .arg(debugText));
+        }
+
         if (data.isEmpty())
+        {
+            const auto debugText = "Empty data";
+            emit showDebugSignal(QTime::currentTime(), debugText);
+            m_settings->debugOut(QString("%1 | %2:%3 | %4")
+                                 .arg(VN_S(VMTDHostProtocolHandler))
+                                 .arg(hostIp()).arg(hostPort())
+                                 .arg(debugText));
             return;
+        }
 
         QJsonParseError parseError;
         QJsonDocument inputDoc, outputDoc;
@@ -109,7 +130,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
 
                 outputDoc.setObject(buildError(QJsonValue(),
@@ -122,7 +143,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
             }
         }
@@ -135,7 +156,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
             }
             else if (m_side == EnSide::SERVER)
@@ -145,7 +166,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
             }
 
@@ -194,14 +215,14 @@ namespace VMTDLib
 
         if (m_side == EnSide::CLIENT && !outputDoc.isEmpty())
         {
-            emit sendMessageSignal(socket, outputDoc.toJson(QJsonDocument::JsonFormat::Indented));
+            emit sendMessageSignal(ip, port, outputDoc.toJson(QJsonDocument::JsonFormat::Indented));
 
             const auto debugText = QString("Response sent:\n")
                                    + outputDoc.toJson(QJsonDocument::JsonFormat::Indented);
             emit showDebugSignal(QTime::currentTime(), debugText);
             m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                  .arg(VN_S(VMTDHostProtocolHandler))
-                                 .arg(ip()).arg(port())
+                                 .arg(hostIp()).arg(hostPort())
                                  .arg(debugText));
         }
     }
@@ -289,7 +310,7 @@ namespace VMTDLib
 
     void VMTDHostProtocolHandler::handleServer(const QJsonObject &response)
     {
-        emit updateIpOnlineSignal(ip(), true);
+        emit updateIpOnlineSignal(hostIp(), true);
 
         m_ticketTimeoutTimer.stop();
 
@@ -299,7 +320,7 @@ namespace VMTDLib
             emit showDebugSignal(QTime::currentTime(), debugText);
             m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                  .arg(VN_S(VMTDHostProtocolHandler))
-                                 .arg(ip()).arg(port())
+                                 .arg(hostIp()).arg(hostPort())
                                  .arg(debugText));
         }
         else
@@ -312,7 +333,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
             }
             else if (response.contains("result"))
@@ -325,7 +346,7 @@ namespace VMTDLib
                     emit showDebugSignal(QTime::currentTime(), debugText);
                     m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                          .arg(VN_S(VMTDHostProtocolHandler))
-                                         .arg(ip()).arg(port())
+                                         .arg(hostIp()).arg(hostPort())
                                          .arg(debugText));
                 }
                 else
@@ -334,7 +355,7 @@ namespace VMTDLib
                     emit showDebugSignal(QTime::currentTime(), debugText);
                     m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                          .arg(VN_S(VMTDHostProtocolHandler))
-                                         .arg(ip()).arg(port())
+                                         .arg(hostIp()).arg(hostPort())
                                          .arg(debugText));
                 }
             }
@@ -352,7 +373,7 @@ namespace VMTDLib
             emit showDebugSignal(QTime::currentTime(), debugText);
             m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                  .arg(VN_S(VMTDHostProtocolHandler))
-                                 .arg(ip()).arg(port())
+                                 .arg(hostIp()).arg(hostPort())
                                  .arg(debugText));
 
             response = buildError(request["id"], (int)error, enErrorToS(error));
@@ -369,7 +390,7 @@ namespace VMTDLib
                 emit showDebugSignal(QTime::currentTime(), debugText);
                 m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                      .arg(VN_S(VMTDHostProtocolHandler))
-                                     .arg(ip()).arg(port())
+                                     .arg(hostIp()).arg(hostPort())
                                      .arg(debugText));
 
                 response = buildError(request["id"], (int)error, enErrorToS(error));
@@ -395,7 +416,7 @@ namespace VMTDLib
                         emit showDebugSignal(QTime::currentTime(), debugText);
                         m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                              .arg(VN_S(VMTDHostProtocolHandler))
-                                             .arg(ip()).arg(port())
+                                             .arg(hostIp()).arg(hostPort())
                                              .arg(debugText));
 
                         response = buildError(request["id"], (int)error, enErrorToS(error));
@@ -414,7 +435,7 @@ namespace VMTDLib
                     emit showDebugSignal(QTime::currentTime(), debugText);
                     m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                          .arg(VN_S(VMTDHostProtocolHandler))
-                                         .arg(ip()).arg(port())
+                                         .arg(hostIp()).arg(hostPort())
                                          .arg(debugText));
 
                     emit handleMethodSignal(method, params, result);
@@ -440,10 +461,10 @@ namespace VMTDLib
         emit showDebugSignal(QTime::currentTime(), debugText);
         m_settings->debugOut(QString("%1 | %2:%3 | %4")
                              .arg(VN_S(VMTDHostProtocolHandler))
-                             .arg(ip()).arg(port())
+                             .arg(hostIp()).arg(hostPort())
                              .arg(debugText));
 
-        emit sendMessageSignal(m_socket, outputDoc.toJson(QJsonDocument::JsonFormat::Indented));
+        emit sendMessageSignal(hostIp(), hostPort(), outputDoc.toJson(QJsonDocument::JsonFormat::Indented));
 
         m_ticketTimeoutTimer.start();
     }
@@ -452,13 +473,13 @@ namespace VMTDLib
     {
         m_queueState = EnQueueState::READY_TO_SEND;
 
-        emit updateIpOnlineSignal(ip(), false);
+        emit updateIpOnlineSignal(hostIp(), false);
 
         const auto debugText = QString("Response not received");
         emit showDebugSignal(QTime::currentTime(), debugText);
         m_settings->debugOut(QString("%1 | %2:%3 | %4")
                              .arg(VN_S(VMTDHostProtocolHandler))
-                             .arg(ip()).arg(port())
+                             .arg(hostIp()).arg(hostPort())
                              .arg(debugText));
     }
 }

@@ -396,7 +396,12 @@ namespace VMTDLib
     }
     void VMTDSettings::setTicketTimeoutInterval(int ticketTimeoutInterval)
     {
-        m_ticketTimeoutInterval = ticketTimeoutInterval;
+        if (m_ticketTimeoutInterval != ticketTimeoutInterval)
+        {
+            m_ticketTimeoutInterval = ticketTimeoutInterval;
+
+            m_shouldBeRestarted = true;
+        }
     }
 
     int VMTDSettings::checkQueueInterval() const

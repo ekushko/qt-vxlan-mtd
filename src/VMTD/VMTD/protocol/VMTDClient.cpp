@@ -55,8 +55,9 @@ namespace VMTDLib
         }
 
         const auto ip = QHostAddress(socket->peerAddress().toIPv4Address()).toString();
+        const auto port = socket->peerPort();
 
-        if (m_hostHandler != nullptr && m_hostHandler->ip() == ip)
+        if (m_hostHandler != nullptr && m_hostHandler->hostIp() == ip)
         {
             m_settings->debugOut(QString("%1 | Host handler for %2 already created!")
                                  .arg(VN_S(VMTDClient))
@@ -69,7 +70,7 @@ namespace VMTDLib
         m_hostHandler = new VMTDHostProtocolHandler(this,
                                                     m_settings,
                                                     VMTDProtocolHandler::EnSide::CLIENT,
-                                                    m_socket);
+                                                    ip, port);
 
         connect(m_hostHandler, &VMTDHostProtocolHandler::sendMessageSignal,
                 m_hostClient, &VMTDHostClient::sendDataSlot);

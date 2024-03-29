@@ -17,7 +17,7 @@ namespace VMTDLib
 
         VMTDNxApiProtocolHandler(QObject *parent,
                                  VMTDSettings *settings,
-                                 VMTDNxApiAdapter *adapter);
+                                 const QString &url);
 
         // ЛОГИКА
 
@@ -49,7 +49,7 @@ namespace VMTDLib
 
         QPointer<VMTDNxApiProtocolHandlerForm> m_form;
 
-        VMTDNxApiAdapter *m_adapter;
+        QString m_url;
 
         QQueue<QStringList> m_queue;
 

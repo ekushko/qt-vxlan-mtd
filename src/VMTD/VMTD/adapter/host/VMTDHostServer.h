@@ -35,7 +35,7 @@ namespace VMTDLib
         void clientConnectedSignal(QWebSocket *socket);
         void clientDisconnectedSignal(QWebSocket *socket);
 
-        void receiveMessageSignal(QWebSocket *socket, const QString &data);
+        void receiveMessageSignal(const QString &ip, int port, const QString &data);
 
         void showDebugSignal(QWebSocket *socket, const QTime &time, const QString &text);
 
@@ -45,7 +45,7 @@ namespace VMTDLib
         void    stopListenSlot();
         void restartListenSlot();
 
-        void sendMessageSlot(QWebSocket *socket, const QString &data);
+        void sendMessageSlot(const QString &ip, int port, const QString &data);
 
     private:
 

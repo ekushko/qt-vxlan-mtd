@@ -100,35 +100,41 @@ namespace VMTDLib
         connectSocketSlot();
     }
 
-    void VMTDHostClient::sendDataSlot(QWebSocket *socket, const QString &data)
+    void VMTDHostClient::sendDataSlot(const QString &ip, int port, const QString &data)
     {
-        if (m_socket != socket
-            || m_socket->state() != QAbstractSocket::ConnectedState)
+        if (QHostAddress(m_socket->peerAddress().toIPv4Address()).toString() == ip
+            && m_socket->peerPort() == port)
+        {
+            return;
+        }
+
+        if (m_socket->state() != QAbstractSocket::ConnectedState)
             return;
 
         m_socket->sendTextMessage(data);
 
         auto debugString = QString("Sended to {%1:%2}: %3")
-                           .arg(QHostAddress(socket->peerAddress().toIPv4Address()).toString())
-                           .arg(socket->peerPort())
+                           .arg(ip).arg(port)
                            .arg(data);
 
-        emit showDebugSignal(socket, QTime::currentTime(), debugString);
+        emit showDebugSignal(m_socket, QTime::currentTime(), debugString);
         m_settings->debugOut(VN_S(VMTDHostClient) + " | " + debugString);
     }
 
 
     void VMTDHostClient::textMessageReceivedSlot(const QString &data)
     {
+        const auto ip = QHostAddress(m_socket->peerAddress().toIPv4Address()).toString();
+        const auto port = m_socket->peerPort();
+
         const auto debugString = QString("Received from {%1:%2}: %3\n")
-                                 .arg(QHostAddress(m_socket->peerAddress().toIPv4Address()).toString())
-                                 .arg(m_socket->peerPort())
+                                 .arg(ip).arg(port)
                                  .arg(data);
 
         emit showDebugSignal(m_socket, QTime::currentTime(), debugString);
         m_settings->debugOut(VN_S(VMTDHostClient) + " | " + debugString);
 
-        emit receiveMessageSignal(m_socket, data);
+        emit receiveMessageSignal(ip, port, data);
     }
 
     void VMTDHostClient::connectedSlot()

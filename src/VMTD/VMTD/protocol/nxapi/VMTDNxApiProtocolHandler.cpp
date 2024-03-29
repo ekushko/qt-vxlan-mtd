@@ -7,9 +7,9 @@ namespace VMTDLib
 {
     VMTDNxApiProtocolHandler::VMTDNxApiProtocolHandler(QObject *parent,
                                                        VMTDSettings *settings,
-                                                       VMTDNxApiAdapter *adapter)
+                                                       const QString &url)
         : VMTDProtocolHandler(parent, settings, EnType::NX_API, EnSide::SERVER)
-        , m_adapter(adapter)
+        , m_url(url)
     {
 
     }
@@ -32,7 +32,7 @@ namespace VMTDLib
 
     QString VMTDNxApiProtocolHandler::url() const
     {
-        return m_adapter->url().toString(QUrl::RemoveUserInfo);
+        return m_url;
     }
 
     int VMTDNxApiProtocolHandler::queueLength() const

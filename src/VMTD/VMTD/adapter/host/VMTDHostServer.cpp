@@ -117,8 +117,19 @@ namespace VMTDLib
         startListenSlot();
     }
 
-    void VMTDHostServer::sendMessageSlot(QWebSocket *socket, const QString &data)
+    void VMTDHostServer::sendMessageSlot(const QString &ip, int port, const QString &data)
     {
+        QWebSocket *socket = nullptr;
+
+        for (auto _socket : WsClientSockets)
+        {
+            if (QHostAddress(_socket->peerAddress().toIPv4Address()).toString() == ip
+                && _socket->peerPort() == port)
+            {
+                socket = _socket;
+            }
+        }
+
         if (socket == nullptr)
             return;
 
@@ -128,8 +139,7 @@ namespace VMTDLib
         socket->sendTextMessage(data);
 
         auto debugString = QString("Sended to {%1:%2}: %3\n")
-                           .arg(QHostAddress(socket->peerAddress().toIPv4Address()).toString())
-                           .arg(socket->peerPort())
+                           .arg(ip).arg(port)
                            .arg(data);
 
         emit showDebugSignal(socket, QTime::currentTime(), debugString);
@@ -174,15 +184,17 @@ namespace VMTDLib
     {
         auto socket = dynamic_cast<QWebSocket *>(sender());
 
+        const auto ip = QHostAddress(socket->peerAddress().toIPv4Address()).toString();
+        const auto port = socket->peerPort();
+
         const auto debugString = QString("Received from {%1:%2}: %3\n")
-                                 .arg(QHostAddress(socket->peerAddress().toIPv4Address()).toString())
-                                 .arg(socket->peerPort())
+                                 .arg(ip).arg(port)
                                  .arg(data);
 
         emit showDebugSignal(socket, QTime::currentTime(), debugString);
         m_settings->debugOut(VN_S(VMTDHostServer) + " | " + debugString);
 
-        emit receiveMessageSignal(socket, data);
+        emit receiveMessageSignal(ip, port, data);
     }
 
     void VMTDHostServer::errorSlot(QAbstractSocket::SocketError error)

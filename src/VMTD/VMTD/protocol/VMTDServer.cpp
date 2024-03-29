@@ -115,13 +115,15 @@ namespace VMTDLib
             return;
         }
 
-        auto handler = new VMTDNxApiProtocolHandler(this, m_settings, adapter);
+        auto handler = new VMTDNxApiProtocolHandler(this, m_settings, url);
         m_nxApiHandlers[url] = handler;
 
         connect(handler, &VMTDNxApiProtocolHandler::executeCommandListSignal,
                 adapter, &VMTDNxApiAdapter::executeCommandListSlot);
         connect(adapter, &VMTDNxApiAdapter::commandListExecutedSignal,
                 handler, &VMTDNxApiProtocolHandler::commandListExecutedSlot);
+        connect(handler, &VMTDNxApiProtocolHandler::checkConnectionSignal,
+                adapter, &VMTDNxApiAdapter::checkConnectionSlot);
         connect(handler, &VMTDNxApiProtocolHandler::updateUrlOnlineSignal,
                 this, &VMTDServer::updateUrlOnlineSignal);
 
@@ -171,6 +173,7 @@ namespace VMTDLib
         }
 
         const auto ip = QHostAddress(socket->peerAddress().toIPv4Address()).toString();
+        const auto port = socket->peerPort();
 
         if (m_hostHandlers.contains(ip))
         {
@@ -182,7 +185,7 @@ namespace VMTDLib
 
         auto handler = new VMTDHostProtocolHandler(this, m_settings,
                                                    VMTDProtocolHandler::EnSide::SERVER,
-                                                   socket);
+                                                   ip, port);
         m_hostHandlers[ip] = handler;
 
         connect(handler, &VMTDHostProtocolHandler::sendMessageSignal,

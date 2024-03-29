@@ -46,7 +46,7 @@ namespace VMTDLib
         {
             auto hostHandler = dynamic_cast<VMTDHostProtocolHandler *>(handler);
             auto form = new VMTDHostProtocolHandlerForm(ui->tbwHost, hostHandler);
-            ui->tbwHost->addTab(form, hostHandler->ip());
+            ui->tbwHost->addTab(form, hostHandler->hostIp());
             m_hostForms[handler] = form;
         }
     }
@@ -78,7 +78,7 @@ namespace VMTDLib
 
             for (int i = 0; ui->tbwHost->tabBar()->count(); ++i)
             {
-                if (ui->tbwHost->tabBar()->tabText(i) == hostHandler->ip())
+                if (ui->tbwHost->tabBar()->tabText(i) == hostHandler->hostIp())
                 {
                     ui->tbwHost->removeTab(i);
                     break;

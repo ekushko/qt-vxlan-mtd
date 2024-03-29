@@ -29,6 +29,7 @@ namespace VMTDLib
     void VMTDNxApiAdapter::checkConnectionSlot()
     {
         QNetworkRequest request(m_url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json-rpc");
         buildRequest(&request);
         showRequest(&request);
 
@@ -82,7 +83,7 @@ namespace VMTDLib
                                        reply->error() != QNetworkReply::NoError);
 
         emit showDebugSignal(QTime::currentTime(), debugString);
-        m_settings->debugOut(VN_S(VMTDNxApiAdapter) + QString("(%1) | %2")
+        m_settings->debugOut(VN_S(VMTDNxApiAdapter) + QString(" | %1 | %2")
                              .arg(m_url.toString(QUrl::RemoveUserInfo))
                              .arg(debugString));
 
@@ -108,7 +109,7 @@ namespace VMTDLib
             debugString.append("\n" + jsonDoc->toJson(QJsonDocument::JsonFormat::Indented));
 
         emit showDebugSignal(QTime::currentTime(), debugString);
-        m_settings->debugOut(VN_S(VMTDNxApiAdapter) + QString("(%1) | %2")
+        m_settings->debugOut(VN_S(VMTDNxApiAdapter) + QString(" | %1 | %2")
                              .arg(m_url.toString(QUrl::RemoveUserInfo))
                              .arg(debugString));
     }

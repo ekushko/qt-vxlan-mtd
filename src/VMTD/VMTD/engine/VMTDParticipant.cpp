@@ -139,7 +139,7 @@ namespace VMTDLib
         if (m_role == EnRole::GATEWAY)
             vlans += QString(", %1").arg(m_interface2->vlanId());
 
-        m_commandList.append(QString("interface %1").arg(m_hostInterface));
+        m_commandList.append(QString("interface %1").arg(m_switchPort));
         m_commandList.append(QString("  switchport"));
         m_commandList.append(QString("  switchport mode trunk"));
         m_commandList.append(QString("  switchport trunk allowed vlan %1").arg(vlans));
