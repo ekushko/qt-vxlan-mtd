@@ -13,11 +13,14 @@ echo "Root rights found!"
 
 # Настройка прав для netplan
 
-utils="GROUP_EVE ALL=(ALL) NOPASSWD: /home/eve/VMTD/VMTD, /bin/nohup"
+utils="GROUP_EVE ALL=(ALL) NOPASSWD: /bin/ip, /sbin/ifconfig, /sbin/netplan"
 utils_users="User_Alias GROUP_EVE = eve"
 utils_file="/etc/sudoers"
 echo $utils_users >> $utils_file
 echo $utils >> $utils_file
+
+chown -R eve /etc/netplan/
+chmod -R 777 /etc/netplan/
 
 # Обновление пакетов
 

@@ -340,7 +340,7 @@ namespace VMTDLib
 
         if (!m_vlanInterface1.isEmpty())
         {
-            commands += QString("ip link delete %1")
+            commands += QString("sudo ip link delete %1")
                         .arg(m_vlanInterface1);
 
             m_settings->debugOut(QString("%1 | Interface %2 is down!")
@@ -353,7 +353,7 @@ namespace VMTDLib
             if (!commands.isEmpty())
                 commands += "; ";
 
-            commands += QString("ip link delete %1")
+            commands += QString("sudo ip link delete %1")
                         .arg(m_vlanInterface2);
 
             m_settings->debugOut(QString("%1 | Interface %2 is down!")
@@ -365,7 +365,7 @@ namespace VMTDLib
             if (!commands.isEmpty())
                 commands += "; ";
 
-            commands += "netplan apply";
+            commands += "sudo netplan apply";
         }
 
         const auto result =

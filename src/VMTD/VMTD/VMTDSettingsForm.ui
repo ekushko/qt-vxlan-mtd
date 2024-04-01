@@ -93,6 +93,12 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="_14">
+            <property name="minimumSize">
+             <size>
+              <width>205</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Node type:</string>
             </property>
@@ -165,6 +171,12 @@
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="_23">
+            <property name="minimumSize">
+             <size>
+              <width>205</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Min VLAN ID:</string>
             </property>
@@ -425,6 +437,12 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="_10">
+            <property name="minimumSize">
+             <size>
+              <width>205</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
              <string>Remote IP:</string>
             </property>

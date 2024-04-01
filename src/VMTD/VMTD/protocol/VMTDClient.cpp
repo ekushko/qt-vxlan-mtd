@@ -59,9 +59,8 @@ namespace VMTDLib
 
         if (m_hostHandler != nullptr && m_hostHandler->hostIp() == ip)
         {
-            m_settings->debugOut(QString("%1 | Host handler for %2 already created!")
-                                 .arg(VN_S(VMTDClient))
-                                 .arg(ip));
+            m_settings->debugOut(QString("%1 | Host handler already created!")
+                                 .arg(VN_S(VMTDClient)));
             return;
         }
 
@@ -82,9 +81,8 @@ namespace VMTDLib
 
         emit handlerCreatedSignal(m_hostHandler);
 
-        m_settings->debugOut(QString("%1 | Host handler for %2 already created!")
-                             .arg(VN_S(VMTDClient))
-                             .arg(ip));
+        m_settings->debugOut(QString("%1 | Host handler created!")
+                             .arg(VN_S(VMTDClient)));
     }
     void VMTDClient::socketDisconnectedSlot(QWebSocket *socket)
     {
@@ -95,13 +93,10 @@ namespace VMTDLib
             return;
         }
 
-        const auto ip = QHostAddress(socket->peerAddress().toIPv4Address()).toString();
-
         if (m_socket != socket)
         {
-            m_settings->debugOut(QString("%1 | Host handler for %2 not created!")
-                                 .arg(VN_S(VMTDClient))
-                                 .arg(ip));
+            m_settings->debugOut(QString("%1 | Host handler not created!")
+                                 .arg(VN_S(VMTDClient)));
             return;
         }
 
@@ -109,8 +104,7 @@ namespace VMTDLib
 
         delete m_hostHandler;
 
-        m_settings->debugOut(QString("%1 | Host handler for %2 removed!")
-                             .arg(VN_S(VMTDClient))
-                             .arg(ip));
+        m_settings->debugOut(QString("%1 | Host handler removed!")
+                             .arg(VN_S(VMTDClient)));
     }
 }

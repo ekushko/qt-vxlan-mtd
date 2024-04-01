@@ -40,6 +40,13 @@ namespace VMTDLib
 
     void VMTDEngine::execute()
     {
+        if (m_manager->participants().size() < 2)
+        {
+            m_settings->debugOut(QString("%1 | Participants are not enough!")
+                                 .arg(VN_S(VMTDEngine)));
+            return;
+        }
+
         createGroups();
         createGateways();
         createCommands();
@@ -59,13 +66,6 @@ namespace VMTDLib
         m_manager->buildParticipants();
 
         const auto &participants = m_manager->participants();
-
-        if (participants.size() < 2)
-        {
-            m_settings->debugOut(QString("%1 | Participants are not enough!")
-                                 .arg(VN_S(VMTDEngine)));
-            return;
-        }
 
         const int groupCount = QRandomGenerator::global()->bounded(2, participants.size());
 
