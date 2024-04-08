@@ -20,6 +20,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+
+    void showSettingsSlot();
+
 private:
 
     Ui::MainWindow *ui;

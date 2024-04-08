@@ -34,6 +34,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::showSettingsSlot()
+{
+    m_controller->settings()->showForm();
+}
+
 void MainWindow::restartSlot()
 {
     const auto isServer = (m_controller->settings()->nodeType() == VMTDNodeType::SERVER);

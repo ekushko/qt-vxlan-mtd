@@ -18,7 +18,7 @@ QMAKE_TARGET_PRODUCT      = Moving Target Defense by VXLAN
 QMAKE_TARGET_DESCRIPTION  = Moving Target Defense by VXLAN
 QMAKE_TARGET_COMPANY      = Kushko E.A.
 QMAKE_TARGET_COPYRIGHT    = (C) Kushko E.A.
-#RC_ICONS                  = resources/favicon.ico
+RC_ICONS                  = resources/favicon.ico
 
 #
 ###-----Директивы---------------------------------------------------------------------------
@@ -152,6 +152,7 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     MainWindow.cpp \
+    Tray.cpp \
     VMTD/VMTDBuildInfo.cpp \
     VMTD/VMTDController.cpp \
     VMTD/VMTDMethod.cpp \
@@ -193,6 +194,7 @@ SOURCES += \
 
 HEADERS += \
     MainWindow.h \
+    Tray.h \
     VMTD/VMTDAlias.h \
     VMTD/VMTDBuildInfo.h \
     VMTD/VMTDComboMap.h \
@@ -262,3 +264,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources/VMTDResources.qrc
