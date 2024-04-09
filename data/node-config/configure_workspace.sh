@@ -45,6 +45,8 @@ echo -e "\n\n--------INSTALL NET TOOLS----------\n\n"
 
 apt-get install -y net-tools inetutils-traceroute iperf vlan wireshark nmap
 
+sysctl -w net.ipv4.ip_forward=1
+
 # Установка Qt-библиотек
 
 echo -e "\n\n-------INSTALL QT LIBRARIES--------\n\n"
