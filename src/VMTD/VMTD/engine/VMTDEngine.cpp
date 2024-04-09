@@ -40,6 +40,8 @@ namespace VMTDLib
 
     void VMTDEngine::execute()
     {
+        m_manager->buildParticipants();
+
         if (m_manager->participants().size() < 2)
         {
             m_settings->debugOut(QString("%1 | Participants are not enough!")
@@ -62,8 +64,6 @@ namespace VMTDLib
     {
         qDeleteAll(m_groups);
         m_groups.clear();
-
-        m_manager->buildParticipants();
 
         const auto &participants = m_manager->participants();
 
