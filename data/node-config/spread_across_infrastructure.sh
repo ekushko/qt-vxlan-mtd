@@ -41,7 +41,7 @@ for item in "${ips[@]}"; do
         command_to_host $ip $user $password "kill -9 \$(ps -aux | grep VMTD | awk '{print \$2}')"
     fi
     if [[ $should_send == 1 ]]; then
-        send_to_host $ip $user $password ./VMTD
+        send_to_host $ip $user $password "./VMTD/VMTD" "/home/$user/VMTD/"
     fi
     if [[ $should_run == "run" ]]; then
         command_to_host $ip $user $password "cd VMTD; export DISPLAY=:0; nohup ./VMTD -tray </dev/null &>/dev/null &"
