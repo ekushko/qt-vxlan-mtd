@@ -152,6 +152,10 @@ namespace VMTDLib
         }
     }
 
+    void VMTDDeviceTableForm::on_pbApply_clicked()
+    {
+        m_manager->apply();
+    }
     void VMTDDeviceTableForm::on_pbLoad_clicked()
     {
         m_manager->selectSwitches();

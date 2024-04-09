@@ -376,6 +376,11 @@ namespace VMTDLib
         }
     }
 
+    void VMTDDeviceManager::apply()
+    {
+        emit restartSignal();
+    }
+
     void VMTDDeviceManager::updateUrlOnlineSlot(const QString &url, bool isOnline)
     {
         m_urlOnline[url] = isOnline;

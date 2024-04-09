@@ -53,6 +53,7 @@ namespace VMTDLib
 
         void on_tableView_doubleClicked(const QModelIndex &index);
 
+        void on_pbApply_clicked();
         void on_pbLoad_clicked();
 
         void on_pbCreate_clicked();

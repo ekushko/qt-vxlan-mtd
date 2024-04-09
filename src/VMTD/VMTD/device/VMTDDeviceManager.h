@@ -51,7 +51,11 @@ namespace VMTDLib
         const QList<QUrl> &switchUrls() const;
         void          buildSwitchUrls();
 
+        void apply();
+
     signals:
+
+        void restartSignal();
 
         void switchesUpdatedSignal(const QSqlQuery &query);
 

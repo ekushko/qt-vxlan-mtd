@@ -19,6 +19,7 @@ namespace VMTDLib
         connect(m_settings, &VMTDSettings::restartSignal, this, &VMTDController::restartSlot);
 
         m_manager = new VMTDDeviceManager(this, m_settings);
+        connect(m_manager, &VMTDDeviceManager::restartSignal, this, &VMTDController::restartSlot);
 
         m_engine = new VMTDEngine(this, m_settings, m_manager);
     }

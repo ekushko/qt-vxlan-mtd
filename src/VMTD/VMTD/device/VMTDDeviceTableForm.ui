@@ -20,6 +20,13 @@
    <item>
     <layout class="QHBoxLayout" name="hl_1">
      <item>
+      <widget class="QPushButton" name="pbApply">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pbLoad">
        <property name="text">
         <string>Load</string>
