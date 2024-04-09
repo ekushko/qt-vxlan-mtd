@@ -112,6 +112,7 @@ namespace VMTDLib
     void VMTDHostServerForm::appendClientSocketSlot(QWebSocket *socket)
     {
         auto form = new VMTDHostAdapterForm(this, socket);
+        form->setContentsMargins(9, 9, 9, 9);
 
         connect(m_server, &VMTDHostServer::showDebugSignal,
                 form, &VMTDHostAdapterForm::showDebugSlot);

@@ -102,11 +102,11 @@ namespace VMTDLib
 
     void VMTDHostClient::sendDataSlot(const QString &ip, int port, const QString &data)
     {
-        if (QHostAddress(m_socket->peerAddress().toIPv4Address()).toString() == ip
-            && m_socket->peerPort() == port)
-        {
+        const auto hostIp = QHostAddress(m_socket->peerAddress().toIPv4Address()).toString();
+        const auto hostPort = m_socket->peerPort();
+
+        if (hostIp != ip && hostPort != port)
             return;
-        }
 
         if (m_socket->state() != QAbstractSocket::ConnectedState)
             return;
@@ -124,17 +124,17 @@ namespace VMTDLib
 
     void VMTDHostClient::textMessageReceivedSlot(const QString &data)
     {
-        const auto ip = QHostAddress(m_socket->peerAddress().toIPv4Address()).toString();
-        const auto port = m_socket->peerPort();
+        const auto hostIp = QHostAddress(m_socket->peerAddress().toIPv4Address()).toString();
+        const auto hostPort = m_socket->peerPort();
 
         const auto debugString = QString("Received from {%1:%2}: %3\n")
-                                 .arg(ip).arg(port)
+                                 .arg(hostIp).arg(hostPort)
                                  .arg(data);
 
         emit showDebugSignal(m_socket, QTime::currentTime(), debugString);
         m_settings->debugOut(VN_S(VMTDHostClient) + " | " + debugString);
 
-        emit receiveMessageSignal(ip, port, data);
+        emit receiveMessageSignal(hostIp, hostPort, data);
     }
 
     void VMTDHostClient::connectedSlot()
