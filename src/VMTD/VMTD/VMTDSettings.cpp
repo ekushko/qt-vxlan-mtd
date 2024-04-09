@@ -19,6 +19,9 @@ namespace VMTDLib
         m_debugName = "VMTD";
         m_shouldShowDebug = true;
 
+        m_shouldUseReconfigTimer = false;
+        m_shouldCalcReconfigInterval = false;
+        m_reconfigInterval = 60000;
         m_dbName = "physical_description";
         m_shouldCheckOnline = false;
         m_defaultVlanId = 19;
@@ -105,6 +108,9 @@ namespace VMTDLib
         jsonObj[VN_ME(m_debugName)] = m_debugName;
         jsonObj[VN_ME(m_shouldShowDebug)] = m_shouldShowDebug;
 
+        jsonObj[VN_ME(m_shouldUseReconfigTimer)] = m_shouldUseReconfigTimer;
+        jsonObj[VN_ME(m_shouldCalcReconfigInterval)] = m_shouldCalcReconfigInterval;
+        jsonObj[VN_ME(m_reconfigInterval)] = m_reconfigInterval;
         jsonObj[VN_ME(m_dbName)] = m_dbName;
         jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
         jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
@@ -135,6 +141,11 @@ namespace VMTDLib
         m_debugName = jsonObj[VN_ME(m_debugName)].toString(m_debugName);
         m_shouldShowDebug = jsonObj[VN_ME(m_shouldShowDebug)].toBool(m_shouldShowDebug);
 
+        m_shouldUseReconfigTimer = jsonObj[VN_ME(m_shouldUseReconfigTimer)]
+                                   .toBool(m_shouldUseReconfigTimer);
+        m_shouldCalcReconfigInterval = jsonObj[VN_ME(m_shouldCalcReconfigInterval)]
+                                       .toBool(m_shouldCalcReconfigInterval);
+        m_reconfigInterval = jsonObj[VN_ME(m_reconfigInterval)].toInt(m_reconfigInterval);
         m_dbName = jsonObj[VN_ME(m_dbName)].toString(m_dbName);
         m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
         m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
@@ -224,6 +235,33 @@ namespace VMTDLib
     void VMTDSettings::setShouldShowDebug(bool shouldShowDebug)
     {
         m_shouldShowDebug = shouldShowDebug;
+    }
+
+    bool VMTDSettings::shouldUseReconfigTimer() const
+    {
+        return m_shouldUseReconfigTimer;
+    }
+    void VMTDSettings::setShouldUseReconfigTimer(bool shouldUseReconfigTimer)
+    {
+        m_shouldUseReconfigTimer = shouldUseReconfigTimer;
+    }
+
+    bool VMTDSettings::shouldCalcReconfigInterval() const
+    {
+        return m_shouldCalcReconfigInterval;
+    }
+    void VMTDSettings::setShouldCalcReconfigInterval(bool shouldCalcReconfigInterval)
+    {
+        m_shouldCalcReconfigInterval = shouldCalcReconfigInterval;
+    }
+
+    int VMTDSettings::reconfigInterval() const
+    {
+        return m_reconfigInterval;
+    }
+    void VMTDSettings::setReconfigInterval(int reconfigInterval)
+    {
+        m_reconfigInterval = reconfigInterval;
     }
 
     QString VMTDSettings::dbName() const

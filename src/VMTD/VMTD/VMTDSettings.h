@@ -62,6 +62,15 @@ namespace VMTDLib
 
         // ПАРАМЕТРЫ КОНФИГУРИРОВАНИЯ
 
+        bool    shouldUseReconfigTimer() const;
+        void setShouldUseReconfigTimer(bool shouldUseReconfigTimer);
+
+        bool    shouldCalcReconfigInterval() const;
+        void setShouldCalcReconfigInterval(bool shouldCalcReconfigInterval);
+
+        int     reconfigInterval() const;
+        void setReconfigInterval(int reconfigInterval);
+
         QString dbName() const;
         void setDbName(const QString &dbName);
 
@@ -133,6 +142,9 @@ namespace VMTDLib
         QString m_debugName;
         bool m_shouldShowDebug;
 
+        bool m_shouldUseReconfigTimer;
+        bool m_shouldCalcReconfigInterval;
+        int m_reconfigInterval;
         QString m_dbName;
         bool m_shouldCheckOnline;
         int m_defaultVlanId;
