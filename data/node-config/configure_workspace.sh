@@ -45,6 +45,7 @@ echo -e "\n\n--------INSTALL NET TOOLS----------\n\n"
 
 apt-get install -y net-tools inetutils-traceroute iperf vlan wireshark nmap
 
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sysctl -w net.ipv4.ip_forward=1
 
 # Установка Qt-библиотек
