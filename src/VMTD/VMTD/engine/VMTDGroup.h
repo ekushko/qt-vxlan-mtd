@@ -22,8 +22,11 @@ namespace VMTDLib
         void    addParticipant(VMTDParticipant *participant);
         void  clearParticipants();
 
-        VMTDParticipant *gateway() const;
-        void          setGateway(VMTDParticipant *gateway);
+        VMTDParticipant *internalGateway() const;
+        void          setInternalGateway(VMTDParticipant *internalGateway);
+
+        VMTDParticipant *externalGateway() const;
+        void          setExternalGateway(VMTDParticipant *externalGateway);
 
         // МЕТАДАННЫЕ
 
@@ -60,6 +63,7 @@ namespace VMTDLib
 
         QSet<int> m_octets4;
 
-        VMTDParticipant *m_gateway = nullptr;
+        VMTDParticipant *m_internalGateway = nullptr;
+        VMTDParticipant *m_externalGateway = nullptr;
     };
 }

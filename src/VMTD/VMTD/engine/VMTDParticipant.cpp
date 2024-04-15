@@ -55,8 +55,9 @@ namespace VMTDLib
         {
             QJsonObject jsonObj;
 
-            if (m_role == EnRole::ENDPOINT
-                || m_role == EnRole::GATEWAY)
+            if ((m_role == EnRole::ENDPOINT
+                 || m_role == EnRole::GATEWAY)
+                && m_interface1->isExist())
             {
                 jsonObj[PRM_INTERFACE] = hostInterface();
                 jsonObj[PRM_MAC] = m_interface1->mac();
@@ -92,7 +93,8 @@ namespace VMTDLib
         {
             QJsonObject jsonObj;
 
-            if (m_role == EnRole::GATEWAY)
+            if (m_role == EnRole::GATEWAY
+                && m_interface2->isExist())
             {
                 jsonObj[PRM_INTERFACE] = hostInterface();
                 jsonObj[PRM_MAC] = m_interface2->mac();
@@ -134,11 +136,18 @@ namespace VMTDLib
 
         auto vlans = QString::number(m_defaultVlanId);
 
-        vlans += QString(", %1").arg(m_interface1->vlanId());
+        if (m_role == EnRole::GATEWAY
+            && m_interface2->isExist())
+        {
+            vlans += QString(", %1").arg(qMin(m_interface1->vlanId(), m_interface2->vlanId()));
+            vlans += QString(", %1").arg(qMax(m_interface1->vlanId(), m_interface2->vlanId()));
+        }
+        else
+        {
+            vlans += QString(", %1").arg(m_interface1->vlanId());
+        }
 
-        if (m_role == EnRole::GATEWAY)
-            vlans += QString(", %1").arg(m_interface2->vlanId());
-
+        m_commandList.append(QString("default interface %1").arg(m_switchPort));
         m_commandList.append(QString("interface %1").arg(m_switchPort));
         m_commandList.append(QString("  switchport"));
         m_commandList.append(QString("  switchport mode trunk"));

@@ -48,18 +48,26 @@ namespace VMTDLib
 
         int octet4 = 0;
 
-        do
+        if (m_settings->shouldRandomizeNetwork())
         {
-            octet4 = QRandomGenerator::global()->bounded(1, 254);
-            participant->interface1()->setIp(QString(NETWORK_TEMPLATE).arg(m_octet3).arg(octet4));
-            participant->interface1()->setMac(QString(MAC_TEMPLATE)
-                                              .arg(QString("%1").arg(m_octet3, 2, 16, QLatin1Char('0')))
-                                              .arg(QString("%1").arg(octet4, 2, 16, QLatin1Char('0'))));
+            do
+            {
+                octet4 = QRandomGenerator::global()->bounded(1, 253);
+            }
+            while (m_octets4.contains(octet4));
         }
-        while (m_octets4.contains(octet4));
+        else
+        {
+            octet4 = m_participants.size() + 1;
+        }
 
         m_octets4.insert(octet4);
 
+        participant->interface1()->setExist(true);
+        participant->interface1()->setIp(QString(NETWORK_TEMPLATE).arg(m_octet3).arg(octet4));
+        participant->interface1()->setMac(QString(MAC_TEMPLATE)
+                                          .arg(QString("%1").arg(m_octet3, 2, 16, QLatin1Char('0')))
+                                          .arg(QString("%1").arg(octet4, 2, 16, QLatin1Char('0'))));
         participant->interface1()->setGroupIndex(m_index);
         participant->interface1()->setMask(m_mask);
         participant->interface1()->setVlanId(m_vlanId);
@@ -75,45 +83,88 @@ namespace VMTDLib
         m_participants.clear();
     }
 
-    VMTDParticipant *VMTDGroup::gateway() const
+    VMTDParticipant *VMTDGroup::internalGateway() const
     {
-        return m_gateway;
+        return m_internalGateway;
     }
-    void VMTDGroup::setGateway(VMTDParticipant *gateway)
+    void VMTDGroup::setInternalGateway(VMTDParticipant *internalGateway)
     {
+        if (internalGateway->interface1()->groupIndex() != index())
+        {
+            m_settings->debugOut(QString("%1 | Internal gateway should be in group-%2!")
+                                 .arg(VN_S(VMTDGroup))
+                                 .arg(index()));
+            return;
+        }
+
+        m_internalGateway = internalGateway;
+
+        for (auto participant : m_participants)
+        {
+            if (participant != m_internalGateway)
+                participant->interface1()->addRoute(QString(NETWORK_TEMPLATE).arg(0).arg(0), 16,
+                                                    internalGateway->interface1()->ip(), 100);
+        }
+
+        m_settings->debugOut(QString("%1 | Internal gateway %2 was setted in group-%3! ")
+                             .arg(VN_S(VMTDGroup))
+                             .arg(m_internalGateway->hostName())
+                             .arg(index()));
+    }
+
+    VMTDParticipant *VMTDGroup::externalGateway() const
+    {
+        return m_externalGateway;
+    }
+    void VMTDGroup::setExternalGateway(VMTDParticipant *externalGateway)
+    {
+        if (externalGateway->interface1()->groupIndex() == m_index)
+        {
+            m_settings->debugOut(QString("%1 | Internal gateway should NOT be in group-%2!")
+                                 .arg(VN_S(VMTDGroup))
+                                 .arg(index()));
+            return;
+        }
+
+        m_externalGateway = externalGateway;
+
         int octet4 = 0;
 
-        do
+        if (m_settings->shouldRandomizeGateway())
         {
-            octet4 = QRandomGenerator::global()->bounded(1, 254);
-            gateway->interface2()->setIp(QString(NETWORK_TEMPLATE)
-                                         .arg(m_octet3)
-                                         .arg(octet4));
-            gateway->interface2()->setMac(QString(MAC_TEMPLATE)
-                                          .arg(QString("%1").arg(m_octet3, 2, 16, QLatin1Char('0')))
-                                          .arg(QString("%1").arg(octet4, 2, 16, QLatin1Char('0'))));
+            do
+            {
+                octet4 = QRandomGenerator::global()->bounded(1, 253);
+            }
+            while (m_octets4.contains(octet4));
         }
-        while (m_octets4.contains(octet4));
+        else
+        {
+            octet4 = m_participants.size() + 1;
+        }
 
         m_octets4.insert(octet4);
 
-        gateway->interface2()->setGroupIndex(m_index);
-        gateway->interface2()->setMask(m_mask);
-        gateway->interface2()->setVlanId(m_vlanId);
+        m_externalGateway->interface2()->setExist(true);
+        m_externalGateway->interface2()->setIp(QString(NETWORK_TEMPLATE)
+                                               .arg(m_octet3)
+                                               .arg(octet4));
+        m_externalGateway->interface2()->setMac(QString(MAC_TEMPLATE)
+                                                .arg(QString("%1").arg(m_octet3, 2, 16, QLatin1Char('0')))
+                                                .arg(QString("%1").arg(octet4, 2, 16, QLatin1Char('0'))));
+        m_externalGateway->interface2()->setGroupIndex(m_index);
+        m_externalGateway->interface2()->setMask(m_mask);
+        m_externalGateway->interface2()->setVlanId(m_vlanId);
 
-        for (int i = 0; i < m_participants.size(); ++i)
-        {
-            auto participant = m_participants.at(i);
-            participant->interface1()->addRoute(QString(NETWORK_TEMPLATE).arg(0).arg(0), 16,
-                                                gateway->interface1()->ip(), 100);
-        }
+        m_internalGateway->interface1()->addRoute(QString(NETWORK_TEMPLATE).arg(0).arg(0), 16,
+                                                  m_externalGateway->interface2()->ip(), 100);
 
-        m_settings->debugOut(QString("%1 | Gateway %2 was added in group-%3! ")
+        m_participants.append(m_externalGateway);
+
+        m_settings->debugOut(QString("%1 | External gateway %2 was added in group-%3! ")
                              .arg(VN_S(VMTDGroup))
-                             .arg(gateway->hostName())
+                             .arg(m_externalGateway->hostName())
                              .arg(index()));
-
-        m_gateway = gateway;
     }
 
     int VMTDGroup::index() const

@@ -87,12 +87,20 @@ namespace VMTDLib
 
             int vlanId = 0;
 
-            do
+            if (m_settings->shouldRandomizeVlan())
             {
-                vlanId = QRandomGenerator::global()->bounded(m_settings->minVlanId(), m_settings->maxVlanId());
+                do
+                {
+                    vlanId = QRandomGenerator::global()->bounded(m_settings->minVlanId(), m_settings->maxVlanId());
+                    group->setVlanId(vlanId);
+                }
+                while (_vlanIds.contains(vlanId));
+            }
+            else
+            {
+                vlanId = m_settings->minVlanId() + i;
                 group->setVlanId(vlanId);
             }
-            while (_vlanIds.contains(vlanId));
 
             _vlanIds.insert(vlanId);
 
@@ -100,12 +108,19 @@ namespace VMTDLib
 
             int octet3 = 0;
 
-            do
+            if (m_settings->shouldRandomizeNetwork())
             {
-                octet3 = QRandomGenerator::global()->bounded(1, 254);
-                group->setOctet3(octet3);
+                do
+                {
+                    octet3 = QRandomGenerator::global()->bounded(1, 253);
+                    group->setOctet3(octet3);
+                }
+                while (_octets3.contains(octet3));
             }
-            while (_octets3.contains(octet3));
+            else
+            {
+                group->setOctet3(vlanId);
+            }
 
             _octets3.insert(octet3);
 
@@ -132,8 +147,11 @@ namespace VMTDLib
         QList<VMTDParticipant *> _participants(participants.begin(), participants.end());
         QList<VMTDGroup *> _groups(m_groups.begin(), m_groups.end());
 
-        std::shuffle(_participants.begin(), _participants.end(), generator);
-        std::shuffle(_groups.begin(), _groups.end(), generator);
+        if (m_settings->shouldRandomizeParticipant())
+        {
+            std::shuffle(_participants.begin(), _participants.end(), generator);
+            std::shuffle(_groups.begin(), _groups.end(), generator);
+        }
 
         for (int i = 0, j = 0; i < _groups.size(); ++i)
         {
@@ -171,20 +189,23 @@ namespace VMTDLib
 
         std::random_device randomDevice;
         std::mt19937 generator(randomDevice());
-        std::shuffle(_gateways.begin(), _gateways.end(), generator);
+
+        if (m_settings->shouldRandomizeGateway())
+            std::shuffle(_gateways.begin(), _gateways.end(), generator);
 
         for (auto it = _gateways.begin(); it != _gateways.end(); ++it)
         {
-            auto participant = *it;
-            auto group = m_groups.at(participant->interface1()->groupIndex());
+            auto internalGateway = *it;
+            auto group = m_groups.at(internalGateway->interface1()->groupIndex());
+            group->setInternalGateway(internalGateway);
 
             const auto distance = std::distance(it, _gateways.end());
 
             if (distance <= 1)
                 break;
 
-            auto gateway = *std::next(it);
-            group->setGateway(gateway);
+            auto externalGateway = *std::next(it);
+            group->setExternalGateway(externalGateway);
 
             if (distance <= 2)
                 break;
@@ -197,21 +218,21 @@ namespace VMTDLib
                 auto remoteParticipant = *jt++;
                 auto remoteGroup = m_groups.at(remoteParticipant->interface1()->groupIndex());
 
-                participant->interface2()->addRoute(remoteGroup->network(), remoteGroup->mask(),
-                                                    gateway->interface1()->ip(), 100);
+                internalGateway->interface1()->addRoute(remoteGroup->network(), remoteGroup->mask(),
+                                                        externalGateway->interface2()->ip(), 100);
             }
         }
 
         for (auto it = _gateways.rbegin(); it != _gateways.rend(); ++it)
         {
-            auto participant = *it;
+            auto internalGateway = *it;
 
             const auto distance = std::distance(it, _gateways.rend());
 
             if (distance <= 1)
                 break;
 
-            auto gateway = *std::next(it);
+            auto externalGateway = *std::next(it);
 
             if (distance <= 2)
                 break;
@@ -224,26 +245,9 @@ namespace VMTDLib
                 auto remoteParticipant = *jt++;
                 auto remoteGroup = m_groups.at(remoteParticipant->interface1()->groupIndex());
 
-                participant->interface1()->addRoute(remoteGroup->network(), remoteGroup->mask(),
-                                                    gateway->interface1()->ip(), 100);
-            }
-        }
-
-        {
-            auto gateway = _gateways.first();
-            auto group = m_groups.at(gateway->interface1()->groupIndex());
-
-            gateway->setRole(VMTDParticipant::EnRole::ENDPOINT);
-
-            for (int i = 0; i < group->participants().size(); ++i)
-            {
-                auto participant = group->participants().at(i);
-
-                participant->interface1()->clearRoutes();
-                participant->interface2()->clearRoutes();
-
-                participant->interface1()->addRoute(QString(NETWORK_TEMPLATE).arg(0).arg(0), 16,
-                                                    group->gateway()->interface2()->ip(), 100);
+                if (internalGateway->interface2()->isExist())
+                    internalGateway->interface2()->addRoute(remoteGroup->network(), remoteGroup->mask(),
+                                                            externalGateway->interface1()->ip(), 100);
             }
         }
     }

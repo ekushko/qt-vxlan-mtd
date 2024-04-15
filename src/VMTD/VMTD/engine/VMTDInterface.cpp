@@ -6,11 +6,21 @@ namespace VMTDLib
 {
     VMTDInterface::VMTDInterface()
     {
+        m_isExist = false;
         m_groupIndex = -1;
         m_mac = "aa:bb:cc:dd:ee:ff";
         m_ip = QString(NETWORK_TEMPLATE).arg(0).arg(1);
         m_mask = 16;
-        m_vlanId = 3;
+        m_vlanId = 99;
+    }
+
+    bool VMTDInterface::isExist() const
+    {
+        return m_isExist;
+    }
+    void VMTDInterface::setExist(bool isExist)
+    {
+        m_isExist = isExist;
     }
 
     int VMTDInterface::groupIndex()

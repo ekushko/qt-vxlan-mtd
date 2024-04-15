@@ -43,14 +43,18 @@ namespace VMTDLib
         ui->leDebugName->setText(m_settings->debugName());
         ui->chbShouldShowDebug->setChecked(m_settings->shouldShowDebug());
 
+        ui->leDbName->setText(m_settings->dbName());
+        ui->chbShouldCheckOnline->setChecked(m_settings->shouldCheckOnline());
         ui->chbShouldUseReconfigTimer->setChecked(m_settings->shouldUseReconfigTimer());
         ui->chbShouldCalcReconfigInterval->setChecked(m_settings->shouldCalcReconfigInterval());
         ui->sbReconfigurationInterval->setValue(m_settings->reconfigInterval());
-        ui->leDbName->setText(m_settings->dbName());
-        ui->chbShouldCheckOnline->setChecked(m_settings->shouldCheckOnline());
+        ui->chbShouldRandomizeVlan->setChecked(m_settings->shouldRandomizeVlan());
         ui->sbDefaultVlanId->setValue(m_settings->defaultVlanId());
         ui->sbMinVlanId->setValue(m_settings->minVlanId());
         ui->sbMaxVlanId->setValue(m_settings->maxVlanId());
+        ui->chbShouldRandomizeNetwork->setChecked(m_settings->shouldRandomizeNetwork());
+        ui->chbShouldRandomizeGateway->setChecked(m_settings->shouldRandomizeGateway());
+        ui->chbShouldRandomizeParticipant->setChecked(m_settings->shouldRandomizeParticipant());
         ui->leNetplan1FileName->setText(m_settings->netplan1FileName());
         ui->leNetplan2FileName->setText(m_settings->netplan2FileName());
 
@@ -72,14 +76,18 @@ namespace VMTDLib
         m_settings->setDebugName(ui->leDebugName->text());
         m_settings->setShouldShowDebug(ui->chbShouldShowDebug->isChecked());
 
+        m_settings->setDbName(ui->leDbName->text());
+        m_settings->setShouldCheckOnline(ui->chbShouldCheckOnline->isChecked());
         m_settings->setShouldUseReconfigTimer(ui->chbShouldUseReconfigTimer->isChecked());
         m_settings->setShouldCalcReconfigInterval(ui->chbShouldCalcReconfigInterval->isChecked());
         m_settings->setReconfigInterval(ui->sbReconfigurationInterval->value());
-        m_settings->setDbName(ui->leDbName->text());
-        m_settings->setShouldCheckOnline(ui->chbShouldCheckOnline->isChecked());
+        m_settings->setShouldRandomizeVlan(ui->chbShouldRandomizeVlan->isChecked());
         m_settings->setDefaultVlanId(ui->sbDefaultVlanId->value());
         m_settings->setMinVlanId(ui->sbMinVlanId->value());
         m_settings->setMaxVlanId(ui->sbMaxVlanId->value());
+        m_settings->setShouldRandomizeNetwork(ui->chbShouldRandomizeNetwork->isChecked());
+        m_settings->setShouldRandomizeGateway(ui->chbShouldRandomizeGateway->isChecked());
+        m_settings->setShouldRandomizeParticipant(ui->chbShouldRandomizeParticipant->isChecked());
         m_settings->setNetplan1FileName(ui->leNetplan1FileName->text());
         m_settings->setNetplan2FileName(ui->leNetplan2FileName->text());
 

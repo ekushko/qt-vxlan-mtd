@@ -19,14 +19,18 @@ namespace VMTDLib
         m_debugName = "VMTD";
         m_shouldShowDebug = true;
 
+        m_dbName = "physical_description";
+        m_shouldCheckOnline = false;
         m_shouldUseReconfigTimer = false;
         m_shouldCalcReconfigInterval = false;
         m_reconfigInterval = 60000;
-        m_dbName = "physical_description";
-        m_shouldCheckOnline = false;
+        m_shouldRandomizeVlan = false;
         m_defaultVlanId = 19;
         m_minVlanId = 20;
         m_maxVlanId = 50;
+        m_shouldRandomizeNetwork = false;
+        m_shouldRandomizeGateway = false;
+        m_shouldRandomizeParticipant = false;
         m_netplan1FileName = "02-vmtd-1";
         m_netplan2FileName = "03-vmtd-2";
 
@@ -108,14 +112,18 @@ namespace VMTDLib
         jsonObj[VN_ME(m_debugName)] = m_debugName;
         jsonObj[VN_ME(m_shouldShowDebug)] = m_shouldShowDebug;
 
+        jsonObj[VN_ME(m_dbName)] = m_dbName;
+        jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
         jsonObj[VN_ME(m_shouldUseReconfigTimer)] = m_shouldUseReconfigTimer;
         jsonObj[VN_ME(m_shouldCalcReconfigInterval)] = m_shouldCalcReconfigInterval;
         jsonObj[VN_ME(m_reconfigInterval)] = m_reconfigInterval;
-        jsonObj[VN_ME(m_dbName)] = m_dbName;
-        jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
+        jsonObj[VN_ME(m_shouldRandomizeVlan)] = m_shouldRandomizeVlan;
         jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
         jsonObj[VN_ME(m_minVlanId)] = m_minVlanId;
         jsonObj[VN_ME(m_maxVlanId)] = m_maxVlanId;
+        jsonObj[VN_ME(m_shouldRandomizeNetwork)] = m_shouldRandomizeNetwork;
+        jsonObj[VN_ME(m_shouldRandomizeGateway)] = m_shouldRandomizeGateway;
+        jsonObj[VN_ME(m_shouldRandomizeParticipant)] = m_shouldRandomizeParticipant;
         jsonObj[VN_ME(m_netplan1FileName)] = m_netplan1FileName;
         jsonObj[VN_ME(m_netplan2FileName)] = m_netplan2FileName;
 
@@ -141,16 +149,23 @@ namespace VMTDLib
         m_debugName = jsonObj[VN_ME(m_debugName)].toString(m_debugName);
         m_shouldShowDebug = jsonObj[VN_ME(m_shouldShowDebug)].toBool(m_shouldShowDebug);
 
+        m_dbName = jsonObj[VN_ME(m_dbName)].toString(m_dbName);
+        m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
         m_shouldUseReconfigTimer = jsonObj[VN_ME(m_shouldUseReconfigTimer)]
                                    .toBool(m_shouldUseReconfigTimer);
         m_shouldCalcReconfigInterval = jsonObj[VN_ME(m_shouldCalcReconfigInterval)]
                                        .toBool(m_shouldCalcReconfigInterval);
         m_reconfigInterval = jsonObj[VN_ME(m_reconfigInterval)].toInt(m_reconfigInterval);
-        m_dbName = jsonObj[VN_ME(m_dbName)].toString(m_dbName);
-        m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
+        m_shouldRandomizeVlan = jsonObj[VN_ME(m_shouldRandomizeVlan)].toBool(m_shouldRandomizeVlan);
         m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
         m_minVlanId = jsonObj[VN_ME(m_minVlanId)].toInt(m_minVlanId);
         m_maxVlanId = jsonObj[VN_ME(m_maxVlanId)].toInt(m_maxVlanId);
+        m_shouldRandomizeNetwork = jsonObj[VN_ME(m_shouldRandomizeNetwork)]
+                                   .toBool(m_shouldRandomizeNetwork);
+        m_shouldRandomizeGateway = jsonObj[VN_ME(m_shouldRandomizeGateway)]
+                                   .toBool(m_shouldRandomizeGateway);
+        m_shouldRandomizeParticipant = jsonObj[VN_ME(m_shouldRandomizeParticipant)]
+                                       .toBool(m_shouldRandomizeParticipant);
         m_netplan1FileName = jsonObj[VN_ME(m_netplan1FileName)].toString(m_netplan1FileName);
         m_netplan2FileName = jsonObj[VN_ME(m_netplan2FileName)].toString(m_netplan2FileName);
 
@@ -237,6 +252,24 @@ namespace VMTDLib
         m_shouldShowDebug = shouldShowDebug;
     }
 
+    QString VMTDSettings::dbName() const
+    {
+        return m_dbName;
+    }
+    void VMTDSettings::setDbName(const QString &dbName)
+    {
+        m_dbName = dbName;
+    }
+
+    bool VMTDSettings::shouldCheckOnline() const
+    {
+        return m_shouldCheckOnline;
+    }
+    void VMTDSettings::setShouldCheckOnline(bool shouldCheckOnline)
+    {
+        m_shouldCheckOnline = shouldCheckOnline;
+    }
+
     bool VMTDSettings::shouldUseReconfigTimer() const
     {
         return m_shouldUseReconfigTimer;
@@ -264,22 +297,13 @@ namespace VMTDLib
         m_reconfigInterval = reconfigInterval;
     }
 
-    QString VMTDSettings::dbName() const
+    bool VMTDSettings::shouldRandomizeVlan() const
     {
-        return m_dbName;
+        return m_shouldRandomizeVlan;
     }
-    void VMTDSettings::setDbName(const QString &dbName)
+    void VMTDSettings::setShouldRandomizeVlan(bool shouldRandomizeVlan)
     {
-        m_dbName = dbName;
-    }
-
-    bool VMTDSettings::shouldCheckOnline() const
-    {
-        return m_shouldCheckOnline;
-    }
-    void VMTDSettings::setShouldCheckOnline(bool shouldCheckOnline)
-    {
-        m_shouldCheckOnline = shouldCheckOnline;
+        m_shouldRandomizeVlan = shouldRandomizeVlan;
     }
 
     int VMTDSettings::defaultVlanId() const
@@ -313,6 +337,33 @@ namespace VMTDLib
             return;
 
         m_maxVlanId = maxVlanId;
+    }
+
+    bool VMTDSettings::shouldRandomizeNetwork() const
+    {
+        return m_shouldRandomizeNetwork;
+    }
+    void VMTDSettings::setShouldRandomizeNetwork(bool shouldRandomizeNetwork)
+    {
+        m_shouldRandomizeNetwork = shouldRandomizeNetwork;
+    }
+
+    bool VMTDSettings::shouldRandomizeGateway() const
+    {
+        return m_shouldRandomizeGateway;
+    }
+    void VMTDSettings::setShouldRandomizeGateway(bool shouldRandomizeGateway)
+    {
+        m_shouldRandomizeGateway = shouldRandomizeGateway;
+    }
+
+    bool VMTDSettings::shouldRandomizeParticipant() const
+    {
+        return m_shouldRandomizeParticipant;
+    }
+    void VMTDSettings::setShouldRandomizeParticipant(bool shouldRandomizeParticipant)
+    {
+        m_shouldRandomizeParticipant = shouldRandomizeParticipant;
     }
 
     QString VMTDSettings::netplan1FileName() const

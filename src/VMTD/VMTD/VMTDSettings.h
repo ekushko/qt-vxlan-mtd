@@ -62,6 +62,12 @@ namespace VMTDLib
 
         // ПАРАМЕТРЫ КОНФИГУРИРОВАНИЯ
 
+        QString dbName() const;
+        void setDbName(const QString &dbName);
+
+        bool    shouldCheckOnline() const;
+        void setShouldCheckOnline(bool shouldCheckOnline);
+
         bool    shouldUseReconfigTimer() const;
         void setShouldUseReconfigTimer(bool shouldUseReconfigTimer);
 
@@ -71,11 +77,8 @@ namespace VMTDLib
         int     reconfigInterval() const;
         void setReconfigInterval(int reconfigInterval);
 
-        QString dbName() const;
-        void setDbName(const QString &dbName);
-
-        bool    shouldCheckOnline() const;
-        void setShouldCheckOnline(bool shouldCheckOnline);
+        bool    shouldRandomizeVlan() const;
+        void setShouldRandomizeVlan(bool shouldRandomizeVlan);
 
         int     defaultVlanId() const;
         void setDefaultVlanId(int defaultVlanId);
@@ -85,6 +88,15 @@ namespace VMTDLib
 
         int     maxVlanId() const;
         void setMaxVlanId(int maxVlanId);
+
+        bool    shouldRandomizeNetwork() const;
+        void setShouldRandomizeNetwork(bool shouldRandomizeNetwork);
+
+        bool    shouldRandomizeGateway() const;
+        void setShouldRandomizeGateway(bool shouldRandomizeGateway);
+
+        bool    shouldRandomizeParticipant() const;
+        void setShouldRandomizeParticipant(bool shouldRandomizeParticipant);
 
         QString netplan1FileName() const;
         void setNetplan1FileName(const QString &netplan1FileName);
@@ -142,14 +154,18 @@ namespace VMTDLib
         QString m_debugName;
         bool m_shouldShowDebug;
 
+        QString m_dbName;
+        bool m_shouldCheckOnline;
         bool m_shouldUseReconfigTimer;
         bool m_shouldCalcReconfigInterval;
         int m_reconfigInterval;
-        QString m_dbName;
-        bool m_shouldCheckOnline;
+        bool m_shouldRandomizeVlan;
         int m_defaultVlanId;
         int m_minVlanId;
         int m_maxVlanId;
+        bool m_shouldRandomizeNetwork;
+        bool m_shouldRandomizeGateway;
+        bool m_shouldRandomizeParticipant;
         QString m_netplan1FileName;
         QString m_netplan2FileName;
 

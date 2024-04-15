@@ -14,6 +14,9 @@ namespace VMTDLib
 
         // МЕТАДАННЫЕ
 
+        bool  isExist() const;
+        void setExist(bool isExist);
+
         int     groupIndex();
         void setGroupIndex(int groupIndex);
 
@@ -38,6 +41,7 @@ namespace VMTDLib
 
     private:
 
+        bool m_isExist;
         int m_groupIndex;
         QString m_mac;
         QString m_ip;

@@ -61,37 +61,9 @@ namespace VMTDLib
 
                 fillInterface(participant->interface1(), participantItem);
 
-                if (participant->role() == VMTDParticipant::EnRole::GATEWAY)
+                if (participant->role() == VMTDParticipant::EnRole::GATEWAY
+                    && participant->interface2()->isExist())
                     fillInterface(participant->interface2(), participantItem);
-            }
-
-            // шлюз
-
-            if (group->gateway() != nullptr)
-            {
-                auto gatewaysItem = new QTreeWidgetItem(groupItem);
-
-                const auto gatewaysLabel = QString("Gateway");
-                gatewaysItem->setText(0, gatewaysLabel);
-
-                auto gateway = group->gateway();
-
-                // физическое подключение
-
-                auto gatewayItem = new QTreeWidgetItem(gatewaysItem);
-
-                const auto gatewayLabel = QString("%1 (%2 %3 connected to %4 %5)")
-                                          .arg(gateway->hostName())
-                                          .arg(gateway->hostIp())
-                                          .arg(gateway->hostInterface())
-                                          .arg(gateway->switchPort())
-                                          .arg(gateway->switchName());
-                gatewayItem->setText(0, gatewayLabel);
-
-                fillInterface(gateway->interface1(), gatewayItem);
-
-                if (gateway->role() == VMTDParticipant::EnRole::GATEWAY)
-                    fillInterface(gateway->interface2(), gatewayItem);
             }
         }
     }
