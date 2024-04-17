@@ -26,9 +26,16 @@
    <item>
     <layout class="QHBoxLayout" name="hl_1">
      <item>
-      <widget class="QPushButton" name="pbExecute">
+      <widget class="QPushButton" name="pbGenerate">
        <property name="text">
-        <string>Execute</string>
+        <string>Generate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbRun">
+       <property name="text">
+        <string>Run</string>
        </property>
       </widget>
      </item>

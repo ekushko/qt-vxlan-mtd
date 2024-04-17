@@ -33,6 +33,8 @@ namespace VMTDLib
 
     private slots:
 
-        void on_pbExecute_clicked();
+        void on_pbGenerate_clicked();
+
+        void on_pbRun_clicked();
     };
 }

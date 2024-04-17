@@ -24,7 +24,9 @@ namespace VMTDLib
 
         // ЛОГИКА
 
-        void execute();
+        void generate();
+
+        void run();
 
         // ДАННЫЕ
 

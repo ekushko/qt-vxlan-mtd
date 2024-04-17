@@ -38,7 +38,7 @@ namespace VMTDLib
         m_form->activateWindow();
     }
 
-    void VMTDEngine::execute()
+    void VMTDEngine::generate()
     {
         m_manager->buildParticipants();
 
@@ -51,6 +51,17 @@ namespace VMTDLib
 
         createGroups();
         createGateways();
+    }
+
+    void VMTDEngine::run()
+    {
+        if (m_manager->participants().size() < 2)
+        {
+            m_settings->debugOut(QString("%1 | Participants are not enough!")
+                                 .arg(VN_S(VMTDEngine)));
+            return;
+        }
+
         createCommands();
         createRequests();
     }

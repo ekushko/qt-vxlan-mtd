@@ -125,10 +125,15 @@ namespace VMTDLib
         }
     }
 
-    void VMTDEngineForm::on_pbExecute_clicked()
+    void VMTDEngineForm::on_pbGenerate_clicked()
     {
-        m_engine->execute();
+        m_engine->generate();
 
         updateView();
+    }
+
+    void VMTDEngineForm::on_pbRun_clicked()
+    {
+        m_engine->run();
     }
 }
