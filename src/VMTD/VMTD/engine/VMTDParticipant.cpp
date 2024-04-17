@@ -147,7 +147,7 @@ namespace VMTDLib
             vlans += QString(", %1").arg(m_interface1->vlanId());
         }
 
-        m_commandList.append(QString("default interface %1").arg(m_switchPort));
+        //m_commandList.append(QString("default interface %1").arg(m_switchPort));
         m_commandList.append(QString("interface %1").arg(m_switchPort));
         m_commandList.append(QString("  switchport"));
         m_commandList.append(QString("  switchport mode trunk"));
