@@ -34,6 +34,7 @@ network:
     vlan.19:
       id: 19
       link: ens3
+      mtu: 1440
       addresses: [ "100.100.19.$node_index/24" ]
 EOT
 
