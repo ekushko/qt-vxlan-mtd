@@ -23,6 +23,9 @@ namespace VMTDLib
                                                  .arg("netplan")
                                                  .arg(QDir::separator());
 
+    static const QString HOSTS_BEG_TAG = QString("# *HOSTS BEGIN*");
+    static const QString HOSTS_END_TAG = QString("# *HOSTS END*");
+
     VMTDConfigurator::VMTDConfigurator(QObject *parent, VMTDSettings *settings)
         : QObject(parent)
         , m_settings(settings)
@@ -32,7 +35,7 @@ namespace VMTDLib
 
         m_netplan1 = load(netplan1FilePath());
         m_netplan2 = load(netplan2FilePath());
-        //m_hosts = load(hostsFilePath());
+        m_hosts = loadHosts(hostsFilePath());
     }
 
     VMTDConfigurator::~VMTDConfigurator()
@@ -110,7 +113,11 @@ namespace VMTDLib
     }
     QString VMTDConfigurator::hostsFilePath() const
     {
-        return QString();
+        return QString("%1%2%3%4")
+               .arg(QDir::separator())
+               .arg("etc")
+               .arg(QDir::separator())
+               .arg("hosts");
     }
 
 
@@ -329,12 +336,77 @@ namespace VMTDLib
         return QString::fromUtf8(f.readAll());
     }
 
+    void VMTDConfigurator::saveHosts(const QString &filePath, const QString &data)
+    {
+        QFile f(filePath);
+
+        if (!f.open(QIODevice::ReadWrite))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(filePath));
+            return;
+        }
+
+        auto text = QString::fromUtf8(f.readAll());
+
+        const auto begPos = text.indexOf(HOSTS_BEG_TAG);
+
+        if (begPos > 0)
+        {
+            const auto endPos = text.lastIndexOf(HOSTS_END_TAG, begPos);
+
+            text.remove(begPos, endPos + HOSTS_END_TAG.size() - begPos);
+            text.insert(begPos, QString("\n%1\n%2\n%3\n")
+                        .arg(HOSTS_BEG_TAG)
+                        .arg(data)
+                        .arg(HOSTS_END_TAG));
+        }
+        else
+        {
+            text.append(QString("\n%1\n%2\n%3\n")
+                        .arg(HOSTS_BEG_TAG)
+                        .arg(data)
+                        .arg(HOSTS_END_TAG));
+        }
+
+        f.write(text.toUtf8());
+        f.close();
+    }
+    QString VMTDConfigurator::loadHosts(const QString &filePath)
+    {
+        QFile f(filePath);
+
+        if (!f.open(QIODevice::ReadOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(filePath));
+            return QString();
+        }
+
+        auto text = QString::fromUtf8(f.readAll());
+
+        auto begPos = text.indexOf(HOSTS_BEG_TAG);
+
+        if (begPos < 0)
+            return QString();
+
+        auto endPos = text.lastIndexOf(HOSTS_END_TAG, begPos);
+
+        if (endPos < 0)
+            endPos = text.size();
+
+        begPos += HOSTS_BEG_TAG.size();
+
+        return text.mid(begPos, endPos - begPos);
+    }
 
     void VMTDConfigurator::applyNetplanSlot()
     {
         save(netplan1FilePath(), m_netplan1);
         save(netplan2FilePath(), m_netplan2);
-        //save(hostsFilePath(), m_hosts);
+        saveHosts(hostsFilePath(), m_hosts);
 
         QString commands;
 

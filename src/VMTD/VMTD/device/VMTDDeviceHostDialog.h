@@ -25,6 +25,9 @@ namespace VMTDLib
         QString name() const;
         void setName(const QString &name);
 
+        QString domainName() const;
+        void setDomainName(const QString &domainName);
+
         QString ip() const;
         void setIp(const QString &ip);
 

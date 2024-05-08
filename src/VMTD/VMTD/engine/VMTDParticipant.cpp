@@ -13,6 +13,7 @@ namespace VMTDLib
         m_defaultVlanId = 19;
 
         m_hostName = "none";
+        m_hostDomainName = "none";
         m_hostIp = "none";
         m_hostInterface = "none";
 
@@ -180,6 +181,15 @@ namespace VMTDLib
     void VMTDParticipant::setHostName(const QString &hostName)
     {
         m_hostName = hostName;
+    }
+
+    QString VMTDParticipant::hostDomainName() const
+    {
+        return m_hostDomainName;
+    }
+    void VMTDParticipant::setHostDomainName(const QString &hostDomainName)
+    {
+        m_hostDomainName = hostDomainName;
     }
 
     QString VMTDParticipant::hostIp() const

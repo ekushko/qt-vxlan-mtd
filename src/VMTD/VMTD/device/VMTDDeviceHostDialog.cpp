@@ -47,6 +47,15 @@ namespace VMTDLib
         ui->leName->setText(name);
     }
 
+    QString VMTDDeviceHostDialog::domainName() const
+    {
+        return ui->leDomainName->text();
+    }
+    void VMTDDeviceHostDialog::setDomainName(const QString &domainName)
+    {
+        ui->leDomainName->setText(domainName);
+    }
+
     QString VMTDDeviceHostDialog::ip() const
     {
         return ui->leIp->text();

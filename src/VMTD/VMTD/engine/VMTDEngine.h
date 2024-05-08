@@ -44,6 +44,8 @@ namespace VMTDLib
         void createRequests();
         void createCommands();
 
+        QJsonObject hosts() const;
+
         QPointer<VMTDEngineForm> m_form;
 
         VMTDSettings *m_settings;

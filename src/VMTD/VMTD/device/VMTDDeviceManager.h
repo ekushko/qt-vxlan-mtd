@@ -36,6 +36,7 @@ namespace VMTDLib
 
         void selectHosts();
         void createHost(int id, const QString &name,
+                        const QString &domainName,
                         const QString &ip,
                         const QString &interface,
                         const QString &switchport,

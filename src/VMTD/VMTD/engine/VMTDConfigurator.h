@@ -60,6 +60,9 @@ namespace VMTDLib
         void    save(const QString &filePath, const QString &data);
         QString load(const QString &filePath);
 
+        void    saveHosts(const QString &filePath, const QString &data);
+        QString loadHosts(const QString &filePath);
+
         QPointer<VMTDConfiguratorForm> m_form;
 
         VMTDSettings *m_settings;

@@ -87,10 +87,11 @@ namespace VMTDLib
 
             m_viewModel->setHeaderData(0, Qt::Horizontal, "Id");
             m_viewModel->setHeaderData(1, Qt::Horizontal, "Name");
-            m_viewModel->setHeaderData(2, Qt::Horizontal, "IP");
-            m_viewModel->setHeaderData(3, Qt::Horizontal, "Interface");
-            m_viewModel->setHeaderData(4, Qt::Horizontal, "Switch port");
-            m_viewModel->setHeaderData(5, Qt::Horizontal, "Switch name");
+            m_viewModel->setHeaderData(2, Qt::Horizontal, "Domain name");
+            m_viewModel->setHeaderData(3, Qt::Horizontal, "IP");
+            m_viewModel->setHeaderData(4, Qt::Horizontal, "Interface");
+            m_viewModel->setHeaderData(5, Qt::Horizontal, "Switch port");
+            m_viewModel->setHeaderData(6, Qt::Horizontal, "Switch name");
         }
     }
 
@@ -109,7 +110,9 @@ namespace VMTDLib
     {
         if (result == QDialog::Accepted)
         {
-            m_manager->createHost(m_hostDialog->id(), m_hostDialog->name(),
+            m_manager->createHost(m_hostDialog->id(),
+                                  m_hostDialog->name(),
+                                  m_hostDialog->domainName(),
                                   m_hostDialog->ip(),
                                   m_hostDialog->interface(),
                                   m_hostDialog->switchport(),
@@ -140,14 +143,16 @@ namespace VMTDLib
                                     ui->tableView->model()->index(index.row(), 0)).toInt());
             m_hostDialog->setName(ui->tableView->model()->data(
                                       ui->tableView->model()->index(index.row(), 1)).toString());
+            m_hostDialog->setDomainName(ui->tableView->model()->data(
+                                            ui->tableView->model()->index(index.row(), 2)).toString());
             m_hostDialog->setIp(ui->tableView->model()->data(
-                                    ui->tableView->model()->index(index.row(), 2)).toString());
+                                    ui->tableView->model()->index(index.row(), 3)).toString());
             m_hostDialog->setInterface(ui->tableView->model()->data(
-                                           ui->tableView->model()->index(index.row(), 3)).toString());
+                                           ui->tableView->model()->index(index.row(), 4)).toString());
             m_hostDialog->setSwitchport(ui->tableView->model()->data(
-                                            ui->tableView->model()->index(index.row(), 4)).toString());
-            m_hostDialog->setSwitchName(ui->tableView->model()->data(
                                             ui->tableView->model()->index(index.row(), 5)).toString());
+            m_hostDialog->setSwitchName(ui->tableView->model()->data(
+                                            ui->tableView->model()->index(index.row(), 6)).toString());
             m_hostDialog->exec();
         }
     }
@@ -177,6 +182,7 @@ namespace VMTDLib
         {
             m_hostDialog->setId(-1);
             m_hostDialog->setName(QString());
+            m_hostDialog->setDomainName(QString());
             m_hostDialog->setIp(QString());
             m_hostDialog->setInterface(QString());
             m_hostDialog->setSwitchport(QString());

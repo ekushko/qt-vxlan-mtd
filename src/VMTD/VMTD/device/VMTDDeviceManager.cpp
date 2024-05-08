@@ -179,7 +179,7 @@ namespace VMTDLib
     void VMTDDeviceManager::selectHosts()
     {
         const auto queryStr =
-            QString("SELECT Hosts.id, Hosts.name, Hosts.ip, Hosts.interface, Hosts.switch_port, Switches.name "
+            QString("SELECT Hosts.id, Hosts.name, Hosts.domain_name, Hosts.ip, Hosts.interface, Hosts.switch_port, Switches.name "
                     "FROM Hosts INNER JOIN Switches ON Switches.id = Hosts.switch_id;");
 
         QSqlQuery query(m_db);
@@ -196,6 +196,7 @@ namespace VMTDLib
         }
     }
     void VMTDDeviceManager::createHost(int id, const QString &name,
+                                       const QString &domainName,
                                        const QString &ip,
                                        const QString &interface,
                                        const QString &switchport,
@@ -213,9 +214,10 @@ namespace VMTDLib
         if (id > 0)
         {
             queryStr =
-                QString("UPDATE Hosts SET name = '%1', ip = '%2', interface = '%3', switch_port = '%4', switch_id = '%5'"
+                QString("UPDATE Hosts SET name = '%1', domain_name = '%2', ip = '%3', interface = '%4', switch_port = '%5', switch_id = '%6'"
                         "WHERE id = '%6';")
                 .arg(name)
+                .arg(domainName)
                 .arg(ip)
                 .arg(interface)
                 .arg(switchport)
@@ -225,9 +227,10 @@ namespace VMTDLib
         else if (id < 0)
         {
             queryStr =
-                QString("INSERT INTO Hosts (name, ip, interface, switch_port, switch_id) "
-                        "VALUES ('%1', '%2', '%3', '%4', '%5');")
+                QString("INSERT INTO Hosts (name, domain_name, ip, interface, switch_port, switch_id) "
+                        "VALUES ('%1', '%2', '%3', '%4', '%5', '%6');")
                 .arg(name)
+                .arg(domainName)
                 .arg(ip)
                 .arg(interface)
                 .arg(switchport)
@@ -276,7 +279,7 @@ namespace VMTDLib
         m_participants.clear();
 
         const auto queryStr =
-            QString("SELECT Hosts.id, Hosts.name, Hosts.ip, Hosts.interface, Hosts.switch_port, Switches.name, Switches.url "
+            QString("SELECT Hosts.id, Hosts.name, Hosts.domain_name, Hosts.ip, Hosts.interface, Hosts.switch_port, Switches.name, Switches.url "
                     "FROM Hosts INNER JOIN Switches ON Switches.id = Hosts.switch_id WHERE Hosts.id > '0';");
 
         QSqlQuery query(m_db);
@@ -298,6 +301,7 @@ namespace VMTDLib
                 continue;
 
             const auto hostName = query.value("Hosts.name").toString();
+            const auto hostDomainName = query.value("Hosts.domain_name").toString();
             const auto hostInterface = query.value("Hosts.interface").toString();
             const auto switchPort = query.value("Hosts.switch_port").toString();
             const auto switchName = query.value("Switches.name").toString();
@@ -305,6 +309,7 @@ namespace VMTDLib
             auto participant = new VMTDParticipant(this);
             participant->setDefaultVlanId(m_settings->defaultVlanId());
             participant->setHostName(hostName);
+            participant->setHostDomainName(hostDomainName);
             participant->setHostIp(hostIp);
             participant->setHostInterface(hostInterface);
             participant->setSwitchName(switchName);
@@ -454,6 +459,7 @@ namespace VMTDLib
             QString("CREATE TABLE IF NOT EXISTS %1 ("
                     "id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL UNIQUE DEFAULT (1), "
                     "name STRING NOT NULL, "
+                    "domain_name STRING NOT NULL, "
                     "ip STRING NOT NULL, "
                     "interface STRING NOT NULL, "
                     "switch_port STRING NOT NULL,"
@@ -471,8 +477,8 @@ namespace VMTDLib
         }
 
         queryStr =
-            QString("INSERT OR IGNORE INTO %1 (id, name, ip, interface, switch_port, switch_id) "
-                    "VALUES ('0', 'none', 'none', 'none', 'none', '0');")
+            QString("INSERT OR IGNORE INTO %1 (id, name, domain_name, ip, interface, switch_port, switch_id) "
+                    "VALUES ('0', 'none', 'none', 'none', 'none', 'none', '0');")
             .arg(tableName);
 
         if (!query.exec(queryStr))

@@ -44,6 +44,9 @@ namespace VMTDLib
         QString hostName() const;
         void setHostName(const QString &hostName);
 
+        QString hostDomainName() const;
+        void setHostDomainName(const QString &hostDomainName);
+
         QString hostIp() const;
         void setHostIp(const QString &hostIp);
 
@@ -72,6 +75,7 @@ namespace VMTDLib
         int m_defaultVlanId;
 
         QString m_hostName;
+        QString m_hostDomainName;
         QString m_hostIp;
         QString m_hostInterface;
 

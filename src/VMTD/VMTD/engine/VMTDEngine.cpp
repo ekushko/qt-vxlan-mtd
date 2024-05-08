@@ -269,7 +269,10 @@ namespace VMTDLib
         {
             participant->buildRequests();
 
-            emit appendRequestListSignal(participant->hostIp(), participant->requests());
+            auto requests = participant->requests();
+            requests.append(qMakePair(MTH_SETUP_HOSTS, hosts()));
+
+            emit appendRequestListSignal(participant->hostIp(), requests);
         }
     }
 
@@ -297,5 +300,23 @@ namespace VMTDLib
 
             emit appendCommandListSignal(url, commands);
         }
+    }
+
+    QJsonObject VMTDEngine::hosts() const
+    {
+        QJsonObject jsonObj;
+        QJsonArray jsonArr;
+
+        for (auto participant : m_manager->participants())
+        {
+            QJsonObject itemObj;
+            jsonObj[PRM_IP] = participant->interface1()->ip();
+            jsonObj[PRM_DOMAIN_NAME] = participant->hostDomainName();
+            jsonArr.append(jsonObj);
+        }
+
+        jsonObj[PRM_HOSTS] = jsonArr;
+
+        return jsonObj;
     }
 }
