@@ -252,13 +252,13 @@ namespace VMTDLib
 
         if (!jsonArr.isEmpty())
         {
-            for (auto jsonVal : params[PRM_HOSTS].toArray())
+            for (const auto jsonVal : jsonArr)
             {
-                const auto jsonObj = jsonVal.toObject();
+                const auto &itemObj = jsonVal.toObject();
 
                 m_hosts.append(QString("%1 %2\n")
-                               .arg(params[PRM_IP].toString())
-                               .arg(params[PRM_DOMAIN_NAME].toString()));
+                               .arg(itemObj[PRM_IP].toString())
+                               .arg(itemObj[PRM_DOMAIN_NAME].toString()));
             }
         }
 
@@ -340,7 +340,7 @@ namespace VMTDLib
     {
         QFile f(filePath);
 
-        if (!f.open(QIODevice::ReadWrite))
+        if (!f.open(QIODevice::ReadOnly))
         {
             m_settings->debugOut(QString("%1 | File %2 not opened!")
                                  .arg(VN_S(VMTDConfigurator))
@@ -350,14 +350,17 @@ namespace VMTDLib
 
         auto text = QString::fromUtf8(f.readAll());
 
+        f.close();
+
+
         const auto begPos = text.indexOf(HOSTS_BEG_TAG);
 
         if (begPos > 0)
         {
-            const auto endPos = text.lastIndexOf(HOSTS_END_TAG, begPos);
+            const auto endPos = text.lastIndexOf(HOSTS_END_TAG);
 
             text.remove(begPos, endPos + HOSTS_END_TAG.size() - begPos);
-            text.insert(begPos, QString("\n%1\n%2\n%3\n")
+            text.insert(begPos, QString("%1\n%2\n%3")
                         .arg(HOSTS_BEG_TAG)
                         .arg(data)
                         .arg(HOSTS_END_TAG));
@@ -368,6 +371,15 @@ namespace VMTDLib
                         .arg(HOSTS_BEG_TAG)
                         .arg(data)
                         .arg(HOSTS_END_TAG));
+        }
+
+
+        if (!f.open(QIODevice::WriteOnly))
+        {
+            m_settings->debugOut(QString("%1 | File %2 not opened!")
+                                 .arg(VN_S(VMTDConfigurator))
+                                 .arg(filePath));
+            return;
         }
 
         f.write(text.toUtf8());
@@ -392,7 +404,7 @@ namespace VMTDLib
         if (begPos < 0)
             return QString();
 
-        auto endPos = text.lastIndexOf(HOSTS_END_TAG, begPos);
+        auto endPos = text.lastIndexOf(HOSTS_END_TAG);
 
         if (endPos < 0)
             endPos = text.size();

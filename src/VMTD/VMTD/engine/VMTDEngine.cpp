@@ -271,6 +271,7 @@ namespace VMTDLib
 
             auto requests = participant->requests();
             requests.append(qMakePair(MTH_SETUP_HOSTS, hosts()));
+            requests.append(qMakePair(MTH_APPLY_NETPLAN, QJsonObject()));
 
             emit appendRequestListSignal(participant->hostIp(), requests);
         }
@@ -310,9 +311,9 @@ namespace VMTDLib
         for (auto participant : m_manager->participants())
         {
             QJsonObject itemObj;
-            jsonObj[PRM_IP] = participant->interface1()->ip();
-            jsonObj[PRM_DOMAIN_NAME] = participant->hostDomainName();
-            jsonArr.append(jsonObj);
+            itemObj[PRM_IP] = participant->interface1()->ip();
+            itemObj[PRM_DOMAIN_NAME] = participant->hostDomainName();
+            jsonArr.append(itemObj);
         }
 
         jsonObj[PRM_HOSTS] = jsonArr;
