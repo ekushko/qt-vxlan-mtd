@@ -215,7 +215,7 @@ namespace VMTDLib
         {
             queryStr =
                 QString("UPDATE Hosts SET name = '%1', domain_name = '%2', ip = '%3', interface = '%4', switch_port = '%5', switch_id = '%6'"
-                        "WHERE id = '%6';")
+                        "WHERE id = '%7';")
                 .arg(name)
                 .arg(domainName)
                 .arg(ip)

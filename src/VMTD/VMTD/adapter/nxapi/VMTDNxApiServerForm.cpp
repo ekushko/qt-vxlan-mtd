@@ -64,7 +64,7 @@ namespace VMTDLib
         delete m_adapterForms[adapter];
         m_adapterForms.remove(adapter);
 
-        for (int i = 0; ui->twAdapters->tabBar()->count(); ++i)
+        for (int i = 0; i < ui->twAdapters->tabBar()->count(); ++i)
         {
             if (ui->twAdapters->tabBar()->tabText(i) == adapter->url().toString(QUrl::RemoveUserInfo))
             {
