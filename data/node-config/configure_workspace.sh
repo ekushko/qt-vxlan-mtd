@@ -21,6 +21,7 @@ echo $utils >> $utils_file
 
 chown -R eve /etc/netplan/
 chmod -R 777 /etc/netplan/
+chmod 777 /etc/hosts
 
 # Обновление пакетов
 
