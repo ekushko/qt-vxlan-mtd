@@ -46,7 +46,6 @@ namespace VMTDLib
         ui->leDbName->setText(m_settings->dbName());
         ui->chbShouldCheckOnline->setChecked(m_settings->shouldCheckOnline());
         ui->chbShouldUseReconfigTimer->setChecked(m_settings->shouldUseReconfigTimer());
-        ui->chbShouldCalcReconfigInterval->setChecked(m_settings->shouldCalcReconfigInterval());
         ui->sbReconfigurationInterval->setValue(m_settings->reconfigInterval());
         ui->chbShouldRandomizeVlan->setChecked(m_settings->shouldRandomizeVlan());
         ui->sbDefaultVlanId->setValue(m_settings->defaultVlanId());
@@ -79,7 +78,6 @@ namespace VMTDLib
         m_settings->setDbName(ui->leDbName->text());
         m_settings->setShouldCheckOnline(ui->chbShouldCheckOnline->isChecked());
         m_settings->setShouldUseReconfigTimer(ui->chbShouldUseReconfigTimer->isChecked());
-        m_settings->setShouldCalcReconfigInterval(ui->chbShouldCalcReconfigInterval->isChecked());
         m_settings->setReconfigInterval(ui->sbReconfigurationInterval->value());
         m_settings->setShouldRandomizeVlan(ui->chbShouldRandomizeVlan->isChecked());
         m_settings->setDefaultVlanId(ui->sbDefaultVlanId->value());

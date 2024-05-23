@@ -15,7 +15,8 @@ namespace VMTDLib
         , m_settings(settings)
         , m_manager(manager)
     {
-
+        connect(&m_reconfigTimer, &QTimer::timeout,
+                this, &VMTDEngine::reconfigTimerTickSlot);
     }
 
     VMTDEngine::~VMTDEngine()
@@ -36,6 +37,31 @@ namespace VMTDLib
         m_form->show();
         m_form->raise();
         m_form->activateWindow();
+    }
+
+    void VMTDEngine::startEngine()
+    {
+        if (m_settings->shouldUseReconfigTimer())
+        {
+            QTimer::singleShot(1000, this, [this]()
+            {
+                reconfigTimerTickSlot();
+
+                m_reconfigTimer.start(m_settings->reconfigInterval());
+            });
+        }
+    }
+    void VMTDEngine::stopEngine()
+    {
+        m_reconfigTimer.stop();
+    }
+    void VMTDEngine::resetEngine()
+    {
+        if (m_reconfigTimer.isActive())
+        {
+            m_reconfigTimer.stop();
+            m_reconfigTimer.start();
+        }
     }
 
     void VMTDEngine::generate()
@@ -64,6 +90,11 @@ namespace VMTDLib
 
         createCommands();
         createRequests();
+    }
+
+    int VMTDEngine::remainingTime() const
+    {
+        return m_reconfigTimer.remainingTime();
     }
 
     const QList<VMTDGroup *> &VMTDEngine::groups() const
@@ -319,5 +350,13 @@ namespace VMTDLib
         jsonObj[PRM_HOSTS] = jsonArr;
 
         return jsonObj;
+    }
+
+    void VMTDEngine::reconfigTimerTickSlot()
+    {
+        m_settings->debugOut(VN_S(VMTDEngine) + " | Time to reconfiguration!");
+
+        generate();
+        run();
     }
 }

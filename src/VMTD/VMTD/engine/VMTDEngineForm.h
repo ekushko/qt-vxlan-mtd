@@ -31,7 +31,11 @@ namespace VMTDLib
 
         VMTDEngine *m_engine;
 
+        QTimer m_uiTimer;
+
     private slots:
+
+        void uiTimerTickSlot();
 
         void on_pbGenerate_clicked();
 

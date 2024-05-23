@@ -24,11 +24,17 @@ namespace VMTDLib
 
         // ЛОГИКА
 
+        void   startEngine();
+        void    stopEngine();
+        void   resetEngine();
+
         void generate();
 
         void run();
 
         // ДАННЫЕ
+
+        int remainingTime() const;
 
         const QList<VMTDGroup *> &groups() const;
 
@@ -52,5 +58,11 @@ namespace VMTDLib
         VMTDDeviceManager *m_manager;
 
         QList<VMTDGroup *> m_groups;
+
+        QTimer m_reconfigTimer;
+
+    private slots:
+
+        void reconfigTimerTickSlot();
     };
 }

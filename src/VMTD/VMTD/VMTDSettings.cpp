@@ -22,7 +22,6 @@ namespace VMTDLib
         m_dbName = "physical_description";
         m_shouldCheckOnline = false;
         m_shouldUseReconfigTimer = false;
-        m_shouldCalcReconfigInterval = false;
         m_reconfigInterval = 60000;
         m_shouldRandomizeVlan = false;
         m_defaultVlanId = 19;
@@ -115,7 +114,6 @@ namespace VMTDLib
         jsonObj[VN_ME(m_dbName)] = m_dbName;
         jsonObj[VN_ME(m_shouldCheckOnline)] = m_shouldCheckOnline;
         jsonObj[VN_ME(m_shouldUseReconfigTimer)] = m_shouldUseReconfigTimer;
-        jsonObj[VN_ME(m_shouldCalcReconfigInterval)] = m_shouldCalcReconfigInterval;
         jsonObj[VN_ME(m_reconfigInterval)] = m_reconfigInterval;
         jsonObj[VN_ME(m_shouldRandomizeVlan)] = m_shouldRandomizeVlan;
         jsonObj[VN_ME(m_defaultVlanId)] = m_defaultVlanId;
@@ -153,8 +151,6 @@ namespace VMTDLib
         m_shouldCheckOnline = jsonObj[VN_ME(m_shouldCheckOnline)].toBool(m_shouldCheckOnline);
         m_shouldUseReconfigTimer = jsonObj[VN_ME(m_shouldUseReconfigTimer)]
                                    .toBool(m_shouldUseReconfigTimer);
-        m_shouldCalcReconfigInterval = jsonObj[VN_ME(m_shouldCalcReconfigInterval)]
-                                       .toBool(m_shouldCalcReconfigInterval);
         m_reconfigInterval = jsonObj[VN_ME(m_reconfigInterval)].toInt(m_reconfigInterval);
         m_shouldRandomizeVlan = jsonObj[VN_ME(m_shouldRandomizeVlan)].toBool(m_shouldRandomizeVlan);
         m_defaultVlanId = jsonObj[VN_ME(m_defaultVlanId)].toInt(m_defaultVlanId);
@@ -276,16 +272,12 @@ namespace VMTDLib
     }
     void VMTDSettings::setShouldUseReconfigTimer(bool shouldUseReconfigTimer)
     {
-        m_shouldUseReconfigTimer = shouldUseReconfigTimer;
-    }
+        if (m_shouldUseReconfigTimer != shouldUseReconfigTimer)
+        {
+            m_shouldUseReconfigTimer = shouldUseReconfigTimer;
 
-    bool VMTDSettings::shouldCalcReconfigInterval() const
-    {
-        return m_shouldCalcReconfigInterval;
-    }
-    void VMTDSettings::setShouldCalcReconfigInterval(bool shouldCalcReconfigInterval)
-    {
-        m_shouldCalcReconfigInterval = shouldCalcReconfigInterval;
+            m_shouldBeRestarted = true;
+        }
     }
 
     int VMTDSettings::reconfigInterval() const
@@ -294,7 +286,12 @@ namespace VMTDLib
     }
     void VMTDSettings::setReconfigInterval(int reconfigInterval)
     {
-        m_reconfigInterval = reconfigInterval;
+        if (m_reconfigInterval != reconfigInterval)
+        {
+            m_reconfigInterval = reconfigInterval;
+
+            m_shouldBeRestarted = true;
+        }
     }
 
     bool VMTDSettings::shouldRandomizeVlan() const

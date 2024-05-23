@@ -14,6 +14,11 @@ namespace VMTDLib
             parent->layout()->addWidget(this);
 
         updateView();
+
+        connect(&m_uiTimer, &QTimer::timeout, this, &VMTDEngineForm::uiTimerTickSlot);
+        m_uiTimer.start(1000);
+
+        uiTimerTickSlot();
     }
 
     VMTDEngineForm::~VMTDEngineForm()
@@ -125,6 +130,15 @@ namespace VMTDLib
         }
     }
 
+    void VMTDEngineForm::uiTimerTickSlot()
+    {
+        if (m_engine->remainingTime() < 0)
+            ui->lbRemainingTime->setText("Reconfig timer is not running");
+        else
+            ui->lbRemainingTime->setText(QString("Remaining time: %1 secs")
+                                         .arg(m_engine->remainingTime() / 1000));
+    }
+
     void VMTDEngineForm::on_pbGenerate_clicked()
     {
         m_engine->generate();
@@ -135,5 +149,7 @@ namespace VMTDLib
     void VMTDEngineForm::on_pbRun_clicked()
     {
         m_engine->run();
+
+        m_engine->resetEngine();
     }
 }

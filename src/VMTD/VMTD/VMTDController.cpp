@@ -132,18 +132,22 @@ namespace VMTDLib
                     m_server, &VMTDServer::appendCommandListSlot);
             connect(m_engine, &VMTDEngine::appendRequestListSignal,
                     m_server, &VMTDServer::appendRequestListSlot);
+
+            m_engine->startEngine();
         }
 
         exec();
 
-        m_hostClient->disconnectSocketSlot();
-
         if (m_nodeType == VMTDNodeType::SERVER)
         {
-            m_nxApiServer->stopListenSlot();
+            m_engine->stopEngine();
 
             m_hostServer->stopListenSlot();
+
+            m_nxApiServer->stopListenSlot();
         }
+
+        m_hostClient->disconnectSocketSlot();
     }
 
     void VMTDController::restartSlot()

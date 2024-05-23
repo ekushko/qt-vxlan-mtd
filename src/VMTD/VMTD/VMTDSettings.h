@@ -71,9 +71,6 @@ namespace VMTDLib
         bool    shouldUseReconfigTimer() const;
         void setShouldUseReconfigTimer(bool shouldUseReconfigTimer);
 
-        bool    shouldCalcReconfigInterval() const;
-        void setShouldCalcReconfigInterval(bool shouldCalcReconfigInterval);
-
         int     reconfigInterval() const;
         void setReconfigInterval(int reconfigInterval);
 
@@ -157,7 +154,6 @@ namespace VMTDLib
         QString m_dbName;
         bool m_shouldCheckOnline;
         bool m_shouldUseReconfigTimer;
-        bool m_shouldCalcReconfigInterval;
         int m_reconfigInterval;
         bool m_shouldRandomizeVlan;
         int m_defaultVlanId;

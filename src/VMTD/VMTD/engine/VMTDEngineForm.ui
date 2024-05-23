@@ -52,6 +52,19 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="lbRemainingTime">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Remaining time: 10 sec</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
