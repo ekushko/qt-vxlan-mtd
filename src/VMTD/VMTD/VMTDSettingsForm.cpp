@@ -56,6 +56,7 @@ namespace VMTDLib
         ui->chbShouldRandomizeParticipant->setChecked(m_settings->shouldRandomizeParticipant());
         ui->leNetplan1FileName->setText(m_settings->netplan1FileName());
         ui->leNetplan2FileName->setText(m_settings->netplan2FileName());
+        ui->leAlertFilePath->setText(m_settings->alertFilePath());
 
         ui->sbLocalPort->setValue(m_settings->localPort());
         ui->leServerIp->setText(m_settings->serverIp());
@@ -88,6 +89,7 @@ namespace VMTDLib
         m_settings->setShouldRandomizeParticipant(ui->chbShouldRandomizeParticipant->isChecked());
         m_settings->setNetplan1FileName(ui->leNetplan1FileName->text());
         m_settings->setNetplan2FileName(ui->leNetplan2FileName->text());
+        m_settings->setAlertFilePath(ui->leAlertFilePath->text());
 
         m_settings->setLocalPort(ui->sbLocalPort->value());
         m_settings->setServerIp(ui->leServerIp->text());

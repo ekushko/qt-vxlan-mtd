@@ -101,6 +101,9 @@ namespace VMTDLib
         QString netplan2FileName() const;
         void setNetplan2FileName(const QString &netplan2FileName);
 
+        QString alertFilePath() const;
+        void setAlertFilePath(const QString &alertFilePath);
+
         // СЕТЕВЫЕ ПАРАМЕТРЫ
 
         int     localPort() const;
@@ -164,6 +167,7 @@ namespace VMTDLib
         bool m_shouldRandomizeParticipant;
         QString m_netplan1FileName;
         QString m_netplan2FileName;
+        QString m_alertFilePath;
 
         int m_localPort;
         QString m_serverIp;

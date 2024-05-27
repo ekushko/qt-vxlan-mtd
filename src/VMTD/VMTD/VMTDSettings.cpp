@@ -32,6 +32,8 @@ namespace VMTDLib
         m_shouldRandomizeParticipant = false;
         m_netplan1FileName = "02-vmtd-1";
         m_netplan2FileName = "03-vmtd-2";
+        m_alertFilePath = QString("%1var%1log%1snort%1alert")
+                          .arg(QDir::separator());
 
         m_localPort = 30001;
         m_serverIp = "127.0.0.1";
@@ -124,6 +126,7 @@ namespace VMTDLib
         jsonObj[VN_ME(m_shouldRandomizeParticipant)] = m_shouldRandomizeParticipant;
         jsonObj[VN_ME(m_netplan1FileName)] = m_netplan1FileName;
         jsonObj[VN_ME(m_netplan2FileName)] = m_netplan2FileName;
+        jsonObj[VN_ME(m_alertFilePath)] = m_alertFilePath;
 
         jsonObj[VN_ME(m_localPort)] = m_localPort;
         jsonObj[VN_ME(m_serverIp)] = m_serverIp;
@@ -164,6 +167,7 @@ namespace VMTDLib
                                        .toBool(m_shouldRandomizeParticipant);
         m_netplan1FileName = jsonObj[VN_ME(m_netplan1FileName)].toString(m_netplan1FileName);
         m_netplan2FileName = jsonObj[VN_ME(m_netplan2FileName)].toString(m_netplan2FileName);
+        m_alertFilePath = jsonObj[VN_ME(m_alertFilePath)].toString(m_alertFilePath);
 
         m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
         m_serverIp = jsonObj[VN_ME(m_serverIp)].toString(m_serverIp);
@@ -379,6 +383,20 @@ namespace VMTDLib
     void VMTDSettings::setNetplan2FileName(const QString &netplan2FileName)
     {
         m_netplan2FileName = netplan2FileName;
+    }
+
+    QString VMTDSettings::alertFilePath() const
+    {
+        return m_alertFilePath;
+    }
+    void VMTDSettings::setAlertFilePath(const QString &alertFilePath)
+    {
+        if (m_alertFilePath != alertFilePath)
+        {
+            m_alertFilePath = alertFilePath;
+
+            m_shouldBeRestarted = true;
+        }
     }
 
     int VMTDSettings::localPort() const
