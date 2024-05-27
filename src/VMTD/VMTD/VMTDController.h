@@ -13,6 +13,7 @@
 
 #include "engine/VMTDEngine.h"
 #include "engine/VMTDConfigurator.h"
+#include "engine/VMTDWatchdog.h"
 
 #include <QThread>
 
@@ -44,6 +45,8 @@ namespace VMTDLib
         VMTDEngine *engine() const;
 
         VMTDConfigurator *configurator() const;
+
+        VMTDWatchdog *watchdog() const;
 
     signals:
 
@@ -79,6 +82,8 @@ namespace VMTDLib
         VMTDEngine *m_engine;
 
         VMTDConfigurator *m_configurator;
+
+        VMTDWatchdog *m_watchdog;
 
     private slots:
 

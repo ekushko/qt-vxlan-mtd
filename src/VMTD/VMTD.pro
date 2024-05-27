@@ -181,6 +181,7 @@ SOURCES += \
     VMTD/engine/VMTDInterface.cpp \
     VMTD/engine/VMTDParticipant.cpp \
     VMTD/engine/VMTDRoute.cpp \
+    VMTD/engine/VMTDWatchdog.cpp \
     VMTD/protocol/VMTDClient.cpp \
     VMTD/protocol/VMTDClientForm.cpp \
     VMTD/protocol/VMTDProtocolHandler.cpp \
@@ -228,6 +229,7 @@ HEADERS += \
     VMTD/engine/VMTDInterface.h \
     VMTD/engine/VMTDParticipant.h \
     VMTD/engine/VMTDRoute.h \
+    VMTD/engine/VMTDWatchdog.h \
     VMTD/protocol/VMTDClient.h \
     VMTD/protocol/VMTDClientForm.h \
     VMTD/protocol/VMTDProtocolHandler.h \

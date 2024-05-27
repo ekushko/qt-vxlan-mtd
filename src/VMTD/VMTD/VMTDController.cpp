@@ -81,6 +81,11 @@ namespace VMTDLib
         return m_configurator;
     }
 
+    VMTDWatchdog *VMTDController::watchdog() const
+    {
+        return m_watchdog;
+    }
+
     void VMTDController::startController()
     {
         m_settings->debugOut(VN_S(VMTDController) + " | Starting...");
@@ -111,6 +116,9 @@ namespace VMTDLib
         connect(m_client, &VMTDClient::handleMethodSignal,
                 m_configurator, &VMTDConfigurator::handleMethodSlot,
                 Qt::DirectConnection);
+
+        m_watchdog = new VMTDWatchdog(nullptr, m_settings);
+        connect(this, &VMTDController::finished, m_watchdog, &VMTDWatchdog::deleteLater);
 
         if (m_nodeType == VMTDNodeType::SERVER)
         {
