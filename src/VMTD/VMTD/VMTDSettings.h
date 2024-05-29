@@ -101,6 +101,9 @@ namespace VMTDLib
         QString netplan2FileName() const;
         void setNetplan2FileName(const QString &netplan2FileName);
 
+        bool    shouldControlAlert() const;
+        void setShouldControlAlert(bool shouldControlAlert);
+
         QString alertFilePath() const;
         void setAlertFilePath(const QString &alertFilePath);
 
@@ -167,6 +170,7 @@ namespace VMTDLib
         bool m_shouldRandomizeParticipant;
         QString m_netplan1FileName;
         QString m_netplan2FileName;
+        bool m_shouldControlAlert;
         QString m_alertFilePath;
 
         int m_localPort;

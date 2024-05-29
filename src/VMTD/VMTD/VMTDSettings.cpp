@@ -32,6 +32,7 @@ namespace VMTDLib
         m_shouldRandomizeParticipant = false;
         m_netplan1FileName = "02-vmtd-1";
         m_netplan2FileName = "03-vmtd-2";
+        m_shouldControlAlert = true;
         m_alertFilePath = QString("%1var%1log%1snort%1alert")
                           .arg(QDir::separator());
 
@@ -126,6 +127,7 @@ namespace VMTDLib
         jsonObj[VN_ME(m_shouldRandomizeParticipant)] = m_shouldRandomizeParticipant;
         jsonObj[VN_ME(m_netplan1FileName)] = m_netplan1FileName;
         jsonObj[VN_ME(m_netplan2FileName)] = m_netplan2FileName;
+        jsonObj[VN_ME(m_shouldControlAlert)] = m_shouldControlAlert;
         jsonObj[VN_ME(m_alertFilePath)] = m_alertFilePath;
 
         jsonObj[VN_ME(m_localPort)] = m_localPort;
@@ -167,6 +169,7 @@ namespace VMTDLib
                                        .toBool(m_shouldRandomizeParticipant);
         m_netplan1FileName = jsonObj[VN_ME(m_netplan1FileName)].toString(m_netplan1FileName);
         m_netplan2FileName = jsonObj[VN_ME(m_netplan2FileName)].toString(m_netplan2FileName);
+        m_shouldControlAlert = jsonObj[VN_ME(m_shouldControlAlert)].toBool(m_shouldControlAlert);
         m_alertFilePath = jsonObj[VN_ME(m_alertFilePath)].toString(m_alertFilePath);
 
         m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
@@ -383,6 +386,20 @@ namespace VMTDLib
     void VMTDSettings::setNetplan2FileName(const QString &netplan2FileName)
     {
         m_netplan2FileName = netplan2FileName;
+    }
+
+    bool VMTDSettings::shouldControlAlert() const
+    {
+        return m_shouldControlAlert;
+    }
+    void VMTDSettings::setShouldControlAlert(bool shouldControlAlert)
+    {
+        if (m_shouldControlAlert != shouldControlAlert)
+        {
+            m_shouldControlAlert = shouldControlAlert;
+
+            m_shouldBeRestarted = true;
+        }
     }
 
     QString VMTDSettings::alertFilePath() const
