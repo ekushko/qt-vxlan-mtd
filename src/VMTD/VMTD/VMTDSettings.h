@@ -107,6 +107,9 @@ namespace VMTDLib
         QString alertFilePath() const;
         void setAlertFilePath(const QString &alertFilePath);
 
+        int     alertDelayInterval() const;
+        void setAlertDelayInterval(int alertDelayInterval);
+
         // СЕТЕВЫЕ ПАРАМЕТРЫ
 
         int     localPort() const;
@@ -172,6 +175,7 @@ namespace VMTDLib
         QString m_netplan2FileName;
         bool m_shouldControlAlert;
         QString m_alertFilePath;
+        int m_alertDelayInterval;
 
         int m_localPort;
         QString m_serverIp;

@@ -35,6 +35,7 @@ namespace VMTDLib
         m_shouldControlAlert = true;
         m_alertFilePath = QString("%1var%1log%1snort%1alert")
                           .arg(QDir::separator());
+        m_alertDelayInterval = 2000;
 
         m_localPort = 30001;
         m_serverIp = "127.0.0.1";
@@ -129,6 +130,7 @@ namespace VMTDLib
         jsonObj[VN_ME(m_netplan2FileName)] = m_netplan2FileName;
         jsonObj[VN_ME(m_shouldControlAlert)] = m_shouldControlAlert;
         jsonObj[VN_ME(m_alertFilePath)] = m_alertFilePath;
+        jsonObj[VN_ME(m_alertDelayInterval)] = m_alertDelayInterval;
 
         jsonObj[VN_ME(m_localPort)] = m_localPort;
         jsonObj[VN_ME(m_serverIp)] = m_serverIp;
@@ -171,6 +173,7 @@ namespace VMTDLib
         m_netplan2FileName = jsonObj[VN_ME(m_netplan2FileName)].toString(m_netplan2FileName);
         m_shouldControlAlert = jsonObj[VN_ME(m_shouldControlAlert)].toBool(m_shouldControlAlert);
         m_alertFilePath = jsonObj[VN_ME(m_alertFilePath)].toString(m_alertFilePath);
+        m_alertDelayInterval = jsonObj[VN_ME(m_alertDelayInterval)].toInt(m_alertDelayInterval);
 
         m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
         m_serverIp = jsonObj[VN_ME(m_serverIp)].toString(m_serverIp);
@@ -414,6 +417,15 @@ namespace VMTDLib
 
             m_shouldBeRestarted = true;
         }
+    }
+
+    int VMTDSettings::alertDelayInterval() const
+    {
+        return m_alertDelayInterval;
+    }
+    void VMTDSettings::setAlertDelayInterval(int alertDelayInterval)
+    {
+        m_alertDelayInterval = alertDelayInterval;
     }
 
     int VMTDSettings::localPort() const

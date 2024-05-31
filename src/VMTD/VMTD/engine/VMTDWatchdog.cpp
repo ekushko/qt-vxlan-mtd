@@ -17,6 +17,9 @@ namespace VMTDLib
         : QObject(parent)
         , m_settings(settings)
     {
+        m_shouldWait = false;
+        m_shouldCheck = false;
+
         if (!QFile::exists(m_settings->alertFilePath()))
         {
             m_settings->debugOut(QString("%1 | Alert file (%2) not found!")
@@ -34,10 +37,19 @@ namespace VMTDLib
                 connect(&m_watcher, &QFileSystemWatcher::fileChanged, this, &VMTDWatchdog::fileChangedSlot);
             }
         }
+
+        m_delayTimer.setSingleShot(true);
+        connect(&m_delayTimer, &QTimer::timeout, this, &VMTDWatchdog::delayTimerTickSlot);
     }
 
     void VMTDWatchdog::fileChangedSlot(const QString &path)
     {
+        if (m_shouldWait)
+        {
+            m_shouldCheck = true;
+            return;
+        }
+
         m_settings->debugOut(QString("%1 | Alert detected %2!")
                              .arg(VN_S(VMTDWatchdog))
                              .arg(path));
@@ -58,6 +70,8 @@ namespace VMTDLib
         const QRegularExpression re(PATTERN);
         auto matchIt = re.globalMatch(alertContent);
 
+        m_scanners.clear();
+
         while (matchIt.hasNext())
         {
             const auto match = matchIt.next();
@@ -75,8 +89,13 @@ namespace VMTDLib
                                      .arg(timeStamp)
                                      .arg(srcIp).arg(srcPort)
                                      .arg(dstIp).arg(dstPort));
+
+                m_scanners.append(srcIp);
             }
         }
+
+        if (!m_scanners.isEmpty())
+            emit scanDetectedSignal(m_scanners);
 
         if (QFile::exists(m_settings->alertFilePath()))
         {
@@ -84,5 +103,17 @@ namespace VMTDLib
 
             m_watcher.addPath(m_settings->alertFilePath());
         }
+
+        m_shouldCheck = false;
+        m_shouldWait = true;
+        m_delayTimer.start(m_settings->alertDelayInterval());
+    }
+
+    void VMTDWatchdog::delayTimerTickSlot()
+    {
+        m_shouldWait = false;
+
+        if (m_shouldCheck)
+            fileChangedSlot(m_settings->alertFilePath());
     }
 }

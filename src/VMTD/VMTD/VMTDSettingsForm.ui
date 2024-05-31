@@ -56,7 +56,7 @@
         <x>0</x>
         <y>0</y>
         <width>452</width>
-        <height>1016</height>
+        <height>1047</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -152,10 +152,33 @@
           <string>Engine</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="9" column="0" colspan="2">
-           <widget class="QCheckBox" name="chbShouldRandomizeVlan">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="leDbName"/>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLabel" name="_4">
             <property name="text">
-             <string>Should randomize VLAN</string>
+             <string>Default VLAN ID:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="1">
+           <widget class="QLineEdit" name="leNetplan1FileName"/>
+          </item>
+          <item row="17" column="1">
+           <widget class="QLineEdit" name="leNetplan2FileName"/>
+          </item>
+          <item row="17" column="0">
+           <widget class="QLabel" name="_22">
+            <property name="text">
+             <string>Netplan-2:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="chbShouldCheckOnline">
+            <property name="text">
+             <string>Should check online</string>
             </property>
            </widget>
           </item>
@@ -172,15 +195,8 @@
             </property>
            </widget>
           </item>
-          <item row="16" column="1">
-           <widget class="QLineEdit" name="leNetplan1FileName"/>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QCheckBox" name="chbShouldCheckOnline">
-            <property name="text">
-             <string>Should check online</string>
-            </property>
-           </widget>
+          <item row="18" column="1">
+           <widget class="QLineEdit" name="leAlertFilePath"/>
           </item>
           <item row="15" column="0" colspan="2">
            <widget class="QCheckBox" name="chbShouldRandomizeParticipant">
@@ -189,67 +205,10 @@
             </property>
            </widget>
           </item>
-          <item row="12" column="0">
-           <widget class="QLabel" name="_4">
-            <property name="text">
-             <string>Default VLAN ID:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QCheckBox" name="chbShouldUseReconfigTimer">
-            <property name="text">
-             <string>Should use reconfiguration timer</string>
-            </property>
-           </widget>
-          </item>
-          <item row="16" column="0">
-           <widget class="QLabel" name="_21">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Netplan-1:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Reconfiguration interval (ms):</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="1">
            <widget class="QSpinBox" name="sbReconfigurationInterval">
             <property name="maximum">
              <number>999999999</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="leDbName"/>
-          </item>
-          <item row="17" column="0">
-           <widget class="QLabel" name="_22">
-            <property name="text">
-             <string>Netplan-2:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="17" column="1">
-           <widget class="QLineEdit" name="leNetplan2FileName"/>
-          </item>
-          <item row="11" column="1">
-           <widget class="QSpinBox" name="sbMaxVlanId">
-            <property name="minimum">
-             <number>16</number>
-            </property>
-            <property name="maximum">
-             <number>4096</number>
             </property>
            </widget>
           </item>
@@ -263,10 +222,31 @@
             </property>
            </widget>
           </item>
-          <item row="14" column="0" colspan="2">
-           <widget class="QCheckBox" name="chbShouldRandomizeGateway">
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="chbShouldUseReconfigTimer">
             <property name="text">
-             <string>Should randomize gateway</string>
+             <string>Should use reconfiguration timer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0" colspan="2">
+           <widget class="QCheckBox" name="chbShouldRandomizeVlan">
+            <property name="text">
+             <string>Should randomize VLAN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="_6">
+            <property name="text">
+             <string>Reconfiguration interval (ms):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="_5">
+            <property name="text">
+             <string>Database:</string>
             </property>
            </widget>
           </item>
@@ -284,6 +264,23 @@
             </property>
            </widget>
           </item>
+          <item row="14" column="0" colspan="2">
+           <widget class="QCheckBox" name="chbShouldRandomizeGateway">
+            <property name="text">
+             <string>Should randomize gateway</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QSpinBox" name="sbMaxVlanId">
+            <property name="minimum">
+             <number>16</number>
+            </property>
+            <property name="maximum">
+             <number>4096</number>
+            </property>
+           </widget>
+          </item>
           <item row="12" column="1">
            <widget class="QSpinBox" name="sbDefaultVlanId">
             <property name="minimum">
@@ -294,22 +291,39 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="_5">
+          <item row="16" column="0">
+           <widget class="QLabel" name="_21">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="text">
-             <string>Database:</string>
+             <string>Netplan-1:</string>
             </property>
            </widget>
           </item>
           <item row="18" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="_12">
             <property name="text">
              <string>Alert file path:</string>
             </property>
            </widget>
           </item>
-          <item row="18" column="1">
-           <widget class="QLineEdit" name="leAlertFilePath"/>
+          <item row="19" column="0">
+           <widget class="QLabel" name="_18">
+            <property name="text">
+             <string>Alert delay interval (ms):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="1">
+           <widget class="QSpinBox" name="sbAlertDelayInterval">
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
