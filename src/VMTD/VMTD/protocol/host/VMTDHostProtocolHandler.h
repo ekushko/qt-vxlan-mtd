@@ -52,7 +52,9 @@ namespace VMTDLib
 
         void sendMessageSignal(const QString &ip, int port, const QString &data);
 
-        void handleMethodSignal(const QString &method, const QJsonObject &params, bool &result);
+        void handleMethodSignal(const QString &method, const QJsonObject &params, QJsonValue &result);
+
+        void handleResultSignal(const QJsonValue &result);
 
         void updateIpOnlineSignal(const QString &ip, bool isOnline);
 

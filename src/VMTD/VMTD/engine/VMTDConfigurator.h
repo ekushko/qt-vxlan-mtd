@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../VMTDSettings.h"
+#include "VMTDWatchdog.h"
 
 #include <QObject>
 
@@ -40,22 +41,23 @@ namespace VMTDLib
 
     public slots:
 
-        void handleMethodSlot(const QString &method, const QJsonObject &params, bool &result);
+        void handleMethodSlot(const QString &method, const QJsonObject &params, QJsonValue &result);
 
     private:
 
-        bool handleSetupInterface1(const QJsonObject &params);
-        bool handleSetupInterface2(const QJsonObject &params);
-        bool handleSetupHosts(const QJsonObject &params);
+        QJsonValue handleSetupInterface1(const QJsonObject &params);
+        QJsonValue handleSetupInterface2(const QJsonObject &params);
+        QJsonValue handleSetupHosts(const QJsonObject &params);
 
-        bool handleClearInterface1(const QJsonObject &params);
-        bool handleClearInterface2(const QJsonObject &params);
-        bool handleClearRoutes(const QJsonObject &params);
-        bool handleClearHosts(const QJsonObject &params);
+        QJsonValue handleClearInterface1(const QJsonObject &params);
+        QJsonValue handleClearInterface2(const QJsonObject &params);
+        QJsonValue handleClearHosts(const QJsonObject &params);
 
-        bool handleApplyNetplan(const QJsonObject &params);
+        QJsonValue handleGetScanners(const QJsonObject &params);
 
-        bool handleCheckConnection(const QJsonObject &params);
+        QJsonValue handleApplyNetplan(const QJsonObject &params);
+
+        QJsonValue handleCheckConnection(const QJsonObject &params);
 
         void    save(const QString &filePath, const QString &data);
         QString load(const QString &filePath);
@@ -66,6 +68,7 @@ namespace VMTDLib
         QPointer<VMTDConfiguratorForm> m_form;
 
         VMTDSettings *m_settings;
+        VMTDWatchdog *m_watchdog;
 
         QString m_vlanInterface1;
         QString m_vlanInterface2;

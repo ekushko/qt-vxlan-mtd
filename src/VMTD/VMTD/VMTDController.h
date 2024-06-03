@@ -46,8 +46,6 @@ namespace VMTDLib
 
         VMTDConfigurator *configurator() const;
 
-        VMTDWatchdog *watchdog() const;
-
     signals:
 
         void restartedSignal();
@@ -82,8 +80,6 @@ namespace VMTDLib
         VMTDEngine *m_engine;
 
         VMTDConfigurator *m_configurator;
-
-        VMTDWatchdog *m_watchdog;
 
     private slots:
 

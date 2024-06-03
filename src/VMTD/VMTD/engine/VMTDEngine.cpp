@@ -102,6 +102,29 @@ namespace VMTDLib
         return m_groups;
     }
 
+    void VMTDEngine::handleResultSlot(const QJsonValue &result)
+    {
+        if (result.isObject())
+        {
+            const auto jsonObj = result.toObject();
+
+            if (jsonObj.contains(PRM_SCANNERS))
+            {
+                qDebug() << jsonObj[PRM_SCANNERS];
+            }
+            else
+            {
+                m_settings->debugOut(QString("%1 | Result is unknown!")
+                                     .arg(VN_S(VMTDEngine)));
+            }
+        }
+        else
+        {
+            m_settings->debugOut(QString("%1 | Result not handled!")
+                                 .arg(VN_S(VMTDEngine)));
+        }
+    }
+
     void VMTDEngine::createGroups()
     {
         qDeleteAll(m_groups);

@@ -43,6 +43,10 @@ namespace VMTDLib
         void appendRequestListSignal(const QString &ip, const RequestList &requests);
         void appendCommandListSignal(const QString &url, const CommandList &commands);
 
+    public slots:
+
+        void handleResultSlot(const QJsonValue &result);
+
     private:
 
         void createGroups();

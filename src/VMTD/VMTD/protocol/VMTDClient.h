@@ -28,7 +28,7 @@ namespace VMTDLib
 
     signals:
 
-        void handleMethodSignal(const QString &method, const QJsonObject &params, bool &result);
+        void handleMethodSignal(const QString &method, const QJsonObject &params, QJsonValue &result);
 
         void handlerCreatedSignal(VMTDProtocolHandler *handler);
         void handlerRemovedSignal(VMTDProtocolHandler *handler);

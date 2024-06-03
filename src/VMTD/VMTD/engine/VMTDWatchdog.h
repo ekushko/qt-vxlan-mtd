@@ -15,6 +15,8 @@ namespace VMTDLib
 
         VMTDWatchdog(QObject *parent, VMTDSettings *settings);
 
+        const QList<QString> &scanners() const;
+
     signals:
 
         void scanDetectedSignal(const QList<QString> scanners);

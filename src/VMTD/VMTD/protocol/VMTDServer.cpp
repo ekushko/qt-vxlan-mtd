@@ -194,6 +194,8 @@ namespace VMTDLib
                 handler, &VMTDHostProtocolHandler::receiveMessageSlot);
         connect(handler, &VMTDHostProtocolHandler::updateIpOnlineSignal,
                 this, &VMTDServer::updateIpOnlineSignal);
+        connect(handler, &VMTDHostProtocolHandler::handleResultSignal,
+                this, &VMTDServer::handleResultSignal);
 
         emit handlerCreatedSignal(handler);
 

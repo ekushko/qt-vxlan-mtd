@@ -351,13 +351,24 @@ namespace VMTDLib
                 }
                 else
                 {
-                    const auto debugText = QString("Request handled but result is unknown!");
+                    emit handleResultSignal(response["result"]);
+
+                    const auto debugText = QString("Request handled but result should be handled too!");
                     emit showDebugSignal(QTime::currentTime(), debugText);
                     m_settings->debugOut(QString("%1 | %2:%3 | %4")
                                          .arg(VN_S(VMTDHostProtocolHandler))
                                          .arg(hostIp()).arg(hostPort())
                                          .arg(debugText));
                 }
+            }
+            else
+            {
+                const auto debugText = QString("Request handled but result is unknown!");
+                emit showDebugSignal(QTime::currentTime(), debugText);
+                m_settings->debugOut(QString("%1 | %2:%3 | %4")
+                                     .arg(VN_S(VMTDHostProtocolHandler))
+                                     .arg(hostIp()).arg(hostPort())
+                                     .arg(debugText));
             }
         }
 
@@ -429,7 +440,7 @@ namespace VMTDLib
 
                 if (isValid)
                 {
-                    bool result = false;
+                    QJsonValue result = false;
 
                     const auto debugText = QString("Method is valid: %1\n").arg(method);
                     emit showDebugSignal(QTime::currentTime(), debugText);
@@ -440,7 +451,7 @@ namespace VMTDLib
 
                     emit handleMethodSignal(method, params, result);
 
-                    response = buildResponse(request["id"], QJsonValue(result));
+                    response = buildResponse(request["id"], result);
                 }
             }
         }

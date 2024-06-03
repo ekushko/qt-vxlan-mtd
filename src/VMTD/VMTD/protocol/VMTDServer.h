@@ -38,6 +38,8 @@ namespace VMTDLib
         void handlerCreatedSignal(VMTDProtocolHandler *handler);
         void handlerRemovedSignal(VMTDProtocolHandler *handler);
 
+        void handleResultSignal(const QJsonValue &result);
+
     public slots:
 
         void appendRequestListSlot(const QString &ip, const RequestList &requests);

@@ -30,6 +30,8 @@ namespace VMTDLib
         : QObject(parent)
         , m_settings(settings)
     {
+        m_watchdog = new VMTDWatchdog(this, m_settings);
+
         connect(this, &VMTDConfigurator::applyNetplanSignal,
                 this, &VMTDConfigurator::applyNetplanSlot);
 
@@ -123,7 +125,7 @@ namespace VMTDLib
 
     void VMTDConfigurator::handleMethodSlot(const QString &method,
                                             const QJsonObject &params,
-                                            bool &result)
+                                            QJsonValue &result)
     {
         m_settings->debugOut(QString("%1 | Start handling method: %2")
                              .arg(VN_S(VMTDConfigurator))
@@ -153,6 +155,10 @@ namespace VMTDLib
         {
             result = handleClearHosts(params);
         }
+        else if (method == MTH_GET_SCANNERS)
+        {
+            result = handleGetScanners(params);
+        }
         else if (method == MTH_APPLY_NETPLAN)
         {
             result = handleApplyNetplan(params);
@@ -168,11 +174,11 @@ namespace VMTDLib
 
         m_settings->debugOut(QString("%1 | Method handled %2: %3")
                              .arg(VN_S(VMTDConfigurator))
-                             .arg(result ? "successfully" : "with error")
+                             .arg(result.toBool() ? "successfully" : "with error")
                              .arg(method));
     }
 
-    bool VMTDConfigurator::handleSetupInterface1(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleSetupInterface1(const QJsonObject &params)
     {
         auto netplan = VLAN_HEADER_TEMPLATE +
                        QString(VLAN_TEMPLATE)
@@ -206,9 +212,9 @@ namespace VMTDLib
 
         setNetplan1(netplan);
 
-        return true;
+        return QJsonValue(true);
     }
-    bool VMTDConfigurator::handleSetupInterface2(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleSetupInterface2(const QJsonObject &params)
     {
         auto netplan = VLAN_HEADER_TEMPLATE +
                        QString(VLAN_TEMPLATE)
@@ -242,9 +248,9 @@ namespace VMTDLib
 
         setNetplan2(netplan);
 
-        return true;
+        return QJsonValue(true);
     }
-    bool VMTDConfigurator::handleSetupHosts(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleSetupHosts(const QJsonObject &params)
     {
         m_hosts.clear();
 
@@ -262,48 +268,67 @@ namespace VMTDLib
             }
         }
 
-        return true;
+        return QJsonValue(true);
     }
 
-    bool VMTDConfigurator::handleClearInterface1(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleClearInterface1(const QJsonObject &params)
     {
         Q_UNUSED(params)
 
         m_netplan1.clear();
 
-        return true;
+        return QJsonValue(true);
     }
-    bool VMTDConfigurator::handleClearInterface2(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleClearInterface2(const QJsonObject &params)
     {
         Q_UNUSED(params)
 
         m_netplan2.clear();
 
-        return true;
+        return QJsonValue(true);
     }
-    bool VMTDConfigurator::handleClearHosts(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleClearHosts(const QJsonObject &params)
     {
         Q_UNUSED(params)
 
         m_hosts.clear();
 
-        return true;
+        return QJsonValue(true);
     }
 
-    bool VMTDConfigurator::handleApplyNetplan(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleGetScanners(const QJsonObject &params)
+    {
+        Q_UNUSED(params)
+
+        QJsonObject jsonObj;
+        QJsonArray jsonArr;
+
+        for (auto scannerIp : m_watchdog->scanners())
+        {
+            QJsonObject itemObj;
+            itemObj[PRM_IP] = scannerIp;
+            jsonArr.append(itemObj);
+        }
+
+        jsonObj[PRM_SCANNERS] = jsonArr;
+
+        return QJsonValue(jsonObj);
+    }
+
+    QJsonValue VMTDConfigurator::handleApplyNetplan(const QJsonObject &params)
     {
         Q_UNUSED(params)
 
         emit applyNetplanSignal();
 
-        return true;
+        return QJsonValue(true);
     }
 
-    bool VMTDConfigurator::handleCheckConnection(const QJsonObject &params)
+    QJsonValue VMTDConfigurator::handleCheckConnection(const QJsonObject &params)
     {
         Q_UNUSED(params)
 
-        return true;
+        return QJsonValue(true);
     }
 
     void VMTDConfigurator::save(const QString &filePath, const QString &data)

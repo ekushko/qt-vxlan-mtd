@@ -12,6 +12,7 @@ namespace VMTDLib
             { EnName::CLEAR_INTERFACE_1,      "clearInterface1" },
             { EnName::CLEAR_INTERFACE_2,      "clearInterface2" },
             { EnName::CLEAR_HOSTS,            "clearHosts" },
+            { EnName::GET_SCANNERS,           "getScanners" },
             { EnName::APPLY_NETPLAN,          "applyNetplan" },
             { EnName::CHECK_CONNECTION,       "checkConnection" }
         };
@@ -31,7 +32,8 @@ namespace VMTDLib
             { EnParamName::NETWORK,     "network" },
             { EnParamName::DOMAIN_NAME, "domainName" },
             { EnParamName::ROUTES,      "routes" },
-            { EnParamName::HOSTS,       "hosts" }
+            { EnParamName::HOSTS,       "hosts" },
+            { EnParamName::SCANNERS,    "scanners" }
         };
         return map;
     }

@@ -52,6 +52,7 @@ namespace VMTDLib
 #define MTH_CLEAR_INTERFACE_1 VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_INTERFACE_1)
 #define MTH_CLEAR_INTERFACE_2 VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_INTERFACE_2)
 #define MTH_CLEAR_HOSTS VMTDMethod::methods().value(VMTDMethod::EnName::CLEAR_HOSTS)
+#define MTH_GET_SCANNERS VMTDMethod::methods().value(VMTDMethod::EnName::GET_SCANNERS)
 #define MTH_APPLY_NETPLAN VMTDMethod::methods().value(VMTDMethod::EnName::APPLY_NETPLAN)
 #define MTH_CHECK_CONNECTION VMTDMethod::methods().value(VMTDMethod::EnName::CHECK_CONNECTION)
 
@@ -66,6 +67,7 @@ namespace VMTDLib
 #define PRM_METRIC VMTDMethod::params().value(VMTDMethod::EnParamName::METRIC)
 #define PRM_ROUTES VMTDMethod::params().value(VMTDMethod::EnParamName::ROUTES)
 #define PRM_HOSTS VMTDMethod::params().value(VMTDMethod::EnParamName::HOSTS)
+#define PRM_SCANNERS VMTDMethod::params().value(VMTDMethod::EnParamName::SCANNERS)
 
     class VMTDMethod
     {
@@ -82,6 +84,8 @@ namespace VMTDLib
             CLEAR_INTERFACE_1,
             CLEAR_INTERFACE_2,
             CLEAR_HOSTS,
+
+            GET_SCANNERS,
 
             APPLY_NETPLAN,
 
@@ -100,7 +104,8 @@ namespace VMTDLib
             DOMAIN_NAME,
             METRIC,
             ROUTES,
-            HOSTS
+            HOSTS,
+            SCANNERS
         };
 
         static const QMap<EnName, QString> &methods();

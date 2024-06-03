@@ -42,6 +42,11 @@ namespace VMTDLib
         connect(&m_delayTimer, &QTimer::timeout, this, &VMTDWatchdog::delayTimerTickSlot);
     }
 
+    const QList<QString> &VMTDWatchdog::scanners() const
+    {
+        return m_scanners;
+    }
+
     void VMTDWatchdog::fileChangedSlot(const QString &path)
     {
         if (m_shouldWait)
