@@ -36,6 +36,8 @@ namespace VMTDLib
         m_alertFilePath = QString("%1var%1log%1snort%1alert")
                           .arg(QDir::separator());
         m_alertDelayInterval = 2000;
+        m_exclusionRule = EnExclusionRule::NEVER;
+        m_exclusionInterval = 60000;
 
         m_localPort = 30001;
         m_serverIp = "127.0.0.1";
@@ -100,6 +102,24 @@ namespace VMTDLib
         RETURN_MAP(EnNodeType, enNodeTypeToS);
     }
 
+    const QString &VMTDSettings::enExclusionToS(const EnExclusionRule &rule)
+    {
+        switch (rule)
+        {
+        // *INDENT-OFF*
+        case EnExclusionRule::NEVER       : RETURN_S("Never");
+        case EnExclusionRule::TEMPORARILY : RETURN_S("Temporarily");
+        case EnExclusionRule::FOREVER     : RETURN_S("Forever");
+        // *INDENT-ON*
+        }
+
+        return S_QUESTIONS;
+    }
+    const QMap<int, QString> &VMTDSettings::enExclusionToL()
+    {
+        RETURN_MAP(EnExclusionRule, enExclusionToS);
+    }
+
     void VMTDSettings::debugOut(const QString &text)
     {
         if (m_shouldShowDebug)
@@ -131,6 +151,8 @@ namespace VMTDLib
         jsonObj[VN_ME(m_shouldControlAlert)] = m_shouldControlAlert;
         jsonObj[VN_ME(m_alertFilePath)] = m_alertFilePath;
         jsonObj[VN_ME(m_alertDelayInterval)] = m_alertDelayInterval;
+        jsonObj[VN_ME(m_exclusionRule)] = (int)m_exclusionRule;
+        jsonObj[VN_ME(m_exclusionInterval)] = m_exclusionInterval;
 
         jsonObj[VN_ME(m_localPort)] = m_localPort;
         jsonObj[VN_ME(m_serverIp)] = m_serverIp;
@@ -174,6 +196,8 @@ namespace VMTDLib
         m_shouldControlAlert = jsonObj[VN_ME(m_shouldControlAlert)].toBool(m_shouldControlAlert);
         m_alertFilePath = jsonObj[VN_ME(m_alertFilePath)].toString(m_alertFilePath);
         m_alertDelayInterval = jsonObj[VN_ME(m_alertDelayInterval)].toInt(m_alertDelayInterval);
+        m_exclusionRule = (EnExclusionRule)jsonObj[VN_ME(m_exclusionRule)].toInt((int)m_exclusionRule);
+        m_exclusionInterval = jsonObj[VN_ME(m_exclusionInterval)].toInt(m_exclusionInterval);
 
         m_localPort = jsonObj[VN_ME(m_localPort)].toInt(m_localPort);
         m_serverIp = jsonObj[VN_ME(m_serverIp)].toString(m_serverIp);
@@ -426,6 +450,24 @@ namespace VMTDLib
     void VMTDSettings::setAlertDelayInterval(int alertDelayInterval)
     {
         m_alertDelayInterval = alertDelayInterval;
+    }
+
+    VMTDSettings::EnExclusionRule VMTDSettings::exclusionRule() const
+    {
+        return m_exclusionRule;
+    }
+    void VMTDSettings::setExclusionRule(EnExclusionRule exclusionRule)
+    {
+        m_exclusionRule = exclusionRule;
+    }
+
+    int VMTDSettings::exclusionInterval() const
+    {
+        return m_exclusionInterval;
+    }
+    void VMTDSettings::setExclusionInverval(int exclusionInterval)
+    {
+        m_exclusionInterval = exclusionInterval;
     }
 
     int VMTDSettings::localPort() const

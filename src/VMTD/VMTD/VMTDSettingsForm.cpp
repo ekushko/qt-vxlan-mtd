@@ -17,6 +17,7 @@ namespace VMTDLib
         setAttribute(Qt::WA_DeleteOnClose, true);
 
         CB_FILL_MAP(ui->cbNodeType, VMTDSettings::enNodeTypeToL());
+        CB_FILL_MAP(ui->cbExclusionRule, VMTDSettings::enExclusionToL());
 
         setEditMode(false);
         updateView();
@@ -58,6 +59,8 @@ namespace VMTDLib
         ui->leNetplan2FileName->setText(m_settings->netplan2FileName());
         ui->leAlertFilePath->setText(m_settings->alertFilePath());
         ui->sbAlertDelayInterval->setValue(m_settings->alertDelayInterval());
+        CB_SELECT(ui->cbExclusionRule, m_settings->exclusionRule());
+        ui->sbExclusionInterval->setValue(m_settings->exclusionInterval());
 
         ui->sbLocalPort->setValue(m_settings->localPort());
         ui->leServerIp->setText(m_settings->serverIp());
@@ -92,6 +95,7 @@ namespace VMTDLib
         m_settings->setNetplan2FileName(ui->leNetplan2FileName->text());
         m_settings->setAlertFilePath(ui->leAlertFilePath->text());
         m_settings->setAlertDelayInterval(ui->sbAlertDelayInterval->value());
+        m_settings->setExclusionRule(CB_DATA_TOE(ui->cbExclusionRule, VMTDExclusionRule));
 
         m_settings->setLocalPort(ui->sbLocalPort->value());
         m_settings->setServerIp(ui->leServerIp->text());

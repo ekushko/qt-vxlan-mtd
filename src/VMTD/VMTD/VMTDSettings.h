@@ -8,6 +8,7 @@
 namespace VMTDLib
 {
 #define VMTDNodeType VMTDSettings::EnNodeType
+#define VMTDExclusionRule VMTDSettings::EnExclusionRule
 
     class VMTDSettingsForm;
 
@@ -32,6 +33,16 @@ namespace VMTDLib
         Q_ENUM(EnNodeType)
         static const QString            &enNodeTypeToS(const EnNodeType &nodeType);
         static const QMap<int, QString> &enNodeTypeToL();
+
+        enum class EnExclusionRule
+        {
+            NEVER,
+            TEMPORARILY,
+            FOREVER
+        };
+        Q_ENUM(EnExclusionRule)
+        static const QString            &enExclusionToS(const EnExclusionRule &rule);
+        static const QMap<int, QString> &enExclusionToL();
 
         // ЛОГИКА
 
@@ -110,6 +121,12 @@ namespace VMTDLib
         int     alertDelayInterval() const;
         void setAlertDelayInterval(int alertDelayInterval);
 
+        EnExclusionRule exclusionRule() const;
+        void         setExclusionRule(EnExclusionRule exclusionRule);
+
+        int     exclusionInterval() const;
+        void setExclusionInverval(int exclusionInterval);
+
         // СЕТЕВЫЕ ПАРАМЕТРЫ
 
         int     localPort() const;
@@ -176,6 +193,8 @@ namespace VMTDLib
         bool m_shouldControlAlert;
         QString m_alertFilePath;
         int m_alertDelayInterval;
+        EnExclusionRule m_exclusionRule;
+        int m_exclusionInterval;
 
         int m_localPort;
         QString m_serverIp;
