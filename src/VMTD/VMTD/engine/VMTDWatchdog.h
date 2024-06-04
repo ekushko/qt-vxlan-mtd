@@ -4,6 +4,7 @@
 
 #include <QFileSystemWatcher>
 #include <QTimer>
+#include <QSet>
 
 namespace VMTDLib
 {
@@ -15,11 +16,8 @@ namespace VMTDLib
 
         VMTDWatchdog(QObject *parent, VMTDSettings *settings);
 
-        const QList<QString> &scanners() const;
-
-    signals:
-
-        void scanDetectedSignal(const QList<QString> scanners);
+        const QSet<QString> &scanners() const;
+        void            clearScanners();
 
     private:
 
@@ -27,7 +25,7 @@ namespace VMTDLib
 
         QFileSystemWatcher m_watcher;
 
-        QList<QString> m_scanners;
+        QSet<QString> m_scanners;
 
         QTimer m_delayTimer;
         bool m_shouldWait;

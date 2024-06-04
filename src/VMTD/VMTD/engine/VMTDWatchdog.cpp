@@ -42,9 +42,13 @@ namespace VMTDLib
         connect(&m_delayTimer, &QTimer::timeout, this, &VMTDWatchdog::delayTimerTickSlot);
     }
 
-    const QList<QString> &VMTDWatchdog::scanners() const
+    const QSet<QString> &VMTDWatchdog::scanners() const
     {
         return m_scanners;
+    }
+    void VMTDWatchdog::clearScanners()
+    {
+        m_scanners.clear();
     }
 
     void VMTDWatchdog::fileChangedSlot(const QString &path)
@@ -95,12 +99,9 @@ namespace VMTDLib
                                      .arg(srcIp).arg(srcPort)
                                      .arg(dstIp).arg(dstPort));
 
-                m_scanners.append(srcIp);
+                m_scanners.insert(srcIp);
             }
         }
-
-        if (!m_scanners.isEmpty())
-            emit scanDetectedSignal(m_scanners);
 
         if (QFile::exists(m_settings->alertFilePath()))
         {

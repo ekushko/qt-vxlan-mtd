@@ -312,6 +312,8 @@ namespace VMTDLib
 
         jsonObj[PRM_SCANNERS] = jsonArr;
 
+        m_watchdog->clearScanners();
+
         return QJsonValue(jsonObj);
     }
 
