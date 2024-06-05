@@ -381,6 +381,146 @@ namespace VMTDLib
         }
     }
 
+    void VMTDDeviceManager::selectBannedScanners()
+    {
+        const auto queryStr =
+            QString("SELECT Banned_scanners.id, Hosts.name, Banned_scanners.remaining "
+                    "FROM Banned_scanners INNER JOIN Hosts ON Hosts.id = Banned_scanners.host_id;");
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Banned_scanners\" selecting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+        else
+        {
+            emit bannedScannersUpdatedSignal(query);
+        }
+    }
+    void VMTDDeviceManager::createBannedScanner(int id, int hostId, int remaining)
+    {
+        QString queryStr;
+
+        if (id >= 0)
+        {
+            queryStr =
+                QString("UPDATE Banned_scanners SET host_id = '%1', remaining = '%2', WHERE id = '%2';")
+                .arg(hostId)
+                .arg(remaining)
+                .arg(id);
+        }
+        else if (id < 0)
+        {
+            queryStr =
+                QString("INSERT INTO Banned_scanners (host_id, remaining) VALUES ('%1', '%2');")
+                .arg(hostId)
+                .arg(remaining);
+        }
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Banned_scanners\" inserting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+    }
+    void VMTDDeviceManager::removeBannedScanner(int id)
+    {
+        if (id < 0)
+        {
+            m_settings->debugOut(QString("%1 | Bad id value of banned scanner!")
+                                 .arg(VN_S(VMTDDeviceManager)));
+            return;
+        }
+
+        const auto queryStr =
+            QString("DELETE FROM Banned_scanners WHERE id = '%1'")
+            .arg(id);
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Banned_scanners\" deleting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+    }
+
+    void VMTDDeviceManager::selectAllowedScanners()
+    {
+        const auto queryStr =
+            QString("SELECT Allowed_scanners.id, Hosts.name "
+                    "FROM Allowed_scanners INNER JOIN Hosts ON Hosts.id = Allowed_scanners.host_id;");
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Allowed_scanners\" selecting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+        else
+        {
+            emit allowedScannersUpdatedSignal(query);
+        }
+    }
+    void VMTDDeviceManager::createAllowedScanner(int id, int hostId)
+    {
+        QString queryStr;
+
+        if (id >= 0)
+        {
+            queryStr =
+                QString("UPDATE Allowed_scanners SET host_id = '%1', WHERE id = '%2';")
+                .arg(hostId)
+                .arg(id);
+        }
+        else if (id < 0)
+        {
+            queryStr =
+                QString("INSERT INTO Allowed_scanners (host_id) VALUES ('%1');")
+                .arg(hostId);
+        }
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Allowed_scanners\" inserting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+    }
+    void VMTDDeviceManager::removeAllowedScanner(int id)
+    {
+        if (id < 0)
+        {
+            m_settings->debugOut(QString("%1 | Bad id value of allowed scanner!")
+                                 .arg(VN_S(VMTDDeviceManager)));
+            return;
+        }
+
+        const auto queryStr =
+            QString("DELETE FROM Allowed_scanners WHERE id = '%1'")
+            .arg(id);
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"Allowed_scanners\" deleting error: %2")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(query.lastError().text()));
+        }
+    }
+
     void VMTDDeviceManager::apply()
     {
         emit restartSignal();
@@ -412,6 +552,8 @@ namespace VMTDLib
 
         createTableSwitches();
         createTableHosts();
+        createTableBannedScanners();
+        createTableAllowedScanners();
     }
 
     void VMTDDeviceManager::createTableSwitches()
@@ -484,6 +626,49 @@ namespace VMTDLib
         if (!query.exec(queryStr))
         {
             m_settings->debugOut(QString("%1 | Table \"%2\" inserting error: %3")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(tableName)
+                                 .arg(query.lastError().text()));
+        }
+    }
+
+    void VMTDDeviceManager::createTableBannedScanners()
+    {
+        const auto tableName = QString("Banned_scanners");
+
+        auto queryStr =
+            QString("CREATE TABLE IF NOT EXISTS %1 ("
+                    "id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL UNIQUE DEFAULT (1), "
+                    "host_id INTEGER REFERENCES Hosts (Id) NOT NULL, "
+                    "remaining INTEGER NOT NULL);")
+            .arg(tableName);
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"%2\" creating error: %3")
+                                 .arg(VN_S(VMTDDeviceManager))
+                                 .arg(tableName)
+                                 .arg(query.lastError().text()));
+        }
+    }
+
+    void VMTDDeviceManager::createTableAllowedScanners()
+    {
+        const auto tableName = QString("Allowed_scanners");
+
+        auto queryStr =
+            QString("CREATE TABLE IF NOT EXISTS %1 ("
+                    "id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL UNIQUE DEFAULT (1), "
+                    "host_id INTEGER REFERENCES Hosts (Id) NOT NULL);")
+            .arg(tableName);
+
+        QSqlQuery query(m_db);
+
+        if (!query.exec(queryStr))
+        {
+            m_settings->debugOut(QString("%1 | Table \"%2\" creating error: %3")
                                  .arg(VN_S(VMTDDeviceManager))
                                  .arg(tableName)
                                  .arg(query.lastError().text()));

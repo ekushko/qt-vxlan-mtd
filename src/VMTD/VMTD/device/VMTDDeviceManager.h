@@ -52,6 +52,14 @@ namespace VMTDLib
         const QList<QUrl> &switchUrls() const;
         void          buildSwitchUrls();
 
+        void selectBannedScanners();
+        void createBannedScanner(int id, int hostId, int remaining);
+        void removeBannedScanner(int id);
+
+        void selectAllowedScanners();
+        void createAllowedScanner(int id, int hostId);
+        void removeAllowedScanner(int id);
+
         void apply();
 
     signals:
@@ -61,6 +69,10 @@ namespace VMTDLib
         void switchesUpdatedSignal(const QSqlQuery &query);
 
         void hostsUpdatedSignal(const QSqlQuery &query);
+
+        void bannedScannersUpdatedSignal(const QSqlQuery &query);
+
+        void allowedScannersUpdatedSignal(const QSqlQuery &query);
 
     public slots:
 
@@ -75,6 +87,8 @@ namespace VMTDLib
         void createTables();
         void createTableSwitches();
         void createTableHosts();
+        void createTableBannedScanners();
+        void createTableAllowedScanners();
 
         const QString EXTENSION = ".db";
         const QString DIR_NAME = "db";
