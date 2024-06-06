@@ -14,6 +14,7 @@ namespace VMTDLib
         Q_OBJECT
 
     public:
+
         explicit VMTDDeviceHostDialog(QWidget *parent = nullptr);
         ~VMTDDeviceHostDialog();
 

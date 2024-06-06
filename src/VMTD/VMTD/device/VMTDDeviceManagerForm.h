@@ -27,7 +27,9 @@ namespace VMTDLib
 
         VMTDDeviceManager *m_manager;
 
-        VMTDDeviceTableForm *m_switchesForm;
-        VMTDDeviceTableForm    *m_hostsForm;
+        VMTDDeviceTableForm        *m_switchesForm;
+        VMTDDeviceTableForm           *m_hostsForm;
+        VMTDDeviceTableForm  *m_bannedScannersForm;
+        VMTDDeviceTableForm *m_allowedScannersForm;
     };
 }

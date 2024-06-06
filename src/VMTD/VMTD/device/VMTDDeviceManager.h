@@ -18,6 +18,8 @@ namespace VMTDLib
         VMTDDeviceManager(QObject *parent, VMTDSettings *settings);
         ~VMTDDeviceManager();
 
+        VMTDSettings *settings() const;
+
         QWidget *form() const;
         void showForm(QWidget *parent = nullptr);
 

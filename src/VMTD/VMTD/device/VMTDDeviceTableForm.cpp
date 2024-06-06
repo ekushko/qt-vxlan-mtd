@@ -27,6 +27,10 @@ namespace VMTDLib
                 this, &VMTDDeviceTableForm::switchesUpdatedSlot);
         connect(m_manager, &VMTDDeviceManager::hostsUpdatedSignal,
                 this, &VMTDDeviceTableForm::hostsUpdatedSlot);
+        connect(m_manager, &VMTDDeviceManager::bannedScannersUpdatedSignal,
+                this, &VMTDDeviceTableForm::bannedScannersUpdatedSlot);
+        connect(m_manager, &VMTDDeviceManager::allowedScannersUpdatedSignal,
+                this, &VMTDDeviceTableForm::allowedScannersUpdatedSlot);
 
         if (m_type == EnType::SWITCHES)
         {
@@ -39,6 +43,18 @@ namespace VMTDLib
             m_hostDialog = new VMTDDeviceHostDialog(this);
             connect(m_hostDialog, &VMTDDeviceHostDialog::finished,
                     this, &VMTDDeviceTableForm::hostDialogFinishedSlot);
+        }
+        else if (m_type == EnType::BANNED_SCANNERS)
+        {
+            m_bannedScannerDialog = new VMTDDeviceScannerDialog(this);
+            connect(m_bannedScannerDialog, &VMTDDeviceScannerDialog::finished,
+                    this, &VMTDDeviceTableForm::bannedScannerDialogFinishedSlot);
+        }
+        else if (m_type == EnType::ALLOWED_SCANNERS)
+        {
+            m_allowedScannerDialog = new VMTDDeviceScannerDialog(this);
+            connect(m_allowedScannerDialog, &VMTDDeviceScannerDialog::finished,
+                    this, &VMTDDeviceTableForm::allowedScannerDialogFinishedSlot);
         }
 
         on_pbLoad_clicked();
@@ -78,7 +94,6 @@ namespace VMTDLib
             m_hostDialog->initializeView(switchesMap);
         }
     }
-
     void VMTDDeviceTableForm::hostsUpdatedSlot(const QSqlQuery &query)
     {
         if (m_type == EnType::HOSTS)
@@ -92,6 +107,53 @@ namespace VMTDLib
             m_viewModel->setHeaderData(4, Qt::Horizontal, "Interface");
             m_viewModel->setHeaderData(5, Qt::Horizontal, "Switch port");
             m_viewModel->setHeaderData(6, Qt::Horizontal, "Switch name");
+        }
+        else if (m_type == EnType::BANNED_SCANNERS
+                 || m_type == EnType::ALLOWED_SCANNERS)
+        {
+            QSqlQueryModel model;
+            model.setQuery(query);
+
+            QMap<int, QString> hostsMap;
+            QMap<int, QString> hostIpsMap;
+
+            for (int i = 0; i < model.rowCount(); ++i)
+            {
+                const auto id = model.data(model.index(i, 0)).toInt();
+                const auto hostName = model.data(model.index(i, 1)).toString();
+                const auto hostIp = model.data(model.index(i, 3)).toString();
+                hostsMap[id] = hostName;
+                hostIpsMap[id] = hostIp;
+            }
+
+            if (m_type == EnType::BANNED_SCANNERS)
+                m_bannedScannerDialog->initializeView(VMTDDeviceScannerDialog::EnType::BANNED,
+                                                      hostsMap, hostIpsMap);
+
+            if (m_type == EnType::ALLOWED_SCANNERS)
+                m_allowedScannerDialog->initializeView(VMTDDeviceScannerDialog::EnType::ALLOWED,
+                                                       hostsMap, hostIpsMap);
+        }
+    }
+    void VMTDDeviceTableForm::bannedScannersUpdatedSlot(const QSqlQuery &query)
+    {
+        if (m_type == EnType::BANNED_SCANNERS)
+        {
+            m_viewModel->setQuery(query);
+
+            m_viewModel->setHeaderData(0, Qt::Horizontal, "Id");
+            m_viewModel->setHeaderData(1, Qt::Horizontal, "Host");
+            m_viewModel->setHeaderData(2, Qt::Horizontal, "Remaining");
+        }
+    }
+    void VMTDDeviceTableForm::allowedScannersUpdatedSlot(const QSqlQuery &query)
+    {
+        if (m_type == EnType::ALLOWED_SCANNERS)
+        {
+            m_viewModel->setQuery(query);
+
+            m_viewModel->setHeaderData(0, Qt::Horizontal, "Id");
+            m_viewModel->setHeaderData(1, Qt::Horizontal, "Host");
         }
     }
 
@@ -118,6 +180,25 @@ namespace VMTDLib
                                   m_hostDialog->switchport(),
                                   m_hostDialog->switchId());
             m_manager->selectHosts();
+        }
+    }
+    void VMTDDeviceTableForm::bannedScannerDialogFinishedSlot(int result)
+    {
+        if (result == QDialog::Accepted)
+        {
+            m_manager->createBannedScanner(m_bannedScannerDialog->id(),
+                                           m_bannedScannerDialog->hostId(),
+                                           m_bannedScannerDialog->remaining());
+            m_manager->selectBannedScanners();
+        }
+    }
+    void VMTDDeviceTableForm::allowedScannerDialogFinishedSlot(int result)
+    {
+        if (result == QDialog::Accepted)
+        {
+            m_manager->createAllowedScanner(m_allowedScannerDialog->id(),
+                                            m_allowedScannerDialog->hostId());
+            m_manager->selectAllowedScanners();
         }
     }
 
@@ -155,6 +236,24 @@ namespace VMTDLib
                                             ui->tableView->model()->index(index.row(), 6)).toString());
             m_hostDialog->exec();
         }
+        else if (m_type == EnType::BANNED_SCANNERS)
+        {
+            m_bannedScannerDialog->setId(ui->tableView->model()->data(
+                                             ui->tableView->model()->index(index.row(), 0)).toInt());
+            m_bannedScannerDialog->setHostName(ui->tableView->model()->data(
+                                                   ui->tableView->model()->index(index.row(), 1)).toString());
+            m_bannedScannerDialog->setRemaining(ui->tableView->model()->data(
+                                                    ui->tableView->model()->index(index.row(), 2)).toInt());
+            m_bannedScannerDialog->exec();
+        }
+        else if (m_type == EnType::ALLOWED_SCANNERS)
+        {
+            m_allowedScannerDialog->setId(ui->tableView->model()->data(
+                                              ui->tableView->model()->index(index.row(), 0)).toInt());
+            m_allowedScannerDialog->setHostName(ui->tableView->model()->data(
+                                                    ui->tableView->model()->index(index.row(), 1)).toString());
+            m_allowedScannerDialog->exec();
+        }
     }
 
     void VMTDDeviceTableForm::on_pbApply_clicked()
@@ -165,6 +264,8 @@ namespace VMTDLib
     {
         m_manager->selectSwitches();
         m_manager->selectHosts();
+        m_manager->selectBannedScanners();
+        m_manager->selectAllowedScanners();
     }
 
     void VMTDDeviceTableForm::on_pbCreate_clicked()
@@ -188,6 +289,20 @@ namespace VMTDLib
             m_hostDialog->setSwitchport(QString());
             m_hostDialog->setSwitchName(QString());
             m_hostDialog->exec();
+        }
+        else if (m_type == EnType::BANNED_SCANNERS)
+        {
+            m_bannedScannerDialog->setId(-1);
+            m_bannedScannerDialog->setHostName(QString());
+            m_bannedScannerDialog->setRemaining(m_manager->settings()->exclusionInterval());
+            m_bannedScannerDialog->exec();
+        }
+        else if (m_type == EnType::ALLOWED_SCANNERS)
+        {
+            m_allowedScannerDialog->setId(-1);
+            m_allowedScannerDialog->setHostName(QString());
+            m_allowedScannerDialog->setRemaining(-1);
+            m_allowedScannerDialog->exec();
         }
     }
     void VMTDDeviceTableForm::on_pbRemove_clicked()
@@ -214,6 +329,20 @@ namespace VMTDLib
                 m_manager->removeHost(id);
 
             m_manager->selectHosts();
+        }
+        else if (m_type == EnType::BANNED_SCANNERS)
+        {
+            for (auto id : ids)
+                m_manager->removeBannedScanner(id);
+
+            m_manager->selectBannedScanners();
+        }
+        else if (m_type == EnType::ALLOWED_SCANNERS)
+        {
+            for (auto id : ids)
+                m_manager->removeAllowedScanner(id);
+
+            m_manager->selectAllowedScanners();
         }
     }
 }

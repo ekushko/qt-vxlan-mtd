@@ -42,6 +42,11 @@ namespace VMTDLib
         printDbConnections();
     }
 
+    VMTDSettings *VMTDDeviceManager::settings() const
+    {
+        return m_settings;
+    }
+
     QWidget *VMTDDeviceManager::form() const
     {
         return m_form;
@@ -407,7 +412,7 @@ namespace VMTDLib
         if (id >= 0)
         {
             queryStr =
-                QString("UPDATE Banned_scanners SET host_id = '%1', remaining = '%2', WHERE id = '%2';")
+                QString("UPDATE Banned_scanners SET host_id = '%1', remaining = '%2' WHERE id = '%3';")
                 .arg(hostId)
                 .arg(remaining)
                 .arg(id);
@@ -478,7 +483,7 @@ namespace VMTDLib
         if (id >= 0)
         {
             queryStr =
-                QString("UPDATE Allowed_scanners SET host_id = '%1', WHERE id = '%2';")
+                QString("UPDATE Allowed_scanners SET host_id = '%1' WHERE id = '%2';")
                 .arg(hostId)
                 .arg(id);
         }

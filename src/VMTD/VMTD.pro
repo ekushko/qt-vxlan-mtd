@@ -171,6 +171,7 @@ SOURCES += \
     VMTD/device/VMTDDeviceHostDialog.cpp \
     VMTD/device/VMTDDeviceManager.cpp \
     VMTD/device/VMTDDeviceManagerForm.cpp \
+    VMTD/device/VMTDDeviceScannerDialog.cpp \
     VMTD/device/VMTDDeviceSwitchDialog.cpp \
     VMTD/device/VMTDDeviceTableForm.cpp \
     VMTD/engine/VMTDConfigurator.cpp \
@@ -219,6 +220,7 @@ HEADERS += \
     VMTD/device/VMTDDeviceHostDialog.h \
     VMTD/device/VMTDDeviceManager.h \
     VMTD/device/VMTDDeviceManagerForm.h \
+    VMTD/device/VMTDDeviceScannerDialog.h \
     VMTD/device/VMTDDeviceSwitchDialog.h \
     VMTD/device/VMTDDeviceTableForm.h \
     VMTD/engine/VMTDConfigurator.h \
@@ -252,6 +254,7 @@ FORMS += \
     VMTD/adapter/nxapi/VMTDNxApiServerForm.ui \
     VMTD/device/VMTDDeviceHostDialog.ui \
     VMTD/device/VMTDDeviceManagerForm.ui \
+    VMTD/device/VMTDDeviceScannerDialog.ui \
     VMTD/device/VMTDDeviceSwitchDialog.ui \
     VMTD/device/VMTDDeviceTableForm.ui \
     VMTD/engine/VMTDConfiguratorForm.ui \
