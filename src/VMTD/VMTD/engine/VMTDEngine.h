@@ -65,8 +65,13 @@ namespace VMTDLib
 
         QTimer m_reconfigTimer;
 
+        int m_currentParticipantIndex;
+        QTimer m_alertCollectTimer;
+
     private slots:
 
         void reconfigTimerTickSlot();
+
+        void alertCollectTimerTickSlot();
     };
 }

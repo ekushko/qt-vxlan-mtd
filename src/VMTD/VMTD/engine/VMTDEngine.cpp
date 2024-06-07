@@ -15,8 +15,14 @@ namespace VMTDLib
         , m_settings(settings)
         , m_manager(manager)
     {
+        m_reconfigTimer.setParent(this);
         connect(&m_reconfigTimer, &QTimer::timeout,
                 this, &VMTDEngine::reconfigTimerTickSlot);
+
+        m_currentParticipantIndex = 0;
+        m_alertCollectTimer.setParent(this);
+        connect(&m_alertCollectTimer, &QTimer::timeout,
+                this, &VMTDEngine::alertCollectTimerTickSlot);
     }
 
     VMTDEngine::~VMTDEngine()
@@ -41,16 +47,22 @@ namespace VMTDLib
 
     void VMTDEngine::startEngine()
     {
-        if (m_settings->shouldUseReconfigTimer())
+        QTimer::singleShot(1000, this, [this]()
         {
-            QTimer::singleShot(1000, this, [this]()
+            if (m_settings->shouldUseReconfigTimer())
             {
                 reconfigTimerTickSlot();
 
                 m_reconfigTimer.start(m_settings->reconfigInterval());
-            });
-        }
+            }
+
+            if (m_settings->shouldCollectAlert())
+            {
+                m_alertCollectTimer.start(m_settings->alertCollectInterval());
+            }
+        });
     }
+
     void VMTDEngine::stopEngine()
     {
         m_reconfigTimer.stop();
@@ -381,5 +393,20 @@ namespace VMTDLib
 
         generate();
         run();
+    }
+
+    void VMTDEngine::alertCollectTimerTickSlot()
+    {
+        auto participant = m_manager->participants().at(m_currentParticipantIndex);
+
+        RequestList requests;
+        requests.append(qMakePair(MTH_GET_SCANNERS, QJsonObject()));
+
+        emit appendRequestListSignal(participant->hostIp(), requests);
+
+        if (m_currentParticipantIndex < m_manager->participants().size())
+            ++m_currentParticipantIndex;
+        else
+            m_currentParticipantIndex = 0;
     }
 }

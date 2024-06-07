@@ -59,8 +59,10 @@ namespace VMTDLib
         ui->leNetplan2FileName->setText(m_settings->netplan2FileName());
         ui->leAlertFilePath->setText(m_settings->alertFilePath());
         ui->sbAlertDelayInterval->setValue(m_settings->alertDelayInterval());
+        ui->chbShouldCollectAlert->setChecked(m_settings->shouldCollectAlert());
+        ui->sbAlertCollectInterval->setValue(m_settings->alertCollectInterval());
         CB_SELECT(ui->cbExclusionRule, m_settings->exclusionRule());
-        ui->sbExclusionInterval->setValue(m_settings->exclusionInterval());
+        ui->sbExclusionConfigCount->setValue(m_settings->exclusionConfigCount());
 
         ui->sbLocalPort->setValue(m_settings->localPort());
         ui->leServerIp->setText(m_settings->serverIp());
@@ -95,7 +97,10 @@ namespace VMTDLib
         m_settings->setNetplan2FileName(ui->leNetplan2FileName->text());
         m_settings->setAlertFilePath(ui->leAlertFilePath->text());
         m_settings->setAlertDelayInterval(ui->sbAlertDelayInterval->value());
+        m_settings->setShouldCollectAlert(ui->chbShouldCollectAlert->isChecked());
+        m_settings->setAlertCollectInterval(ui->sbAlertCollectInterval->value());
         m_settings->setExclusionRule(CB_DATA_TOE(ui->cbExclusionRule, VMTDExclusionRule));
+        m_settings->setExclusionConfigCount(ui->sbExclusionConfigCount->value());
 
         m_settings->setLocalPort(ui->sbLocalPort->value());
         m_settings->setServerIp(ui->leServerIp->text());

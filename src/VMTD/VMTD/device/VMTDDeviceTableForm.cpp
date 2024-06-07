@@ -294,7 +294,7 @@ namespace VMTDLib
         {
             m_bannedScannerDialog->setId(-1);
             m_bannedScannerDialog->setHostName(QString());
-            m_bannedScannerDialog->setRemaining(m_manager->settings()->exclusionInterval());
+            m_bannedScannerDialog->setRemaining(m_manager->settings()->exclusionConfigCount());
             m_bannedScannerDialog->exec();
         }
         else if (m_type == EnType::ALLOWED_SCANNERS)

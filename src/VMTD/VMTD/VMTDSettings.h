@@ -121,11 +121,17 @@ namespace VMTDLib
         int     alertDelayInterval() const;
         void setAlertDelayInterval(int alertDelayInterval);
 
+        bool    shouldCollectAlert() const;
+        void setShouldCollectAlert(bool shouldCollectAlert);
+
+        int     alertCollectInterval() const;
+        void setAlertCollectInterval(int alertCollectInterval);
+
         EnExclusionRule exclusionRule() const;
         void         setExclusionRule(EnExclusionRule exclusionRule);
 
-        int     exclusionInterval() const;
-        void setExclusionInverval(int exclusionInterval);
+        int     exclusionConfigCount() const;
+        void setExclusionConfigCount(int exclusionConfigCount);
 
         // СЕТЕВЫЕ ПАРАМЕТРЫ
 
@@ -193,8 +199,10 @@ namespace VMTDLib
         bool m_shouldControlAlert;
         QString m_alertFilePath;
         int m_alertDelayInterval;
+        bool m_shouldCollectAlert;
+        int m_alertCollectInterval;
         EnExclusionRule m_exclusionRule;
-        int m_exclusionInterval;
+        int m_exclusionConfigCount;
 
         int m_localPort;
         QString m_serverIp;
