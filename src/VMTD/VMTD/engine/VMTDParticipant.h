@@ -41,6 +41,9 @@ namespace VMTDLib
         int     defaultVlanId() const;
         void setDefaultVlanId(int defaultVlanId);
 
+        int     hostId() const;
+        void setHostId(int hostId);
+
         QString hostName() const;
         void setHostName(const QString &hostName);
 
@@ -69,6 +72,8 @@ namespace VMTDLib
         const CommandList &commands() const;
 
     private:
+
+        int m_hostId;
 
         EnRole m_role;
 

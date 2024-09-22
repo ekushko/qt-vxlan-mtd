@@ -120,9 +120,34 @@ namespace VMTDLib
         {
             const auto jsonObj = result.toObject();
 
-            if (jsonObj.contains(PRM_SCANNERS))
+            if (jsonObj.contains(PRM_SCANNERS)
+                && jsonObj[PRM_SCANNERS].isArray())
             {
-                qDebug() << jsonObj[PRM_SCANNERS];
+                const auto &jsonArr = jsonObj[PRM_SCANNERS].toArray();
+
+                for (const auto &itemObj : jsonArr)
+                {
+                    auto scannerIp = itemObj[PRM_IP].toString();
+
+                    if (!scannerIp.isEmpty() && !scannerIp.contains("127.0.0.1"))
+                    {
+                        for (auto participant : m_manager->participants())
+                        {
+                            if (participant->hostIp() == scannerIp
+                                || participant->interface1()->ip() == scannerIp
+                                || participant->interface2()->ip() == scannerIp)
+                            {
+                                m_manager->createBannedScanner(-1, participant->hostId(), m_settings->exclusionConfigCount());
+                            }
+                            else
+                            {
+                                m_settings->debugOut(QString("%1 | Scanner IP (%2) detected but it is not registered!")
+                                                     .arg(VN_S(VMTDEngine))
+                                                     .arg(scannerIp));
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -397,12 +422,15 @@ namespace VMTDLib
 
     void VMTDEngine::alertCollectTimerTickSlot()
     {
+        if (m_manager->participants().size() == 0)
+            return;
+
         auto participant = m_manager->participants().at(m_currentParticipantIndex);
 
         RequestList requests;
         requests.append(qMakePair(MTH_GET_SCANNERS, QJsonObject()));
 
-        emit appendRequestListSignal(participant->hostIp(), requests);
+        //emit appendRequestListSignal(participant->hostIp(), requests);
 
         if (m_currentParticipantIndex < m_manager->participants().size())
             ++m_currentParticipantIndex;

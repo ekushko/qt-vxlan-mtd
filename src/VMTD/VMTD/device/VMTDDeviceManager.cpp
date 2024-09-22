@@ -298,6 +298,7 @@ namespace VMTDLib
 
         while (query.next())
         {
+            const auto hostId = query.value("Hosts.id").toInt();
             const auto hostIp = query.value("Hosts.ip").toString();
             const auto switchUrl = query.value("Switches.url").toString();
 
@@ -312,6 +313,7 @@ namespace VMTDLib
             const auto switchName = query.value("Switches.name").toString();
 
             auto participant = new VMTDParticipant(this);
+            participant->setHostId(hostId);
             participant->setDefaultVlanId(m_settings->defaultVlanId());
             participant->setHostName(hostName);
             participant->setHostDomainName(hostDomainName);

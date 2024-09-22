@@ -8,6 +8,8 @@ namespace VMTDLib
     VMTDParticipant::VMTDParticipant(QObject *parent)
         : QObject(parent)
     {
+        m_hostId = -1;
+
         m_role = EnRole::ENDPOINT;
 
         m_defaultVlanId = 19;
@@ -169,6 +171,15 @@ namespace VMTDLib
     void VMTDParticipant::setDefaultVlanId(int defaultVlanId)
     {
         m_defaultVlanId = defaultVlanId;
+    }
+
+    int VMTDParticipant::hostId() const
+    {
+        return m_hostId;
+    }
+    void VMTDParticipant::setHostId(int hostId)
+    {
+        m_hostId = hostId;
     }
 
     QString VMTDParticipant::hostName() const

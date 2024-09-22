@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setWindowTitle("Main");
+
     m_controller = new VMTDController(this, "_vmtd");
     m_controller->startController();
 
