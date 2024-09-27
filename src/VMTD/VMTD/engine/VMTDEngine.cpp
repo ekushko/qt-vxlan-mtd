@@ -273,6 +273,29 @@ namespace VMTDLib
     {
         QList<VMTDParticipant *> _gateways;
 
+        // TODO 1.2 (KEA) Шлюзовые подсети
+        // Добавить адекватную генерацию маршрутов
+        // удалить код отсюда
+
+        VMTDParticipant *node1 = nullptr;
+        VMTDParticipant *node10 = nullptr;
+
+        for (auto it = m_groups.begin(); it != m_groups.end(); ++it)
+        {
+            auto group = *it;
+
+            for (auto participant : group->participants())
+            {
+                if (participant->hostName() == "Node-1")
+                    node1 = participant;
+
+                if (participant->hostName() == "Node-10")
+                    node10 = participant;
+            }
+        }
+
+        // удалить код досюда
+
         for (auto it = m_groups.begin(); it != m_groups.end(); ++it)
         {
             auto group = *it;
@@ -310,7 +333,7 @@ namespace VMTDLib
             group->setExternalGateway(externalGateway);
 
             if (distance <= 2)
-                break;
+                continue;
 
             auto jt = it;
             std::advance(jt, 2);
@@ -322,6 +345,13 @@ namespace VMTDLib
 
                 internalGateway->interface1()->addRoute(remoteGroup->network(), remoteGroup->mask(),
                                                         externalGateway->interface2()->ip(), 100);
+
+                // удалить код отсюда
+
+                if (internalGateway != node1)
+                    internalGateway->interface1()->addRoute("100.100.17.0", 24, node1->interface1()->ip(), 100);
+
+                // удалить код досюда
             }
         }
 
@@ -337,7 +367,7 @@ namespace VMTDLib
             auto externalGateway = *std::next(it);
 
             if (distance <= 2)
-                break;
+                continue;
 
             auto jt = it;
             std::advance(jt, 2);
@@ -348,8 +378,17 @@ namespace VMTDLib
                 auto remoteGroup = m_groups.at(remoteParticipant->interface1()->groupIndex());
 
                 if (internalGateway->interface2()->isExist())
+                {
                     internalGateway->interface2()->addRoute(remoteGroup->network(), remoteGroup->mask(),
                                                             externalGateway->interface1()->ip(), 100);
+
+                    // удалить код отсюда
+
+                    if (internalGateway != node10)
+                        internalGateway->interface2()->addRoute("100.100.18.0", 24, node10->interface1()->ip(), 100);
+
+                    // удалить код досюда
+                }
             }
         }
     }

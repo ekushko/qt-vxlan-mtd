@@ -29,7 +29,7 @@ def configure_interfaces(payload, beg_index, end_index):
         run_command(payload, "interface e1/" + str(i))
         run_command(payload, "  switchport")
         run_command(payload, "  switchport mode trunk")
-        run_command(payload, "  switchport trunk allowed vlan 19")
+        run_command(payload, "  switchport trunk allowed vlan 17-19")
         run_command(payload, "  no shutdown")
 
 def configure_nve_interface(payload, beg_vlan_id, end_vlan_id, peer_ip):
@@ -46,14 +46,14 @@ def configure_nxos(switchuser, switchpassword, url, peer_ip):
     request_template["id"] = 0
     
     run_command(payload, "conf t")
-    configure_vlans(payload, 19, 50)
-    configure_interfaces(payload, 2, 6)
-    configure_nve_interface(payload, 19, 50, peer_ip)
+    configure_vlans(payload, 17, 50)
+    configure_interfaces(payload, 2, 7)
+    configure_nve_interface(payload, 17, 50, peer_ip)
 
     run_command(payload, "copy running-config startup-config")
 
     response = requests.post(url, data=json.dumps(payload), headers=request_header, auth=(switchuser,switchpassword), verify=False).json()
 
-configure_nxos("admin", "admin", "https://192.168.68.98/ins", "20.20.20.20")
-configure_nxos("admin", "admin", "https://192.168.68.99/ins", "10.10.10.10")
+configure_nxos("admin", "admin", "https://192.168.132.98/ins", "20.20.20.20")
+configure_nxos("admin", "admin", "https://192.168.132.99/ins", "10.10.10.10")
 

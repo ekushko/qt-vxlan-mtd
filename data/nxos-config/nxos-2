@@ -6,11 +6,11 @@ username admin password admin role network-admin
 boot nxos bootflash:nxos.9.3.10.bin
 
 int m0
-  ip address 192.168.68.99/24
+  ip address 192.168.132.99/24
   no shutdown
   
 vrf context management
-  ip route 0/0 192.168.68.254
+  ip route 0/0 192.168.132.254
   
 feature nxapi
 

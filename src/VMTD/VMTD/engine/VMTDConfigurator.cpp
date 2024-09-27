@@ -472,6 +472,16 @@ namespace VMTDLib
                                  .arg(m_vlanInterface2));
         }
 
+        // TODO 1.3 (KEA) Шлюзовые подсети
+        // Исправить на удаление только тех маршрутов, которые были добавлены
+        // удалить отсюда
+        if (!commands.isEmpty())
+            commands += "; ";
+
+        commands += "sudo ip route flush table main";
+        // удалить досюда
+
+
         {
             if (!commands.isEmpty())
                 commands += "; ";
