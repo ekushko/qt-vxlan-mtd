@@ -25,7 +25,7 @@ namespace VMTDLib
 
         void updateView();
 
-        void fillInterface(VMTDInterface *interface, QTreeWidgetItem *item);
+        void fillInterface(VMTDInterface *interface, int index, QTreeWidgetItem *item);
 
         Ui::VMTDEngineForm *ui;
 

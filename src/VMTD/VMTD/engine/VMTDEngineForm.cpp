@@ -56,7 +56,11 @@ namespace VMTDLib
 
                 auto participantItem = new QTreeWidgetItem(participantsItem);
 
-                const auto participantLabel = QString("%1 (%2 %3 connected to %4 %5)")
+                const QString role = (group->internalGateway() == participant) ? "internal gw" :
+                                     ((group->externalGateway() == participant) ? "external gw" : "endpoint");
+
+                const auto participantLabel = QString("%1 %2 (%3 %4 connected to %5 %6)")
+                                              .arg(role)
                                               .arg(participant->hostName())
                                               .arg(participant->hostIp())
                                               .arg(participant->hostInterface())
@@ -64,22 +68,22 @@ namespace VMTDLib
                                               .arg(participant->switchName());
                 participantItem->setText(0, participantLabel);
 
-                fillInterface(participant->interface1(), participantItem);
+                fillInterface(participant->interface1(), 1, participantItem);
 
                 if (participant->role() == VMTDParticipant::EnRole::GATEWAY
                     && participant->interface2()->isExist())
-                    fillInterface(participant->interface2(), participantItem);
+                    fillInterface(participant->interface2(), 2, participantItem);
             }
         }
     }
 
-    void VMTDEngineForm::fillInterface(VMTDInterface *interface, QTreeWidgetItem *item)
+    void VMTDEngineForm::fillInterface(VMTDInterface *interface, int index, QTreeWidgetItem *item)
     {
         // интерфейс
 
         auto interfaceItem = new QTreeWidgetItem(item);
 
-        const auto interfaceLabel = QString("Network interface");
+        const auto interfaceLabel = QString("Network interface %1").arg(index);
         interfaceItem->setText(0, interfaceLabel);
 
         // mac
