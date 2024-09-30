@@ -353,6 +353,14 @@ namespace VMTDLib
             internalGateway->interface1()->addRoute(externalGroup->network(), externalGroup->mask(),
                                                     externalGateway->interface2()->ip(), 100);
 
+            // удалить код отсюда
+
+            if (internalGateway != node10)
+                internalGateway->interface1()->addRoute("100.100.18.0", 24,
+                                                        externalGateway->interface2()->ip(), 100);
+
+            // удалить код досюда
+
             if (distance <= 2)
                 continue;
 
@@ -366,14 +374,6 @@ namespace VMTDLib
 
                 internalGateway->interface1()->addRoute(remoteGroup->network(), remoteGroup->mask(),
                                                         externalGateway->interface2()->ip(), 100);
-
-                // удалить код отсюда
-
-                if (internalGateway != node1)
-                    internalGateway->interface1()->addRoute("100.100.17.0", 24,
-                                                            externalGateway->interface1()->ip(), 100);
-
-                // удалить код досюда
             }
         }
 
@@ -387,6 +387,14 @@ namespace VMTDLib
                 break;
 
             auto externalGateway = *std::next(it);
+
+            // удалить код отсюда
+
+            if (internalGateway != node1)
+                internalGateway->interface2()->addRoute("100.100.17.0", 24,
+                                                        externalGateway->interface1()->ip(), 100);
+
+            // удалить код досюда
 
             if (distance <= 2)
                 continue;
@@ -403,14 +411,6 @@ namespace VMTDLib
                 {
                     internalGateway->interface2()->addRoute(remoteGroup->network(), remoteGroup->mask(),
                                                             externalGateway->interface1()->ip(), 100);
-
-                    // удалить код отсюда
-
-                    if (internalGateway != node10)
-                        internalGateway->interface2()->addRoute("100.100.18.0", 24,
-                                                                externalGateway->interface1()->ip(), 100);
-
-                    // удалить код досюда
                 }
             }
         }
