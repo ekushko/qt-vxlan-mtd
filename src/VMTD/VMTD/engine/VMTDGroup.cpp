@@ -156,9 +156,6 @@ namespace VMTDLib
         m_externalGateway->interface2()->setMask(m_mask);
         m_externalGateway->interface2()->setVlanId(m_vlanId);
 
-        m_internalGateway->interface1()->addRoute(QString(NETWORK_TEMPLATE).arg(0).arg(0), 16,
-                                                  m_externalGateway->interface2()->ip(), 100);
-
         m_participants.append(m_externalGateway);
 
         m_settings->debugOut(QString("%1 | External gateway %2 was added in group-%3! ")

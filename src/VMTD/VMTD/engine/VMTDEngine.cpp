@@ -300,7 +300,12 @@ namespace VMTDLib
         {
             auto group = *it;
 
-            const auto index = qrand() % group->participants().size();
+            int index = 0;
+
+            if (m_settings->shouldRandomizeGateway())
+                index = qrand() % group->participants().size();
+            else if (*it == m_groups.last())
+                index = group->participants().size() - 1;
 
             auto gateway = group->participants().at(index);
             gateway->setRole(VMTDParticipant::EnRole::GATEWAY);
@@ -331,6 +336,22 @@ namespace VMTDLib
 
             auto externalGateway = *std::next(it);
             group->setExternalGateway(externalGateway);
+        }
+
+        for (auto it = _gateways.begin(); it != _gateways.end(); ++it)
+        {
+            auto internalGateway = *it;
+
+            const auto distance = std::distance(it, _gateways.end());
+
+            if (distance <= 1)
+                break;
+
+            auto externalGateway = *std::next(it);
+
+            auto externalGroup = m_groups.at(externalGateway->interface1()->groupIndex());
+            internalGateway->interface1()->addRoute(externalGroup->network(), externalGroup->mask(),
+                                                    externalGateway->interface2()->ip(), 100);
 
             if (distance <= 2)
                 continue;
@@ -349,7 +370,8 @@ namespace VMTDLib
                 // удалить код отсюда
 
                 if (internalGateway != node1)
-                    internalGateway->interface1()->addRoute("100.100.17.0", 24, node1->interface1()->ip(), 100);
+                    internalGateway->interface1()->addRoute("100.100.17.0", 24,
+                                                            externalGateway->interface1()->ip(), 100);
 
                 // удалить код досюда
             }
@@ -385,7 +407,8 @@ namespace VMTDLib
                     // удалить код отсюда
 
                     if (internalGateway != node10)
-                        internalGateway->interface2()->addRoute("100.100.18.0", 24, node10->interface1()->ip(), 100);
+                        internalGateway->interface2()->addRoute("100.100.18.0", 24,
+                                                                externalGateway->interface1()->ip(), 100);
 
                     // удалить код досюда
                 }
@@ -461,19 +484,19 @@ namespace VMTDLib
 
     void VMTDEngine::alertCollectTimerTickSlot()
     {
-        if (m_manager->participants().size() == 0)
-            return;
+//        if (m_manager->participants().size() == 0)
+//            return;
 
-        auto participant = m_manager->participants().at(m_currentParticipantIndex);
+//        auto participant = m_manager->participants().at(m_currentParticipantIndex);
 
-        RequestList requests;
-        requests.append(qMakePair(MTH_GET_SCANNERS, QJsonObject()));
+//        RequestList requests;
+//        requests.append(qMakePair(MTH_GET_SCANNERS, QJsonObject()));
 
-        //emit appendRequestListSignal(participant->hostIp(), requests);
+//        //emit appendRequestListSignal(participant->hostIp(), requests);
 
-        if (m_currentParticipantIndex < m_manager->participants().size())
-            ++m_currentParticipantIndex;
-        else
-            m_currentParticipantIndex = 0;
+//        if (m_currentParticipantIndex < m_manager->participants().size())
+//            ++m_currentParticipantIndex;
+//        else
+//            m_currentParticipantIndex = 0;
     }
 }
